@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200"
+   height="200"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="block-sly.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="111"
+     inkscape:cy="91.428571"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="850"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#afe9dd"
+       id="rect2393"
+       width="201.5"
+       height="201.5"
+       x="-0.5"
+       y="0" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2400"
+       sodipodi:cx="48.75"
+       sodipodi:cy="66.25"
+       sodipodi:rx="19.75"
+       sodipodi:ry="22.75"
+       d="M 68.5,66.25 A 19.75,22.75 0 1 1 29,66.25 A 19.75,22.75 0 1 1 68.5,66.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2402"
+       sodipodi:cx="84.25"
+       sodipodi:cy="87.5"
+       sodipodi:rx="24.25"
+       sodipodi:ry="24"
+       d="M 108.5,87.5 A 24.25,24 0 1 1 60,87.5 A 24.25,24 0 1 1 108.5,87.5 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2404"
+       sodipodi:cx="69.5"
+       sodipodi:cy="71.5"
+       sodipodi:rx="20"
+       sodipodi:ry="21.5"
+       d="M 89.5,71.5 A 20,21.5 0 1 1 49.5,71.5 A 20,21.5 0 1 1 89.5,71.5 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2406"
+       sodipodi:cx="116.5"
+       sodipodi:cy="106.75"
+       sodipodi:rx="25"
+       sodipodi:ry="21.75"
+       d="M 141.5,106.75 A 25,21.75 0 1 1 91.5,106.75 A 25,21.75 0 1 1 141.5,106.75 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2408"
+       sodipodi:cx="86.75"
+       sodipodi:cy="106.75"
+       sodipodi:rx="30.25"
+       sodipodi:ry="32.25"
+       d="M 117,106.75 A 30.25,32.25 0 1 1 56.5,106.75 A 30.25,32.25 0 1 1 117,106.75 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2410"
+       sodipodi:cx="115.5"
+       sodipodi:cy="126.25"
+       sodipodi:rx="24"
+       sodipodi:ry="23.75"
+       d="M 139.5,126.25 A 24,23.75 0 1 1 91.5,126.25 A 24,23.75 0 1 1 139.5,126.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2412"
+       sodipodi:cx="61.25"
+       sodipodi:cy="98"
+       sodipodi:rx="21.75"
+       sodipodi:ry="29.5"
+       d="M 83,98 A 21.75,29.5 0 1 1 39.5,98 A 21.75,29.5 0 1 1 83,98 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2414"
+       sodipodi:cx="40.5"
+       sodipodi:cy="92"
+       sodipodi:rx="19"
+       sodipodi:ry="18"
+       d="M 59.5,92 A 19,18 0 1 1 21.5,92 A 19,18 0 1 1 59.5,92 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2416"
+       sodipodi:cx="30.5"
+       sodipodi:cy="73.25"
+       sodipodi:rx="14.5"
+       sodipodi:ry="13.75"
+       d="M 45,73.25 A 14.5,13.75 0 1 1 16,73.25 A 14.5,13.75 0 1 1 45,73.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2418"
+       sodipodi:cx="162"
+       sodipodi:cy="33"
+       sodipodi:rx="23"
+       sodipodi:ry="16"
+       d="M 185,33 A 23,16 0 1 1 139,33 A 23,16 0 1 1 185,33 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2420"
+       sodipodi:cx="174.5"
+       sodipodi:cy="48"
+       sodipodi:rx="13.5"
+       sodipodi:ry="12.5"
+       d="M 188,48 A 13.5,12.5 0 1 1 161,48 A 13.5,12.5 0 1 1 188,48 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2422"
+       sodipodi:cx="159.25"
+       sodipodi:cy="49.5"
+       sodipodi:rx="15.75"
+       sodipodi:ry="17"
+       d="M 175,49.5 A 15.75,17 0 1 1 143.5,49.5 A 15.75,17 0 1 1 175,49.5 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2424"
+       sodipodi:cx="161.75"
+       sodipodi:cy="18.75"
+       sodipodi:rx="15.25"
+       sodipodi:ry="10.75"
+       d="M 177,18.75 A 15.25,10.75 0 1 1 146.5,18.75 A 15.25,10.75 0 1 1 177,18.75 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2428"
+       sodipodi:cx="172.25"
+       sodipodi:cy="60.5"
+       sodipodi:rx="9.25"
+       sodipodi:ry="8.5"
+       d="M 181.5,60.5 A 9.25,8.5 0 1 1 163,60.5 A 9.25,8.5 0 1 1 181.5,60.5 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2430"
+       sodipodi:cx="48.25"
+       sodipodi:cy="166.5"
+       sodipodi:rx="22.25"
+       sodipodi:ry="13.5"
+       d="M 70.5,166.5 A 22.25,13.5 0 1 1 26,166.5 A 22.25,13.5 0 1 1 70.5,166.5 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2432"
+       sodipodi:cx="41"
+       sodipodi:cy="154.25"
+       sodipodi:rx="13"
+       sodipodi:ry="10.25"
+       d="M 54,154.25 A 13,10.25 0 1 1 28,154.25 A 13,10.25 0 1 1 54,154.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2434"
+       sodipodi:cx="54.5"
+       sodipodi:cy="148.25"
+       sodipodi:rx="12"
+       sodipodi:ry="15.75"
+       d="M 66.5,148.25 A 12,15.75 0 1 1 42.5,148.25 A 12,15.75 0 1 1 66.5,148.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2436"
+       sodipodi:cx="67.5"
+       sodipodi:cy="153.75"
+       sodipodi:rx="8"
+       sodipodi:ry="9.25"
+       d="M 75.5,153.75 A 8,9.25 0 1 1 59.5,153.75 A 8,9.25 0 1 1 75.5,153.75 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2438"
+       sodipodi:cx="55.75"
+       sodipodi:cy="174.25"
+       sodipodi:rx="12.75"
+       sodipodi:ry="11.75"
+       d="M 68.5,174.25 A 12.75,11.75 0 1 1 43,174.25 A 12.75,11.75 0 1 1 68.5,174.25 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       id="path2440"
+       sodipodi:cx="42"
+       sodipodi:cy="173.75"
+       sodipodi:rx="8.5"
+       sodipodi:ry="10.75"
+       d="M 50.5,173.75 A 8.5,10.75 0 1 1 33.5,173.75 A 8.5,10.75 0 1 1 50.5,173.75 z" />
+  </g>
+</svg>
