@@ -51,20 +51,16 @@ Client::Client(const uint16_t& p, const network::IPAddress& bind_ad, const std::
 	int i = 0;
 	for (short unsigned int x = 0;x<blocknbx;++x) {
 		for (short unsigned int y = 0;y<blocknby;++y) {
-			if (y < 6) {
+			if (y < 10) {
 				blocks[x][y] = new Block(x*40, y*40, Loader.GetImage("block-sky"));
-			} else if (y == 6) {
+			} else if (y == 10) {
 			blocks[x][y] = new Block(x*40, y*40, Loader.GetImage("block-grass"));
 			} else {
-				if (i % 3 == 0) {
-					blocks[x][y] = new Block(x*40, y*40, Loader.GetImage("block-rock"));
-				} else {
-					blocks[x][y] = new Block(x*40, y*40, Loader.GetImage("block-dirt"));
-				}
-			}
+				blocks[x][y] = new Block(x*40, y*40, Loader.GetImage("block-rock"));
+            }
+        }
 			++i;
 		}
-	}
 	while (app.IsOpened()) {
 		uint16_t framerate = (uint16_t) (1.f / app.GetFrameTime());
 		sf::Event Event;
