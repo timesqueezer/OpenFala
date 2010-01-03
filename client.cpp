@@ -14,7 +14,7 @@
 #include "utility.hpp"
 
 
-ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, 
+ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 						const std::string& size, const std::string& name) {
 	// app.Create(sf::VideoMode::GetMode(0), "OpenFala", 0,
 	// sf::WindowSettings::WindowSettings ( 24, 8, 4));
@@ -27,7 +27,7 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	m_name = name;
 
 	#ifdef DEBUG
-    
+
     debugcircle = sf::Shape::Circle(100, 100, 50, sf::Color(128, 192, 255));
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
@@ -36,9 +36,9 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	app.SetFramerateLimit(60);
 
 	ratio = height / 15;
-	
+
 	// Loading Images
-	
+
 	path = filesystem::get_cwd();
 	Loader = utility::ResourceLoader::ResourceLoader();
 	Loader.AddImage(operator/(path, "data/images/").string(), "block-rock.png", ratio, ratio);
@@ -63,7 +63,7 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	int i = 0;
 	for (short unsigned int x = 0;x < blocknbx;++x) {
 		for (short unsigned int y = 0;y<blocknby;++y) {
-            
+
             if ((x < (blocknbx - 20) / 2) or (x > (blocknbx - ((blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
@@ -73,7 +73,7 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 				} else {
 					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("ground-out"));
 		        }
-            	
+
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
@@ -87,9 +87,9 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
         }
 			++i;
 	}
-	
+
 	highlightblock = new Block(0, 0, Loader.GetImage("highlight"));
-	
+
 	mode = 1; // set to build mode
 }
 
@@ -105,26 +105,30 @@ void ClientApp::Update() {
            	app.Close();
            }
 		if (Event.Type == sf::Event::MouseButtonPressed) {
-			Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "rolf";
-			Socket.Send(Packet, bind_address, port);
-			Packet.Clear();
+            if (mode==1) {
+                if (MouseInPlayableArea()) {
+                    Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "rolf";
+                    Socket.Send(Packet, bind_address, port);
+                    Packet.Clear();
+                }
+            }
 		}
-		if (Event.Type == sf::Event::MouseMoved) {
+		/*if (Event.Type == sf::Event::MouseMoved) {
 			Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "lol";
 			Socket.Send(Packet, bind_address, port);
 			Packet.Clear();
-		}
+		}*/
 	}
 
 	// Network tests
-	std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
+    // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
 	//Packet << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
-	
+
 }
 
 void ClientApp::Draw() {
 	uint16_t framerate = (uint16_t) (1.f / app.GetFrameTime());
-	
+
 	for (short unsigned int x = 0;x<blocknbx;++x) {
 		for (short unsigned int y = 0;y<blocknby;++y) {
 			if (mode == 1) {
@@ -134,9 +138,9 @@ void ClientApp::Draw() {
 	}
 	highlightblock->SetPos((float)GetMouseBlock('x')*ratio, (float)GetMouseBlock('y')*ratio);
 	app.Draw(highlightblock->Sprite);
-	
-	
-	
+
+
+
 	#ifdef DEBUG
 		app.Draw(inforect);
 		app.Draw(debugcircle);
@@ -154,8 +158,25 @@ void ClientApp::Draw() {
 
 sf::Uint16 ClientApp::GetMouseBlock(char xy) {
 	if (xy == 'x') {
-		return (sf::Uint16) (input->GetMouseX() / ratio);
+		return (sf::Uint16) (input->GetMouseX() / ratio + (width / ratio - 20)/2);
 	} else {
 		return (sf::Uint16) (input->GetMouseY() / ratio);
 	}
+}
+
+bool ClientApp::MouseInPlayableArea() {
+    if ((input->GetMouseX()) < ((width-20*ratio)/2) or
+       ((input->GetMouseX()) > ((width-(width - 20*ratio)/2)))) {
+        #ifdef DEBUG
+            std::cout << "false" << std::endl;
+        #endif
+        return false;
+    }
+    if ( input->GetMouseY() > 10*ratio ) {
+        #ifdef DEBUG
+            std::cout << "false" << std::endl;
+        #endif
+        return false;
+    }
+    return true;
 }
