@@ -2,7 +2,6 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
-#include <boost/multi_array.hpp>
 
 #include <iostream>
 #include <string>
@@ -17,11 +16,13 @@ void startServer(void *UserData) {
     // We need to get back the passed program arguments here
     po::variables_map vm = *static_cast<po::variables_map*>(UserData);
     uint16_t port = vm["port"].as<uint16_t>();
+	uint16_t max_players = vm["maxplayers"].as<uint16_t>();
 
     // Create actual server in this thread
-    Server server(port);
+    ServerApp Server(port, max_players);
 	while (true) {
-		//Server.HandleRequest();
+		Server.HandleRequest();
+		Server.Update();
 	}
 }
 
@@ -29,11 +30,16 @@ void clientLoop(void *UserData) {
     // We need to get back the passed program arguments here
     po::variables_map vm = *static_cast<po::variables_map*>(UserData);
     uint16_t port = vm["port"].as<uint16_t>();
-    network::IPAddress address(vm["address"].as<std::string>());
+    Network::IPAddress address(vm["address"].as<std::string>());
     std::string size_str = vm["size"].as<std::string>();
 
     // Create actual client in this thread
-    Client client(port, address, size_str);
+    ClientApp Client(port, address, size_str);
+    while (true) {
+    	//Client.HandleInput();
+    	Client.Update();
+    	Client.Draw();
+    }
 }
 
 int main(int argc, char *argv[]) {

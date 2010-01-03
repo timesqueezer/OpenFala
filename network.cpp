@@ -1,4 +1,4 @@
 #include "network.hpp"
 
-namespace network {
+namespace Network {
 }

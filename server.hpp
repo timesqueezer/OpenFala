@@ -4,22 +4,31 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
+#include <boost/multi_array.hpp>
+
+#include <string>
+
 #include "network.hpp"
 
-class Server {
+typedef boost::multi_array<std::string, 2> stringarray2d;
+
+class ServerApp {
 public:
-    Server(const uint16_t&);
-    ~Server();
-    uint16_t m_port;
-	network::IPAddress m_claddress;
-	network::Socket& getSocket();
-	network::Packet& getPacket();
-	//Handle_Request();
+    ServerApp(const uint16_t&, const uint16_t&);
+    ~ServerApp();
+	Network::Socket& GetSocket();
+	Network::Packet& GetPacket();
+
+	void HandleRequest();
+	void Update();
 
 private:
-    network::Socket socket;
-    network::Packet packet;
+    uint16_t m_port;
+	stringarray2d m_clist;
+	stringarray2d::extent_gen extents;
 
+    Network::Socket Socket;
+    Network::Packet Packet;
 };
 
 #endif
