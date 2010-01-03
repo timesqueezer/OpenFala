@@ -6,17 +6,24 @@
 
 #include <ImageMagick/Magick++.h>
 
+#include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp>
 #include <boost/cstdint.hpp>
 
 #include <string>
+#include <vector>
 #include <map>
 #include <iostream>
 
 #include "filesystem.hpp"
 
+namespace po = boost::program_options;
+
 namespace utility {
     uint16_t rnd_int(uint16_t, uint16_t);
     float rnd_float(float, float);
+	std::vector<uint16_t> splitSize (const std::string&);
+    po::variables_map usage ( int&, char**);
 
     class ResourceLoader {
     	public:
@@ -29,5 +36,6 @@ namespace utility {
     		std::map<std::string, sf::Image> images;
 	};
 }
+
 
 #endif

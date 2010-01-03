@@ -10,21 +10,25 @@
 #include <string>
 
 #include "network.hpp"
+
 #include "filesystem.hpp"
+#include "utility.hpp"
 
 class Client {
 public:
-    Client(uint16_t, network::IPAddress);
+    Client(const uint16_t&, const network::IPAddress&, const std::string&);
     ~Client();
     uint16_t port;
-    network::Socket Socket;
-    network::Packet Packet;
-	sf::RenderWindow App;
-	sf::Clock Clock;
-	sf::Shape Circle;
-	sf::String FPS;
-	void create_window();
+    network::IPAddress bind_address;
+    network::Socket socket;
+    network::Packet packet;
+	sf::RenderWindow app;
+	sf::Clock clock;
+	sf::String fps;
+	const sf::Input* input;
 private:
+	uint16_t width;
+	uint16_t height;
 };
 
 #endif

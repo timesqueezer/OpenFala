@@ -215,3 +215,86 @@
 1256756561 source:/home/matz/projects/OpenFala/utility.cpp
 	"utility.hpp"
 
+1262459860 source:/home/matz/OpenFala/block.cpp
+	"block.hpp"
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+
+1262459860 /home/matz/OpenFala/block.hpp
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+
+1262476281 source:/home/matz/OpenFala/client.cpp
+	<SFML/System.hpp>
+	<iostream>
+	<boost/filesystem.hpp>
+	"client.hpp"
+	"filesystem.hpp"
+	"utility"
+
+1262476281 /home/matz/OpenFala/client.hpp
+	<SFML/Network.hpp>
+	<SFML/Window.hpp>
+	<SFML/Graphics.hpp>
+	<ImageMagick/Magick++.h>
+	<string>
+	"network.hpp"
+	"filesystem.hpp"
+	"utility.hpp"
+
+1262459860 /home/matz/OpenFala/network.hpp
+	<SFML/Network.hpp>
+
+1262459860 /home/matz/OpenFala/filesystem.hpp
+	<boost/filesystem.hpp>
+	<string>
+
+1262459861 source:/home/matz/OpenFala/filesystem.cpp
+	<boost/filesystem.hpp>
+	"filesystem.hpp"
+
+1262491033 source:/home/matz/OpenFala/main.cpp
+	<SFML/System.hpp>
+	<boost/lexical_cast.hpp>
+	<boost/program_options.hpp>
+	<boost/multi_array.hpp>
+	<iostream>
+	<string>
+	"client.hpp"
+	"server.hpp"
+	"network.hpp"
+	"block.hpp"
+	"utility.hpp"
+
+1262490281 /home/matz/OpenFala/server.hpp
+	<SFML/System.hpp>
+	<SFML/Network.hpp>
+	"network.hpp"
+
+1262490652 /home/matz/OpenFala/utility.hpp
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+	<ImageMagick/Magick++.h>
+	<boost/lexical_cast.hpp>
+	<boost/program_options.hpp>
+	<boost/cstdint.hpp>
+	<string>
+	<vector>
+	<map>
+	<iostream>
+	"filesystem.hpp"
+
+1262459860 source:/home/matz/OpenFala/network.cpp
+	"network.hpp"
+
+1262490291 source:/home/matz/OpenFala/server.cpp
+	<SFML/System.hpp>
+	<iostream>
+	"server.hpp"
+
+1262490697 source:/home/matz/OpenFala/utility.cpp
+	"utility.hpp"
+	<boost/lexical_cast.hpp>
+	<boost/program_options.hpp>
+	<SFML/Network.hpp>
+

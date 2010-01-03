@@ -8,8 +8,6 @@ class Block {
 	public:
 		Block(float, float, sf::Image*);
 		sf::Sprite Sprite;
-	private:
-
 };
 
 
