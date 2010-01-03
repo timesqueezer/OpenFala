@@ -1,15 +1,15 @@
-#include "utility.hpp"
-
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 
 #include <SFML/Network.hpp>
 
+#include "utility.hpp"
+
 namespace utility {
-    uint16_t rnd_int(uint16_t min, uint16_t max) {
+    uint16_t rndInt(uint16_t min, uint16_t max) {
         return sf::Randomizer::Random(min, max);
     }
-    float rnd_float(float min, float max) {
+    float rndFloat(float min, float max) {
         return sf::Randomizer::Random(min, max);
     }
 
@@ -40,10 +40,14 @@ namespace utility {
 		        "choose mode <modes: 'client', 'server', 'both'>")
 		    ("address,a", po::value<std::string>()->default_value("127.0.0.1"),
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
+		    ("name,n", po::value<std::string>()->default_value("loldude"),
+		    	"player name (ignored for server)")
 		    ("port,p", po::value<uint16_t>()->default_value(1337),
 		    	"port to bind to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
 		    	"sets the window size <e.g.: 800x600>")
+		    ("maxplayers,p", po::value<uint16_t>()->default_value(4),
+		    	"maximum number of players (ignored for client)")
 		    //("verbose,v", po::value<uint16_t>()->implicit_value(1), "be verbose")
 		    //("quiet,q", po::value<uint16_t>()->implicit_value(1), "be quiet")
 		;
@@ -74,9 +78,6 @@ namespace utility {
 		if (!address.IsValid()) {
 			std::cout << "ERROR: Invalid address! " << std::endl;
 		}
-
-		//if (! vm.at(vm["address"].as<string>()
-
 		return vm;
 	}
 

@@ -3,7 +3,7 @@
 
 #include <SFML/Network.hpp>
 
-namespace network {
+namespace Network {
     typedef sf::SocketUDP Socket;
     typedef sf::SelectorUDP Selector;
     typedef sf::Packet Packet;

@@ -20,8 +20,8 @@
 namespace po = boost::program_options;
 
 namespace utility {
-    uint16_t rnd_int(uint16_t, uint16_t);
-    float rnd_float(float, float);
+    uint16_t rndInt(uint16_t, uint16_t);
+    float rndFloat(float, float);
 	std::vector<uint16_t> splitSize (const std::string&);
     po::variables_map usage ( int&, char**);
 

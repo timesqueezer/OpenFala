@@ -1,30 +1,85 @@
 #include <SFML/System.hpp>
+
 #include <iostream>
+#include <string>
 
 #include "server.hpp"
 
-Server::Server(const uint16_t& port) {
-    socket.Bind(port);
+ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
+    Socket.Bind(port);
     m_port = port;
+    m_maxplayers = maxplayers;
+   	m_clist.resize(extents[4][maxplayers]);
+
+	std::cout << "OpenFala server started on port: " << port << std::endl;
+	std::cout << "Max players: " << maxplayers << std::endl;
 }
 
-Server::~Server() {}
+ServerApp::~ServerApp() {}
 
-/*Server::Handle_Request() {
+void ServerApp::HandleRequest() {
+   	// IP Address reference only needed for connecting clients
+   	Network::IPAddress claddress;
+ 	GetSocket().Receive(GetPacket(), claddress, m_port);
 
- 	sf::Uint16 mx = 0;
- 	sf::Uint16 my = 0;
+    // We will expect client packages in this format
+    // [0] name - client name
+    // [1] sqx - horizontal square the client reports the mouse in
+    // [2] sqy - vertical square the client reports the mouse in
+    // [3] buildtype - what type if any of building the client wants to build
+    std::string name;
+    sf::Uint16 sqx;
+    sf::Uint16 sqy;
+    std::string buildtype;
+    GetPacket() >> name >> sqx >> sqy >> buildtype;
 
- 	server.getSocket().Receive(server.getPacket(), server.m_claddress, server.m_port);
-    server.getPacket() >> mx >> my;
-    std::cout << "MouseX: " << mx << " MouseY: " << my << std::endl;
-    server.getPacket().Clear();
+    // Client list has format:
+    // [0][0] client 0 IP
+    // [1][0] client 0 name
+    // TODO: [2][0] client 0 team
+    // TODO: [3][0] client 0 money
+
+    // First check whether client is already in our list
+    bool isknown = false;
+    uint16_t freeslot;
+    std::string ip = claddress.ToString();
+    for(int i = 0; i < m_maxplayers; i++) {
+        // Only check if slot is filled by client
+        if(m_clist[0][i] != "") {
+            if(ip == m_clist[0][i]) {
+                isknown = true;
+                break;
+            }
+        }
+        else {
+            // Record free slot for later
+            freeslot = i;
+        }
+    }
+
+    // If client is unknown, add client to the list
+    if(isknown == false) {
+        std::cout << "Adding new client: " << claddress << " \"" << name
+            << "\"" << std::endl;
+        m_clist[0][freeslot] = claddress.ToString();
+        m_clist[1][freeslot] = name;
+    }
+
+    #ifdef DEBUG
+    std::cout << "MouseX: " << sqx << " MouseY: " << sqy << std::endl;
+    #endif
+
+    // Get ready for next package
+    GetPacket().Clear();
 }
-*/
-network::Socket& Server::getSocket() {
-	return socket;
+
+void ServerApp::Update() {
 }
 
-network::Packet& Server::getPacket() {
-	return packet;
+Network::Socket& ServerApp::GetSocket() {
+	return Socket;
+}
+
+Network::Packet& ServerApp::GetPacket() {
+	return Packet;
 }

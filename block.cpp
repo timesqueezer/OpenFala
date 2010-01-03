@@ -7,3 +7,7 @@ Block::Block(float x, float y, sf::Image *Image) {
 	Sprite.SetImage(*Image);
 	Sprite.SetPosition(x, y);
 }
+
+void Block::SetPos(int x, int y) {
+	Sprite.SetPosition(x, y);
+}
