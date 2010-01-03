@@ -22,17 +22,20 @@ typedef boost::multi_array<Block*, 2> blockarray2d;
 
 class ClientApp {
 public:
-    ClientApp(const uint16_t&, const Network::IPAddress&, const std::string&);
+    ClientApp(const uint16_t&, const Network::IPAddress&, 
+    			const std::string&, const std::string&);
     ~ClientApp();
 
     void Update();
     void Draw();
+    sf::Uint16 GetMouseBlock(char);
 
 private:
 	uint16_t width;
 	uint16_t height;
 	const sf::Input* input;
 	uint16_t port;
+	std::string m_name;
     Network::IPAddress bind_address;
     Network::Socket Socket;
     Network::Packet Packet;
@@ -41,12 +44,18 @@ private:
 	utility::ResourceLoader Loader;
 	filesystem::path path;
 	sf::String mousepos;
+	float ratio;
+	Block* highlightblock;
 
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;
 
 	int blocknbx;
 	int blocknby;
+	
+	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
+	
+	unsigned int highlightx, highlighty;
 	
 	#ifdef DEBUG
 	sf::String fps;

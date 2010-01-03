@@ -14,7 +14,8 @@
 #include "utility.hpp"
 
 
-ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, const std::string& size) {
+ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, 
+						const std::string& size, const std::string& name) {
 	// app.Create(sf::VideoMode::GetMode(0), "OpenFala", 0,
 	// sf::WindowSettings::WindowSettings ( 24, 8, 4));
 	width = utility::splitSize(size)[0];
@@ -23,17 +24,18 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, const
 	input = &app.GetInput();
 	bind_address = bind_ad;
 	port = p;
+	m_name = name;
 
 	#ifdef DEBUG
     
-    debugcircle = sf::Shape::Circle(500, 500, 50, sf::Color(0, 0, 255));
+    debugcircle = sf::Shape::Circle(100, 100, 50, sf::Color(128, 192, 255));
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
 	#endif
 
 	app.SetFramerateLimit(60);
 
-	float ratio = height / 15;
+	ratio = height / 15;
 	
 	// Loading Images
 	
@@ -43,8 +45,15 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, const
 	Loader.AddImage(operator/(path, "data/images/").string(), "block-sky.png", ratio, ratio);
 	Loader.AddImage(operator/(path, "data/images/").string(), "block-grass.png", ratio, ratio);
 	Loader.AddImage(operator/(path, "data/images/").string(), "block-dirt.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/").string(), "block-lava.png", ratio, ratio);
 	Loader.AddImage(operator/(path, "data/images/").string(), "test.png", ratio, ratio);
-	//Loader.AddImage(operator/(path, "data/images/debug/").string(), "sky.svg", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "sky.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "grass.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "ground.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "sky-out.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "grass-out.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "ground-out.png", ratio, ratio);
+	Loader.AddImage(operator/(path, "data/images/debug/").string(), "highlight.png", ratio, ratio);
 
 	blocknbx = app.GetWidth() / ratio;
 	blocknby = app.GetHeight() / ratio;
@@ -58,26 +67,30 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad, const
             if ((x < (blocknbx - 20) / 2) or (x > (blocknbx - ((blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-sky"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("sky-out"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-grass"));
+				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("grass-out"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-rock"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("ground-out"));
 		        }
             	
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-rock"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("sky"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-grass"));
+				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("grass"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("block-sky"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("ground"));
 		        }
             }
         }
 			++i;
 	}
+	
+	highlightblock = new Block(0, 0, Loader.GetImage("highlight"));
+	
+	mode = 1; // set to build mode
 }
 
 ClientApp::~ClientApp() {}
@@ -91,24 +104,38 @@ void ClientApp::Update() {
 			if ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape)) {
            	app.Close();
            }
-       }
+		if (Event.Type == sf::Event::MouseButtonPressed) {
+			Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "rolf";
+			Socket.Send(Packet, bind_address, port);
+			Packet.Clear();
+		}
+		if (Event.Type == sf::Event::MouseMoved) {
+			Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "lol";
+			Socket.Send(Packet, bind_address, port);
+			Packet.Clear();
+		}
+	}
+
+	// Network tests
+	std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
+	//Packet << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
 	
-	
-		// Network tests
-		std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
-		Packet << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
-		Socket.Send(Packet, bind_address, port);
-		Packet.Clear();
-		
 }
 
 void ClientApp::Draw() {
 	uint16_t framerate = (uint16_t) (1.f / app.GetFrameTime());
+	
 	for (short unsigned int x = 0;x<blocknbx;++x) {
 		for (short unsigned int y = 0;y<blocknby;++y) {
-			app.Draw(m_blocks[x][y]->Sprite);
+			if (mode == 1) {
+				app.Draw(m_blocks[x][y]->Sprite);
+			}
 		}
 	}
+	highlightblock->SetPos((float)GetMouseBlock('x')*ratio, (float)GetMouseBlock('y')*ratio);
+	app.Draw(highlightblock->Sprite);
+	
+	
 	
 	#ifdef DEBUG
 		app.Draw(inforect);
@@ -117,10 +144,18 @@ void ClientApp::Draw() {
 			fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 		fps.SetPosition(10, app.GetHeight() - 40);
 		app.Draw(fps);
-			mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(input->GetMouseX())+
-                         	" MouseY: "+boost::lexical_cast<std::string>(input->GetMouseY()));
+			mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x'))+
+                         	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
 		mousepos.SetPosition(150, app.GetHeight() - 40);
 		app.Draw(mousepos);
 	#endif
 	app.Display();
+}
+
+sf::Uint16 ClientApp::GetMouseBlock(char xy) {
+	if (xy == 'x') {
+		return (sf::Uint16) (input->GetMouseX() / ratio);
+	} else {
+		return (sf::Uint16) (input->GetMouseY() / ratio);
+	}
 }

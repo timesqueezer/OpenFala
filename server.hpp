@@ -24,6 +24,7 @@ public:
 
 private:
     uint16_t m_port;
+    uint16_t m_maxplayers;
 	stringarray2d m_clist;
 	stringarray2d::extent_gen extents;
 

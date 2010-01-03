@@ -32,9 +32,10 @@ void clientLoop(void *UserData) {
     uint16_t port = vm["port"].as<uint16_t>();
     Network::IPAddress address(vm["address"].as<std::string>());
     std::string size_str = vm["size"].as<std::string>();
+	std::string name = vm["name"].as<std::string>();
 
     // Create actual client in this thread
-    ClientApp Client(port, address, size_str);
+    ClientApp Client(port, address, size_str, name);
     while (true) {
     	//Client.HandleInput();
     	Client.Update();

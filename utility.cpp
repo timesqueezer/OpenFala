@@ -40,6 +40,8 @@ namespace utility {
 		        "choose mode <modes: 'client', 'server', 'both'>")
 		    ("address,a", po::value<std::string>()->default_value("127.0.0.1"),
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
+		    ("name,n", po::value<std::string>()->default_value("loldude"),
+		    	"player name (ignored for server)")
 		    ("port,p", po::value<uint16_t>()->default_value(1337),
 		    	"port to bind to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
