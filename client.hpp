@@ -22,12 +22,13 @@ typedef boost::multi_array<Block*, 2> blockarray2d;
 
 class ClientApp {
 public:
-    ClientApp(const uint16_t&, const Network::IPAddress&, 
+    ClientApp(const uint16_t&, const Network::IPAddress&,
     			const std::string&, const std::string&);
     ~ClientApp();
 
     void Update();
     void Draw();
+    bool MouseInPlayableArea();
     sf::Uint16 GetMouseBlock(char);
 
 private:
@@ -52,11 +53,11 @@ private:
 
 	int blocknbx;
 	int blocknby;
-	
+
 	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
-	
+
 	unsigned int highlightx, highlighty;
-	
+
 	#ifdef DEBUG
 	sf::String fps;
 	sf::Shape inforect;
