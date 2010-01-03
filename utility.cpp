@@ -30,34 +30,6 @@ namespace utility {
 		return size_vec;
 	}
 
-	ResourceLoader::ResourceLoader() {};
-	ResourceLoader::~ResourceLoader() {};
-	uint8_t ResourceLoader::AddImage(const filesystem::path& path, const std::string& imgname,
-		const uint16_t& width, const uint16_t& height) {
-		Magick::Image image;
-		sf::Image sfimage;
-		try {
-			std::cout << "Caching image at: " << path << std::endl;
-			image.read(operator/(path, imgname).string());
-			std::cout << operator/(path, imgname).string() << std::endl;
-			filesystem::make_dir(operator/(path, "cached").string());
-			Magick::Geometry ss(width, height);
-			image.sample(Magick::Geometry(width, height));
-			image.write(operator/(operator/(path, "cached/"),imgname).string());
-			sfimage.LoadFromFile(operator/(operator/(path, "cached/"),imgname).string());
-			std::string basename = boost::filesystem::basename (operator/(operator/(path, "cached/"),imgname));
-			ResourceLoader::images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
-		}
-		catch (std::exception &error_) {
-			std::cout << "ERROR: " << error_.what() << std::endl;
-			return 1;
-		}
-		return 0;
-	}
-	sf::Image* ResourceLoader::GetImage(const std::string& img) {
-	    sf::Image *a = &ResourceLoader::images[img];
-        return a;
-	};
 	po::variables_map usage ( int& ac, char *av[] ) {
 		// Declare the supported options.
 		po::options_description desc("OpenFala multiplayer tower strategy game.\
@@ -84,6 +56,8 @@ namespace utility {
 		    std::cout << desc << "\n";
 		    exit(1);
 		}
+
+		// TODO: Not actually needed, remove?
 		/*
 		if (vm.count("client") == vm.count("server") == vm.count("both") == 0) {
 			std::cout << "ERROR: You need to provide a valid mode!";
@@ -106,4 +80,33 @@ namespace utility {
 		return vm;
 	}
 
+	ResourceLoader::ResourceLoader() {};
+	ResourceLoader::~ResourceLoader() {};
+	uint8_t ResourceLoader::AddImage(const filesystem::path& path, const std::string& imgname,
+		const uint16_t& width, const uint16_t& height) {
+		Magick::Image image;
+		sf::Image sfimage;
+		try {
+			std::cout << "Caching image at: " << path << std::endl;
+			image.read(operator/(path, imgname).string());
+			std::cout << operator/(path, imgname).string() << std::endl;
+			filesystem::make_dir(operator/(path, "cached").string());
+			Magick::Geometry ss(width, height);
+			image.sample(Magick::Geometry(width, height));
+			image.write(operator/(operator/(path, "cached/"),imgname).string());
+			sfimage.LoadFromFile(operator/(operator/(path, "cached/"),imgname).string());
+			std::string basename = boost::filesystem::basename (operator/(operator/(path, "cached/"),imgname));
+			ResourceLoader::images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
+		}
+		catch (std::exception &error_) {
+			std::cout << "ERROR: " << error_.what() << std::endl;
+			return 1;
+		}
+		return 0;
+	}
+
+	sf::Image* ResourceLoader::GetImage(const std::string& img) {
+	    sf::Image *a = &ResourceLoader::images[img];
+        return a;
+	};
 }

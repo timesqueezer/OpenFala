@@ -298,3 +298,72 @@
 	<boost/program_options.hpp>
 	<SFML/Network.hpp>
 
+1262493823 source:/home/svenstaro/OpenFala/block.cpp
+	"block.hpp"
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+
+1262493823 /home/svenstaro/OpenFala/block.hpp
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+
+1262494012 source:/home/svenstaro/OpenFala/client.cpp
+	<SFML/System.hpp>
+	<boost/lexical_cast.hpp>
+	<boost/program_options.hpp>
+	<boost/multi_array.hpp>
+	<iostream>
+	<string>
+	"client.hpp"
+	"server.hpp"
+	"network.hpp"
+	"block.hpp"
+	"utility.hpp"
+
+1262493938 /home/svenstaro/OpenFala/client.hpp
+	<SFML/Network.hpp>
+	<SFML/Window.hpp>
+	<SFML/Graphics.hpp>
+	<ImageMagick/Magick++.h>
+	<string>
+	"network.hpp"
+	"filesystem.hpp"
+	"utility.hpp"
+
+1262493823 /home/svenstaro/OpenFala/network.hpp
+	<SFML/Network.hpp>
+
+1262493823 /home/svenstaro/OpenFala/filesystem.hpp
+	<boost/filesystem.hpp>
+	<string>
+
+1262494012 /home/svenstaro/OpenFala/utility.hpp
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+	<ImageMagick/Magick++.h>
+	<boost/lexical_cast.hpp>
+	<boost/program_options.hpp>
+	<boost/cstdint.hpp>
+	<string>
+	<vector>
+	<map>
+	<iostream>
+	"filesystem.hpp"
+
+1262494012 /home/svenstaro/OpenFala/server.hpp
+	<SFML/System.hpp>
+	<SFML/Network.hpp>
+	"network.hpp"
+
+1262493823 source:/home/svenstaro/OpenFala/filesystem.cpp
+	<boost/filesystem.hpp>
+	"filesystem.hpp"
+
+1262493823 source:/home/svenstaro/OpenFala/network.cpp
+	"network.hpp"
+
+1262494012 source:/home/svenstaro/OpenFala/server.cpp
+	<SFML/System.hpp>
+	<iostream>
+	"server.hpp"
+

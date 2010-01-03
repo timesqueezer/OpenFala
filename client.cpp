@@ -28,9 +28,8 @@ Client::Client(const uint16_t& p, const network::IPAddress& bind_ad, const std::
     sf::Shape debugcircle;
 	debugcircle = sf::Shape::Circle(500, 500, 50, sf::Color(0, 0, 255));
 	sf::Shape inforect;
-	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40,
-								app.GetWidth(), app.GetHeight(),
-								sf::Color(20, 20, 20));
+	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
+                                 app.GetHeight(), sf::Color(20, 20, 20));
 	sf::String mousepos;
 	#endif
 
