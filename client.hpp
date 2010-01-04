@@ -30,6 +30,7 @@ public:
     void Draw();
     bool MouseInPlayableArea();
     sf::Uint16 GetMouseBlock(char);
+    Network::Socket& GetSocket();
 
 private:
 	uint16_t width;

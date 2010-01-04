@@ -11,6 +11,8 @@
 #include "network.hpp"
 
 typedef boost::multi_array<std::string, 2> stringarray2d;
+typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
+
 
 class ServerApp {
 public:
@@ -18,18 +20,21 @@ public:
     ~ServerApp();
 	Network::Socket& GetSocket();
 	Network::Packet& GetPacket();
+	Network::Packet& GetSendPacket();
 
 	void HandleRequest();
 	void Update();
+	sf::Uint8 GetPlayerId(std::string);
 
 private:
     uint16_t m_port;
     uint16_t m_maxplayers;
 	stringarray2d m_clist;
 	stringarray2d::extent_gen extents;
-
+    uint16array2d m_mpos;
     Network::Socket Socket;
     Network::Packet Packet;
+    Network::Packet SendPacket;
 };
 
 #endif

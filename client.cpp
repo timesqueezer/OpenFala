@@ -107,23 +107,31 @@ void ClientApp::Update() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "rolf";
+                    Packet << m_name << (sf::Uint16) (GetMouseBlock('x') - (width / ratio - 20)/2) << GetMouseBlock('y') << "rolf";
                     Socket.Send(Packet, bind_address, port);
                     Packet.Clear();
                 }
             }
 		}
-		/*if (Event.Type == sf::Event::MouseMoved) {
-			Packet << m_name << GetMouseBlock('x') << GetMouseBlock('y') << "lol";
+		if (Event.Type == sf::Event::MouseMoved) {
+			Packet << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "mouse";
 			Socket.Send(Packet, bind_address, port);
 			Packet.Clear();
-		}*/
+		}
 	}
 
 	// Network tests
     // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
 	//Packet << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
-
+	sf::Uint16 playerid;
+	sf::Uint16 posx;
+	sf::Uint16 posy;
+    Network::IPAddress svaddress;
+    unsigned short svport;
+    GetSocket().Receive(Packet, svaddress, svport);
+    Packet >> playerid >> posx >> posy;
+    std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
+    Packet.Clear();
 }
 
 void ClientApp::Draw() {
@@ -148,7 +156,7 @@ void ClientApp::Draw() {
 			fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 		fps.SetPosition(10, app.GetHeight() - 40);
 		app.Draw(fps);
-			mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x'))+
+			mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (width / ratio - 20)/2)+
                          	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
 		mousepos.SetPosition(150, app.GetHeight() - 40);
 		app.Draw(mousepos);
@@ -158,7 +166,7 @@ void ClientApp::Draw() {
 
 sf::Uint16 ClientApp::GetMouseBlock(char xy) {
 	if (xy == 'x') {
-		return (sf::Uint16) (input->GetMouseX() / ratio + (width / ratio - 20)/2);
+		return (sf::Uint16) (input->GetMouseX() / ratio);
 	} else {
 		return (sf::Uint16) (input->GetMouseY() / ratio);
 	}
@@ -179,4 +187,8 @@ bool ClientApp::MouseInPlayableArea() {
         return false;
     }
     return true;
+}
+
+Network::Socket& ClientApp::GetSocket() {
+	return Socket;
 }
