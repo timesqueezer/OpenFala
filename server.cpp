@@ -1,5 +1,7 @@
 #include <SFML/System.hpp>
 
+//#include <boost/foreach.hpp>
+
 #include <iostream>
 #include <string>
 
@@ -10,6 +12,9 @@ ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
     m_port = port;
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
+   	m_mpos.resize(extents[maxplayers][2]);
+   	// Mouse positions m_mpos[player1,2,3,4][x,y]
+
 
 	std::cout << "OpenFala server started on port: " << port << std::endl;
 	std::cout << "Max players: " << maxplayers << std::endl;
@@ -66,14 +71,26 @@ void ServerApp::HandleRequest() {
     }
 
     #ifdef DEBUG
-    std::cout << "MouseX: " << sqx << " MouseY: " << sqy << std::endl;
+    //std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
     #endif
-
+    if (buildtype == "mouse") {
+        m_mpos[GetPlayerId(name)][0] = sqx;
+        m_mpos[GetPlayerId(name)][1] = sqy;
+        std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
+    }
     // Get ready for next package
     GetPacket().Clear();
 }
 
 void ServerApp::Update() {
+
+    for(int i = 0; i < m_maxplayers; i++) {
+        if (m_clist[0][i] != "") {
+            GetSendPacket() << (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
+            GetSocket().Send(GetSendPacket(), m_clist[0][i], m_port);
+            GetSendPacket().Clear();
+        }
+    }
 }
 
 Network::Socket& ServerApp::GetSocket() {
@@ -82,4 +99,17 @@ Network::Socket& ServerApp::GetSocket() {
 
 Network::Packet& ServerApp::GetPacket() {
 	return Packet;
+}
+
+Network::Packet& ServerApp::GetSendPacket() {
+    return SendPacket;
+}
+
+sf::Uint8 ServerApp::GetPlayerId(std::string name) {
+    for(int i = 0; i < m_maxplayers; i++) {
+        if(m_clist[1][i] == name) {
+            return (sf::Uint8) i;
+        }
+    }
+    return false;
 }
