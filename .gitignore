@@ -1,4 +1,5 @@
 bin/**/*
 obj/**/*
+data/images/cached/
 OpenFala.depend
 OpenFala.layout
