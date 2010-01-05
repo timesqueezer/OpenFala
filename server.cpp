@@ -8,7 +8,7 @@
 #include "server.hpp"
 
 ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
-    Socket.Bind(port);
+    Socket.Bind(41311);
     m_port = port;
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
@@ -84,13 +84,13 @@ void ServerApp::HandleRequest() {
 
 void ServerApp::Update() {
 
-    for(int i = 0; i < m_maxplayers; i++) {
+  /*  for(int i = 0; i < m_maxplayers; i++) {
         if (m_clist[0][i] != "") {
             GetSendPacket() << (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
-            GetSocket().Send(GetSendPacket(), m_clist[0][i], m_port);
+            GetSocket().Send(GetSendPacket(), m_clist[0][i], 41312);
             GetSendPacket().Clear();
         }
-    }
+    }*/
 }
 
 Network::Socket& ServerApp::GetSocket() {

@@ -23,7 +23,7 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	app.Create(sf::VideoMode(width, height, 32), "OpenFala");
 	input = &app.GetInput();
 	bind_address = bind_ad;
-	port = p;
+	port = 41311; // port to send
 	m_name = name;
 
 	#ifdef DEBUG
@@ -32,6 +32,8 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
 	#endif
+
+    Socket.Bind(41312); // port to bind
 
 	app.SetFramerateLimit(60);
 
@@ -128,10 +130,10 @@ void ClientApp::Update() {
 	sf::Uint16 posy;
     Network::IPAddress svaddress;
     unsigned short svport;
-    GetSocket().Receive(Packet, svaddress, svport);
+    /*GetSocket().Receive(Packet, svaddress, svport);
     Packet >> playerid >> posx >> posy;
     std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
-    Packet.Clear();
+    Packet.Clear();*/
 }
 
 void ClientApp::Draw() {
