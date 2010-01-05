@@ -41,6 +41,8 @@ private:
     Network::IPAddress bind_address;
     Network::Socket Socket;
     Network::Packet Packet;
+    Network::Packet RecvPacket;
+
 	sf::RenderWindow app;
 	sf::Clock clock;
 	utility::ResourceLoader Loader;

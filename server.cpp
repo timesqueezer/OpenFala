@@ -84,13 +84,13 @@ void ServerApp::HandleRequest() {
 
 void ServerApp::Update() {
 
-  /*  for(int i = 0; i < m_maxplayers; i++) {
+    for(int i = 0; i < m_maxplayers; i++) {
         if (m_clist[0][i] != "") {
-            GetSendPacket() << (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
+            GetSendPacket() >> (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
             GetSocket().Send(GetSendPacket(), m_clist[0][i], 41312);
             GetSendPacket().Clear();
         }
-    }*/
+    }
 }
 
 Network::Socket& ServerApp::GetSocket() {

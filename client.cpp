@@ -34,7 +34,7 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	#endif
 
     Socket.Bind(41312); // port to bind
-
+    Socket.SetBlocking(false);
 	app.SetFramerateLimit(60);
 
 	ratio = height / 15;
@@ -130,10 +130,10 @@ void ClientApp::Update() {
 	sf::Uint16 posy;
     Network::IPAddress svaddress;
     unsigned short svport;
-    /*GetSocket().Receive(Packet, svaddress, svport);
-    Packet >> playerid >> posx >> posy;
+    GetSocket().Receive(RecvPacket, svaddress, svport);
+    RecvPacket >> playerid >> posx >> posy;
     std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
-    Packet.Clear();*/
+    RecvPacket.Clear();
 }
 
 void ClientApp::Draw() {

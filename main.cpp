@@ -19,7 +19,7 @@ void startServer(void *UserData) {
 	uint16_t max_players = vm["maxplayers"].as<uint16_t>();
 
     // Create actual server in this thread
-    ServerApp Server(port, max_players);
+    ServerApp Server(41312, max_players);
 	while (true) {
 		Server.HandleRequest();
 		Server.Update();
