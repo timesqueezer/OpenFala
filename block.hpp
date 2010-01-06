@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+// Generic class to represent a block in the game world.
 class Block {
 public:
     Block(float, float, sf::Image*);

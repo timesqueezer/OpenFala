@@ -42,8 +42,8 @@ namespace Utility {
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
 		    ("name,n", po::value<std::string>()->default_value("loldude"),
 		    	"player name (ignored for server)")
-		    ("port,p", po::value<uint16_t>()->default_value(41312),
-		    	"port to bind to")
+		    ("port,p", po::value<uint16_t>()->default_value(41311),
+		    	"port to bind to/connect to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
 		    	"sets the window size <e.g.: 800x600>")
 		    ("maxplayers,p", po::value<uint16_t>()->default_value(4),

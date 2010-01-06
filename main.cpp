@@ -21,10 +21,11 @@ void startServer(void *UserData) {
     // Create actual server in this thread
     ServerApp Server(port, max_players);
 	Server.Init();
-	while (true) {
+    while (true) {
 		Server.HandleRequest();
 		Server.Update();
 	}
+	Server.Die();
 }
 
 void clientLoop(void *UserData) {
@@ -43,6 +44,7 @@ void clientLoop(void *UserData) {
     	Client.Update();
     	Client.Draw();
     }
+    Client.Die();
 }
 
 int main(int argc, char *argv[]) {

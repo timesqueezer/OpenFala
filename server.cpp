@@ -8,27 +8,26 @@
 #include "server.hpp"
 
 ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
-    Socket.Bind(port);
-    m_port = port;
+    m_port = port; // port for incoming communication (default 41311)
+    m_clientport = 41312; // port for outgoing communication
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
    	m_mpos.resize(extents[maxplayers][2]);
    	// Mouse positions m_mpos[player1,2,3,4][x,y]
-
-
-	std::cout << "OpenFala server started on port: " << port << std::endl;
-	std::cout << "Max players: " << maxplayers << std::endl;
 }
 
 ServerApp::~ServerApp() {}
 
 void ServerApp::Init() {
+    Socket.Bind(m_port);
+	std::cout << "OpenFala server started on port: " << m_port << std::endl;
+	std::cout << "Max players: " << m_maxplayers << std::endl;
 }
 
 void ServerApp::HandleRequest() {
    	// IP Address reference only needed for connecting clients
    	Network::IPAddress claddress;
- 	GetSocket().Receive(GetPacket(), claddress, m_port);
+ 	Socket.Receive(RecvPacket, claddress, m_port);
 
     // We will expect client packages in this format
     // [0] name - client name
@@ -39,7 +38,7 @@ void ServerApp::HandleRequest() {
     sf::Uint16 sqx;
     sf::Uint16 sqy;
     std::string buildtype;
-    GetPacket() >> name >> sqx >> sqy >> buildtype;
+    RecvPacket >> name >> sqx >> sqy >> buildtype;
 
     // Client list has format:
     // [0][0] client 0 IP
@@ -82,26 +81,29 @@ void ServerApp::HandleRequest() {
         std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
     }
     // Get ready for next package
-    GetPacket().Clear();
+    RecvPacket.Clear();
 }
 
 void ServerApp::Update() {
-
     for(int i = 0; i < m_maxplayers; i++) {
         if (m_clist[0][i] != "") {
-            GetSendPacket() << (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
-            GetSocket().Send(GetSendPacket(), m_clist[0][i], m_port);
-            GetSendPacket().Clear();
+            SendPacket >> (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
+            Socket.Send(SendPacket, m_clist[0][i], 41312);
+            SendPacket.Clear();
         }
     }
+}
+
+void ServerApp::Die() {
+    Socket.Close();
 }
 
 Network::Socket& ServerApp::GetSocket() {
 	return Socket;
 }
 
-Network::Packet& ServerApp::GetPacket() {
-	return Packet;
+Network::Packet& ServerApp::GetRecvPacket() {
+	return RecvPacket;
 }
 
 Network::Packet& ServerApp::GetSendPacket() {

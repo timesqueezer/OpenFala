@@ -3,7 +3,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 #include <boost/multi_array.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <iostream>
 #include <string>
@@ -14,17 +14,14 @@
 #include "block.hpp"
 #include "utility.hpp"
 
-// Big constructor! Will have to do until we get scripting support in. Sorry.
-ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
+// Big constructor!
+ClientApp::ClientApp(const uint16_t& port, const Network::IPAddress& bind_ad,
 						const std::string& size, const std::string& name) {
-	// app.Create(sf::VideoMode::GetMode(0), "OpenFala", 0,
-	// sf::WindowSettings::WindowSettings ( 24, 8, 4));
-	width = Utility::splitSize(size)[0];
-	height = Utility::splitSize(size)[1];
-	app.Create(sf::VideoMode(width, height, 32), "OpenFala");
-	input = &app.GetInput();
-	bind_address = bind_ad;
-	port = p;
+	m_width = Utility::splitSize(size)[0];
+	m_height = Utility::splitSize(size)[1];
+	m_bindaddress = bind_ad;
+	m_port = port; // port for outgoing communication (default 41311)
+    m_clientport = 41312; // port for incoming communication
 	m_name = name;
 
 	#ifdef DEBUG
@@ -32,30 +29,39 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
 	#endif
+}
 
+ClientApp::~ClientApp() {}
+
+void ClientApp::Init() {
+    app.Create(sf::VideoMode(m_width, m_height, 32), "OpenFala");
+	input = &app.GetInput();
+
+    Socket.Bind(m_clientport); // port for incoming communication
+    Socket.SetBlocking(false);
 	app.SetFramerateLimit(60);
 
-	ratio = height / 15;
+	m_ratio = m_height / 15;
 
-	// Load images
+    // Load images
 	path = Filesystem::get_cwd();
 	ResMgr = ResourceManager::ResourceManager();
-	ResMgr.AddImage("data/images/", "block-rock.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/", "block-sky.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/", "block-grass.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/", "block-dirt.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/", "block-lava.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "sky.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "grass.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "ground.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "sky-out.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "grass-out.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "ground-out.svg", ratio, ratio);
-	ResMgr.AddImage("data/images/debug/", "highlight.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "sky.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "grass.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "ground.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "sky-out.png", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "grass-out.png", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "ground-out.png", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/debug/", "highlight.png", m_ratio, m_ratio);
 
-	blocknbx = app.GetWidth() / ratio;
-	blocknby = app.GetHeight() / ratio;
-	std::cout << blocknbx << " " << blocknby << " " << ratio << std::endl;
+	blocknbx = app.GetWidth() / m_ratio;
+	blocknby = app.GetHeight() / m_ratio;
+	std::cout << blocknbx << " " << blocknby << " " << m_ratio << std::endl;
 
 	m_blocks.resize(extents[blocknbx][blocknby]);
 	int i = 0;
@@ -64,20 +70,20 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
             if ((x < (blocknbx - 20) / 2) or (x > (blocknbx - ((blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("sky-out"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("sky-out"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("grass-out"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("grass-out"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("ground-out"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("ground-out"));
 		        }
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("sky"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("sky"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("grass"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("grass"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("ground"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("ground"));
 		        }
             }
         }
@@ -85,14 +91,9 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	}
 
     // TODO: Maybe use shared_ptr later on here?
-	boost::scoped_ptr<Block> highlightblock(new Block(0, 0, ResMgr.GetImage("highlight")));
+	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"));
 
 	mode = 1; // set to build mode
-}
-
-ClientApp::~ClientApp() {}
-
-void ClientApp::Init() {
 }
 
 void ClientApp::HandleInput() {
@@ -110,31 +111,31 @@ void ClientApp::Update() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    Packet << m_name << (sf::Uint16) (GetMouseBlock('x') - (width / ratio - 20)/2) << GetMouseBlock('y') << "rolf";
-                    Socket.Send(Packet, bind_address, port);
-                    Packet.Clear();
+                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y') << "rolf";
+                    Socket.Send(SendPacket, m_bindaddress, m_port);
+                    SendPacket.Clear();
                 }
             }
 		}
 		if (Event.Type == sf::Event::MouseMoved) {
-			Packet << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "mouse";
-			Socket.Send(Packet, bind_address, port);
-			Packet.Clear();
+			SendPacket << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "mouse";
+			Socket.Send(SendPacket, m_bindaddress, m_port);
+			SendPacket.Clear();
 		}
 	}
 
 	// Network tests
     // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
-	//Packet << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
+	//SendPacket << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
 	sf::Uint16 playerid;
 	sf::Uint16 posx;
 	sf::Uint16 posy;
     Network::IPAddress svaddress;
     unsigned short svport;
-    GetSocket().Receive(Packet, svaddress, svport);
-    Packet >> playerid >> posx >> posy;
+    Socket.Receive(RecvPacket, svaddress, svport);
+    RecvPacket >> playerid >> posx >> posy;
     std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
-    Packet.Clear();
+    RecvPacket.Clear();
 }
 
 void ClientApp::Draw() {
@@ -147,7 +148,8 @@ void ClientApp::Draw() {
 			}
 		}
 	}
-	highlightblock->SetPos((float)GetMouseBlock('x')*ratio, (float)GetMouseBlock('y')*ratio);
+
+	highlightblock->SetPos((float)GetMouseBlock('x')*m_ratio, (float)GetMouseBlock('y')*m_ratio);
 	app.Draw(highlightblock->Sprite);
 
 	#ifdef DEBUG
@@ -157,7 +159,7 @@ void ClientApp::Draw() {
 		fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 	fps.SetPosition(10, app.GetHeight() - 40);
 	app.Draw(fps);
-		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (width / ratio - 20)/2)+
+		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (m_width / m_ratio - 20)/2)+
                        	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
 	mousepos.SetPosition(150, app.GetHeight() - 40);
 	app.Draw(mousepos);
@@ -165,23 +167,27 @@ void ClientApp::Draw() {
 	app.Display();
 }
 
+void ClientApp::Die() {
+    Socket.Close();
+}
+
 sf::Uint16 ClientApp::GetMouseBlock(char xy) {
 	if (xy == 'x') {
-		return (sf::Uint16) (input->GetMouseX() / ratio);
+		return (sf::Uint16) (input->GetMouseX() / m_ratio);
 	} else {
-		return (sf::Uint16) (input->GetMouseY() / ratio);
+		return (sf::Uint16) (input->GetMouseY() / m_ratio);
 	}
 }
 
 bool ClientApp::MouseInPlayableArea() {
-    if ((input->GetMouseX()) < ((width-20*ratio)/2) or
-       ((input->GetMouseX()) > ((width-(width - 20*ratio)/2)))) {
+    if ((input->GetMouseX()) < ((m_width-20*m_ratio)/2) or
+       ((input->GetMouseX()) > ((m_width-(m_width - 20*m_ratio)/2)))) {
         #ifdef DEBUG
             std::cout << "false" << std::endl;
         #endif
         return false;
     }
-    if ( input->GetMouseY() > 10*ratio ) {
+    if ( input->GetMouseY() > 10*m_ratio ) {
         #ifdef DEBUG
             std::cout << "false" << std::endl;
         #endif
