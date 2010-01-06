@@ -44,21 +44,21 @@
 			<Add library="boost_filesystem-mt" />
 			<Add library="boost_program_options-mt" />
 		</Linker>
-		<Unit filename="block.cpp" />
-		<Unit filename="block.hpp" />
-		<Unit filename="client.cpp" />
-		<Unit filename="client.hpp" />
-		<Unit filename="filesystem.cpp" />
-		<Unit filename="filesystem.hpp" />
-		<Unit filename="main.cpp" />
-		<Unit filename="network.cpp" />
-		<Unit filename="network.hpp" />
-		<Unit filename="resources.cpp" />
-		<Unit filename="resources.hpp" />
-		<Unit filename="server.cpp" />
-		<Unit filename="server.hpp" />
-		<Unit filename="utility.cpp" />
-		<Unit filename="utility.hpp" />
+        <Unit filename="src/block.cpp" />
+		<Unit filename="src/block.hpp" />
+		<Unit filename="src/client.cpp" />
+		<Unit filename="src/client.hpp" />
+		<Unit filename="src/filesystem.cpp" />
+		<Unit filename="src/filesystem.hpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/network.cpp" />
+		<Unit filename="src/network.hpp" />
+		<Unit filename="src/resources.cpp" />
+		<Unit filename="src/resources.hpp" />
+		<Unit filename="src/server.cpp" />
+		<Unit filename="src/server.hpp" />
+		<Unit filename="src/utility.cpp" />
+		<Unit filename="src/utility.hpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
