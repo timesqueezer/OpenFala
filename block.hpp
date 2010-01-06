@@ -5,13 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 class Block {
-	public:
-		Block(float, float, sf::Image*);
-		sf::Sprite Sprite;
-		void SetPos(int, int);
+public:
+    Block(float, float, sf::Image*);
+    sf::Sprite Sprite;
+    void SetPos(int, int);
 };
-
-
-
 
 #endif

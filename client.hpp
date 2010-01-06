@@ -15,7 +15,7 @@
 
 #include "network.hpp"
 #include "filesystem.hpp"
-#include "utility.hpp"
+#include "resources.hpp"
 #include "block.hpp"
 
 typedef boost::multi_array<Block*, 2> blockarray2d;
@@ -26,6 +26,8 @@ public:
     			const std::string&, const std::string&);
     ~ClientApp();
 
+    void Init();
+    void HandleInput();
     void Update();
     void Draw();
     bool MouseInPlayableArea();
@@ -43,8 +45,8 @@ private:
     Network::Packet Packet;
 	sf::RenderWindow app;
 	sf::Clock clock;
-	utility::ResourceLoader Loader;
-	filesystem::path path;
+	ResourceManager ResMgr;
+	Filesystem::path path;
 	sf::String mousepos;
 	float ratio;
 	Block* highlightblock;

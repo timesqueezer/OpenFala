@@ -22,6 +22,9 @@ ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
 
 ServerApp::~ServerApp() {}
 
+void ServerApp::Init() {
+}
+
 void ServerApp::HandleRequest() {
    	// IP Address reference only needed for connecting clients
    	Network::IPAddress claddress;
@@ -46,7 +49,7 @@ void ServerApp::HandleRequest() {
 
     // First check whether client is already in our list
     bool isknown = false;
-    uint16_t freeslot;
+    uint16_t freeslot = 0;
     std::string ip = claddress.ToString();
     for(int i = 0; i < m_maxplayers; i++) {
         // Only check if slot is filled by client

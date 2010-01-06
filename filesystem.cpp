@@ -2,7 +2,7 @@
 
 #include "filesystem.hpp"
 
-namespace filesystem {
+namespace Filesystem {
 	uint8_t make_dir(const std::string &dir) {
 		if (!boost::filesystem::exists(dir)) {
 			boost::filesystem::create_directory(dir);

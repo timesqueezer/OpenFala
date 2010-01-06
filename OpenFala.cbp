@@ -53,6 +53,8 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="network.cpp" />
 		<Unit filename="network.hpp" />
+		<Unit filename="resources.cpp" />
+		<Unit filename="resources.hpp" />
 		<Unit filename="server.cpp" />
 		<Unit filename="server.hpp" />
 		<Unit filename="utility.cpp" />

@@ -3,6 +3,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 #include <boost/multi_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <iostream>
 #include <string>
@@ -13,13 +14,13 @@
 #include "block.hpp"
 #include "utility.hpp"
 
-
+// Big constructor! Will have to do until we get scripting support in. Sorry.
 ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 						const std::string& size, const std::string& name) {
 	// app.Create(sf::VideoMode::GetMode(0), "OpenFala", 0,
 	// sf::WindowSettings::WindowSettings ( 24, 8, 4));
-	width = utility::splitSize(size)[0];
-	height = utility::splitSize(size)[1];
+	width = Utility::splitSize(size)[0];
+	height = Utility::splitSize(size)[1];
 	app.Create(sf::VideoMode(width, height, 32), "OpenFala");
 	input = &app.GetInput();
 	bind_address = bind_ad;
@@ -27,7 +28,6 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 	m_name = name;
 
 	#ifdef DEBUG
-
     debugcircle = sf::Shape::Circle(100, 100, 50, sf::Color(128, 192, 255));
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
@@ -37,66 +37,69 @@ ClientApp::ClientApp(const uint16_t& p, const Network::IPAddress& bind_ad,
 
 	ratio = height / 15;
 
-	// Loading Images
-
-	path = filesystem::get_cwd();
-	Loader = utility::ResourceLoader::ResourceLoader();
-	Loader.AddImage(operator/(path, "data/images/").string(), "block-rock.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/").string(), "block-sky.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/").string(), "block-grass.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/").string(), "block-dirt.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/").string(), "block-lava.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/").string(), "test.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "sky.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "grass.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "ground.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "sky-out.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "grass-out.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "ground-out.png", ratio, ratio);
-	Loader.AddImage(operator/(path, "data/images/debug/").string(), "highlight.png", ratio, ratio);
+	// Load images
+	path = Filesystem::get_cwd();
+	ResMgr = ResourceManager::ResourceManager();
+	ResMgr.AddImage("data/images/", "block-rock.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/", "block-sky.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/", "block-grass.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/", "block-dirt.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/", "block-lava.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "sky.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "grass.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "ground.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "sky-out.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "grass-out.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "ground-out.svg", ratio, ratio);
+	ResMgr.AddImage("data/images/debug/", "highlight.svg", ratio, ratio);
 
 	blocknbx = app.GetWidth() / ratio;
 	blocknby = app.GetHeight() / ratio;
-	std::cout << blocknbx << " " << blocknby << " " << ratio;
+	std::cout << blocknbx << " " << blocknby << " " << ratio << std::endl;
 
 	m_blocks.resize(extents[blocknbx][blocknby]);
 	int i = 0;
 	for (short unsigned int x = 0;x < blocknbx;++x) {
 		for (short unsigned int y = 0;y<blocknby;++y) {
-
             if ((x < (blocknbx - 20) / 2) or (x > (blocknbx - ((blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("sky-out"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("sky-out"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("grass-out"));
+				m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("grass-out"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("ground-out"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("ground-out"));
 		        }
-
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("sky"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("sky"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("grass"));
+				m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("grass"));
 				} else {
-					m_blocks[x][y] = new Block(x*ratio, y*ratio, Loader.GetImage("ground"));
+					m_blocks[x][y] = new Block(x*ratio, y*ratio, ResMgr.GetImage("ground"));
 		        }
             }
         }
 			++i;
 	}
 
-	highlightblock = new Block(0, 0, Loader.GetImage("highlight"));
+    // TODO: Maybe use shared_ptr later on here?
+	boost::scoped_ptr<Block> highlightblock(new Block(0, 0, ResMgr.GetImage("highlight")));
 
 	mode = 1; // set to build mode
 }
 
 ClientApp::~ClientApp() {}
 
+void ClientApp::Init() {
+}
+
+void ClientApp::HandleInput() {
+}
+
 void ClientApp::Update() {
-	sf::Event Event;
+    sf::Event Event;
 	while (app.GetEvent(Event)) {
 		if (Event.Type == sf::Event::Closed) {
 			app.Close();
@@ -147,19 +150,17 @@ void ClientApp::Draw() {
 	highlightblock->SetPos((float)GetMouseBlock('x')*ratio, (float)GetMouseBlock('y')*ratio);
 	app.Draw(highlightblock->Sprite);
 
-
-
 	#ifdef DEBUG
-		app.Draw(inforect);
-		app.Draw(debugcircle);
-		debugcircle.Move(0.5f, 0.5f);
-			fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
-		fps.SetPosition(10, app.GetHeight() - 40);
-		app.Draw(fps);
-			mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (width / ratio - 20)/2)+
-                         	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
-		mousepos.SetPosition(150, app.GetHeight() - 40);
-		app.Draw(mousepos);
+	app.Draw(inforect);
+	app.Draw(debugcircle);
+	debugcircle.Move(0.5f, 0.5f);
+		fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
+	fps.SetPosition(10, app.GetHeight() - 40);
+	app.Draw(fps);
+		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (width / ratio - 20)/2)+
+                       	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
+	mousepos.SetPosition(150, app.GetHeight() - 40);
+	app.Draw(mousepos);
 	#endif
 	app.Display();
 }

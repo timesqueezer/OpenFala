@@ -5,7 +5,7 @@
 
 #include "utility.hpp"
 
-namespace utility {
+namespace Utility {
     uint16_t rndInt(uint16_t min, uint16_t max) {
         return sf::Randomizer::Random(min, max);
     }
@@ -42,7 +42,7 @@ namespace utility {
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
 		    ("name,n", po::value<std::string>()->default_value("loldude"),
 		    	"player name (ignored for server)")
-		    ("port,p", po::value<uint16_t>()->default_value(1337),
+		    ("port,p", po::value<uint16_t>()->default_value(41312),
 		    	"port to bind to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
 		    	"sets the window size <e.g.: 800x600>")
@@ -61,53 +61,18 @@ namespace utility {
 		    exit(1);
 		}
 
-		// TODO: Not actually needed, remove?
-		/*
-		if (vm.count("client") == vm.count("server") == vm.count("both") == 0) {
+		std::string mode = vm["mode"].as<std::string>();
+		if ((mode != "client") and (mode != "server") and (mode != "both")) {
 			std::cout << "ERROR: You need to provide a valid mode!";
 			exit(1);
 		}
-		*/
-		//
-		//std::string address = vm["address"].as<std::string>();
-		//if (vm["address"].as<std::string>() == "empty") {
-		//	vm["address"].as<std::string>() = sf::IPAddress::LocalHost.ToString();
-		//}
 
 		sf::IPAddress address(vm["address"].as<std::string>());
-		if (!address.IsValid()) {
+        if (!address.IsValid()) {
 			std::cout << "ERROR: Invalid address! " << std::endl;
+			exit(1);
 		}
+
 		return vm;
 	}
-
-	ResourceLoader::ResourceLoader() {};
-	ResourceLoader::~ResourceLoader() {};
-	uint8_t ResourceLoader::AddImage(const filesystem::path& path, const std::string& imgname,
-		const uint16_t& width, const uint16_t& height) {
-		Magick::Image image;
-		sf::Image sfimage;
-		try {
-			std::cout << "Caching image at: " << path << std::endl;
-			image.read(operator/(path, imgname).string());
-			std::cout << operator/(path, imgname).string() << std::endl;
-			filesystem::make_dir(operator/(path, "cached").string());
-			Magick::Geometry ss(width, height);
-			image.sample(Magick::Geometry(width, height));
-			image.write(operator/(operator/(path, "cached/"),imgname).string());
-			sfimage.LoadFromFile(operator/(operator/(path, "cached/"),imgname).string());
-			std::string basename = boost::filesystem::basename (operator/(operator/(path, "cached/"),imgname));
-			ResourceLoader::images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
-		}
-		catch (std::exception &error_) {
-			std::cout << "ERROR: " << error_.what() << std::endl;
-			return 1;
-		}
-		return 0;
-	}
-
-	sf::Image* ResourceLoader::GetImage(const std::string& img) {
-	    sf::Image *a = &ResourceLoader::images[img];
-        return a;
-	};
 }

@@ -20,6 +20,7 @@ void startServer(void *UserData) {
 
     // Create actual server in this thread
     ServerApp Server(port, max_players);
+	Server.Init();
 	while (true) {
 		Server.HandleRequest();
 		Server.Update();
@@ -36,15 +37,16 @@ void clientLoop(void *UserData) {
 
     // Create actual client in this thread
     ClientApp Client(port, address, size_str, name);
+    Client.Init();
     while (true) {
-    	//Client.HandleInput();
+    	Client.HandleInput();
     	Client.Update();
     	Client.Draw();
     }
 }
 
 int main(int argc, char *argv[]) {
-	po::variables_map opts = utility::usage ( argc, argv );
+	po::variables_map opts = Utility::usage ( argc, argv );
 
 	std::string mode = opts["mode"].as<std::string>();
 

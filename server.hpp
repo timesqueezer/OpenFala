@@ -22,10 +22,10 @@ public:
 	Network::Packet& GetPacket();
 	Network::Packet& GetSendPacket();
 
+    void Init();
 	void HandleRequest();
 	void Update();
 	sf::Uint8 GetPlayerId(std::string);
-
 private:
     uint16_t m_port;
     uint16_t m_maxplayers;
