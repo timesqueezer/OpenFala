@@ -43,9 +43,14 @@ public:
    	// Safely shuts down the client.
     void Die();
 
+    // places a block to the specified area
+    void PlaceBlock(int x, int y);
+
     // Check if mouse is in legal area for building.
     bool MouseInPlayableArea();
 
+    // check if the coordinates are in a legal area
+    bool InPlayableArea(int, int);
     // Get the block beneath mouse cursor.
     sf::Uint16 GetMouseBlock(char);
 

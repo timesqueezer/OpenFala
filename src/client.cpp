@@ -108,6 +108,7 @@ void ClientApp::Update() {
                     SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y') << "rolf";
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
+                    PlaceBlock(GetMouseBlock('x'), GetMouseBlock('y'));
                 }
             }
 		}
@@ -190,6 +191,21 @@ bool ClientApp::MouseInPlayableArea() {
     return true;
 }
 
+bool ClientApp::InPlayableArea(int x, int y) {
+    // i was to lazy to implement this at that time i need it
+    return true;
+    //if ( () or () ) {
+    //}
+}
+
+void ClientApp::PlaceBlock(int x, int y) {
+    if (!InPlayableArea(x,y)) {
+        std::cout << "Cannot place the block right there!";
+    } else {
+        m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"));
+    }
+    return;
+}
 
 Network::Socket& ClientApp::GetSocket() {
 	return Socket;
