@@ -46,37 +46,38 @@ void ClientApp::Init() {
     // Load images
 	path = Filesystem::get_cwd();
 	ResMgr = ResourceManager::ResourceManager();
-	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/cached/", "block-rock.png", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
 
-	blocknbx = app.GetWidth() / m_ratio;
-	blocknby = app.GetHeight() / m_ratio;
-	std::cout << blocknbx << " " << blocknby << " " << m_ratio << std::endl;
+	m_blocknbx = app.GetWidth() / m_ratio;
+	m_blocknby = app.GetHeight() / m_ratio;
 
-	m_blocks.resize(extents[blocknbx][blocknby]);
+	std::cout << m_blocknbx << " " << m_blocknby << " " << m_ratio << std::endl;
+
+	m_blocks.resize(extents[m_blocknbx][m_blocknby]);
 	int i = 0;
-	for (short unsigned int x = 0;x < blocknbx;++x) {
-		for (short unsigned int y = 0;y<blocknby;++y) {
-            if ((x < (blocknbx - 20) / 2) or (x > (blocknbx - ((blocknbx - 20) / 2) ))) {
+	for (short unsigned int x = 0;x < m_blocknbx;++x) {
+		for (short unsigned int y = 0;y < m_blocknby;++y) {
+            if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("sky-out"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("grass-out"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"));
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("ground-out"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"));
 		        }
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("sky"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"));
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("grass"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"));
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("ground"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"));
 		        }
             }
         }
@@ -134,8 +135,8 @@ void ClientApp::Update() {
 void ClientApp::Draw() {
 	uint16_t framerate = (uint16_t) (1.f / app.GetFrameTime());
 
-	for (short unsigned int x = 0;x<blocknbx;++x) {
-		for (short unsigned int y = 0;y<blocknby;++y) {
+	for (short unsigned int x = 0;x<m_blocknbx;++x) {
+		for (short unsigned int y = 0;y<m_blocknby;++y) {
 			if (mode == 1) {
 				app.Draw(m_blocks[x][y]->Sprite);
 			}
@@ -188,6 +189,7 @@ bool ClientApp::MouseInPlayableArea() {
     }
     return true;
 }
+
 
 Network::Socket& ClientApp::GetSocket() {
 	return Socket;

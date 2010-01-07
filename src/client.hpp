@@ -74,8 +74,8 @@ private:
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;
 
-	int blocknbx;
-	int blocknby;
+	int m_blocknbx;
+	int m_blocknby;
 
 	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
 
