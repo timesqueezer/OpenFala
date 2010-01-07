@@ -51,13 +51,6 @@ void ClientApp::Init() {
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "sky.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "grass.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "ground.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "sky-out.png", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "grass-out.png", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "ground-out.png", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/debug/", "highlight.png", m_ratio, m_ratio);
 
 	blocknbx = app.GetWidth() / m_ratio;
 	blocknby = app.GetHeight() / m_ratio;
