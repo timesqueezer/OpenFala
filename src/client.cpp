@@ -46,11 +46,12 @@ void ClientApp::Init() {
     // Load images
 	path = Filesystem::get_cwd();
 	ResMgr = ResourceManager::ResourceManager();
-	ResMgr.AddImage("data/images/cached/", "block-rock.png", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "highlight.png", m_ratio, m_ratio);
 
 	m_blocknbx = app.GetWidth() / m_ratio;
 	m_blocknby = app.GetHeight() / m_ratio;
@@ -64,20 +65,20 @@ void ClientApp::Init() {
             if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), 0);
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"), 0);
 		        }
             } else {
             	// TODO: other graphics here, this is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"));
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), 0);
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"));
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"), 0);
 		        }
             }
         }
@@ -85,7 +86,7 @@ void ClientApp::Init() {
 	}
 
     // TODO: Maybe use shared_ptr later on here?
-	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"));
+	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"), 1);
 
 	mode = 1; // set to build mode
 }
@@ -104,7 +105,7 @@ void ClientApp::Update() {
            }
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
-                if (MouseInPlayableArea()) {
+                if (true) {//MouseInPlayableArea()) {
                     SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y') << "rolf";
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
@@ -129,7 +130,7 @@ void ClientApp::Update() {
     unsigned short svport;
     Socket.Receive(RecvPacket, svaddress, svport);
     RecvPacket >> playerid >> posx >> posy;
-    std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
+    //std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
     RecvPacket.Clear();
 }
 
@@ -202,7 +203,12 @@ void ClientApp::PlaceBlock(int x, int y) {
     if (!InPlayableArea(x,y)) {
         std::cout << "Cannot place the block right there!";
     } else {
-        m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"));
+        if (m_blocks[x][y+1]->m_type != 1) {
+            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), 2);
+            std::cout << "lol" << std::endl;
+        } else {
+            std::cout << m_blocks[x][y-1]->m_type << std::endl << m_blocks[x][y]->m_type << std::endl;
+        }
     }
     return;
 }
