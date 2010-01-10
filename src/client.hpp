@@ -89,7 +89,6 @@ private:
 	#ifdef DEBUG
 	sf::String fps;
 	sf::Shape inforect;
-	sf::Shape debugcircle;
 	#endif
 };
 

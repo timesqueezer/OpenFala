@@ -25,7 +25,6 @@ ClientApp::ClientApp(const uint16_t& port, const Network::IPAddress& bind_ad,
 	m_name = name;
 
 	#ifdef DEBUG
-    debugcircle = sf::Shape::Circle(100, 100, 50, sf::Color(128, 192, 255));
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
 	#endif
@@ -50,6 +49,7 @@ void ClientApp::Init() {
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight.png", m_ratio, m_ratio);
 
@@ -150,8 +150,6 @@ void ClientApp::Draw() {
 
 	#ifdef DEBUG
 	app.Draw(inforect);
-	app.Draw(debugcircle);
-	debugcircle.Move(0.5f, 0.5f);
 		fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 	fps.SetPosition(10, app.GetHeight() - 40);
 	app.Draw(fps);
