@@ -52,7 +52,7 @@ public:
     // check if the coordinates are in a legal area
     bool InPlayableArea(int, int);
     // Get the block beneath mouse cursor.
-    sf::Uint16 GetMouseBlock(char);
+    sf::Uint16 GetMouseBlock(char, char);
 
     // Get the client socket.
     Network::Socket& GetSocket();

@@ -58,10 +58,10 @@ void ClientApp::Init() {
 
 	std::cout << m_blocknbx << " " << m_blocknby << " " << m_ratio << std::endl;
 
-	m_blocks.resize(extents[m_blocknbx][m_blocknby]);
+	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
-	for (short unsigned int x = 0;x < m_blocknbx;++x) {
-		for (short unsigned int y = 0;y < m_blocknby;++y) {
+	for (short unsigned int x = 0;x <= m_blocknbx;++x) {
+		for (short unsigned int y = 0;y <= m_blocknby;++y) {
             if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2) ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
@@ -105,11 +105,11 @@ void ClientApp::Update() {
            }
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
-                if (true) {//MouseInPlayableArea()) {
-                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y') << "rolf";
+                if (MouseInPlayableArea()) {
+                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "rolf";
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
-                    PlaceBlock(GetMouseBlock('x'), GetMouseBlock('y'));
+                    PlaceBlock(GetMouseBlock('x','a'), GetMouseBlock('y','a'));
                 }
             }
 		}
@@ -145,7 +145,7 @@ void ClientApp::Draw() {
 		}
 	}
 
-	highlightblock->SetPos((float)GetMouseBlock('x')*m_ratio, (float)GetMouseBlock('y')*m_ratio);
+	highlightblock->SetPos((float)GetMouseBlock('x', 'a')*m_ratio, (float)GetMouseBlock('y','a')*m_ratio);
 	app.Draw(highlightblock->Sprite);
 
 	#ifdef DEBUG
@@ -153,8 +153,8 @@ void ClientApp::Draw() {
 		fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 	fps.SetPosition(10, app.GetHeight() - 40);
 	app.Draw(fps);
-		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x') - (m_width / m_ratio - 20)/2)+
-                       	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y')));
+		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x','p'))+
+                       	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y','p')));
 	mousepos.SetPosition(150, app.GetHeight() - 40);
 	app.Draw(mousepos);
 	#endif
@@ -165,12 +165,20 @@ void ClientApp::Die() {
     Socket.Close();
 }
 
-sf::Uint16 ClientApp::GetMouseBlock(char xy) {
-	if (xy == 'x') {
-		return (sf::Uint16) (input->GetMouseX() / m_ratio);
-	} else {
-		return (sf::Uint16) (input->GetMouseY() / m_ratio);
-	}
+sf::Uint16 ClientApp::GetMouseBlock(char xy, char type) {
+    if (type == 'p') { //this stands for playable area
+        if (xy == 'x') {
+            return (sf::Uint16) ((input->GetMouseX() / m_ratio) - ((m_width - 20*m_ratio)/2) / m_ratio);
+        } else {
+            return (sf::Uint16) (input->GetMouseY() / m_ratio);
+        }
+    } else {
+        if (xy == 'x') {
+            return (sf::Uint16) (input->GetMouseX() / m_ratio);
+        } else {
+            return (sf::Uint16) (input->GetMouseY() / m_ratio);
+        }
+    }
 }
 
 bool ClientApp::MouseInPlayableArea() {
