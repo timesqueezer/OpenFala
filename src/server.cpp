@@ -75,10 +75,10 @@ void ServerApp::HandleRequest() {
     #ifdef DEBUG
     //std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
     #endif
-    if (buildtype == "mouse") {
+    if (buildtype == "mouse") { // add mouse position to the list
         m_mpos[GetPlayerId(name)][0] = sqx;
         m_mpos[GetPlayerId(name)][1] = sqy;
-        std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
+        // std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
     }
     // Get ready for next package
     RecvPacket.Clear();

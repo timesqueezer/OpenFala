@@ -75,6 +75,7 @@ private:
 	sf::String mousepos;
 	float m_ratio;
 	Block* highlightblock;
+    Block* mouse2;
 
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;

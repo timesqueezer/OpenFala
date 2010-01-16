@@ -52,6 +52,7 @@ void ClientApp::Init() {
 	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight.png", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "mouse.png", m_ratio, m_ratio);
 
 	m_blocknbx = app.GetWidth() / m_ratio;
 	m_blocknby = app.GetHeight() / m_ratio;
@@ -60,9 +61,9 @@ void ClientApp::Init() {
 
 	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
-	for (short unsigned int x = 0;x <= m_blocknbx;++x) {
+	for (short unsigned int x = 0;x < m_blocknbx;++x) {
 		for (short unsigned int y = 0;y <= m_blocknby;++y) {
-            if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2) ))) {
+            if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2)-1 ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
 					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
@@ -87,6 +88,7 @@ void ClientApp::Init() {
 
     // TODO: Maybe use shared_ptr later on here?
 	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"), 1);
+	mouse2 = new Block(0, 0, ResMgr.GetImage("mouse"), 1);
 
 	mode = 1; // set to build mode
 }
@@ -130,7 +132,8 @@ void ClientApp::Update() {
     unsigned short svport;
     Socket.Receive(RecvPacket, svaddress, svport);
     RecvPacket >> playerid >> posx >> posy;
-    //std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
+   // mouse2->SetPos((float) posx, (float) posy);
+   // std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
     RecvPacket.Clear();
 }
 
@@ -147,6 +150,8 @@ void ClientApp::Draw() {
 
 	highlightblock->SetPos((float)GetMouseBlock('x', 'a')*m_ratio, (float)GetMouseBlock('y','a')*m_ratio);
 	app.Draw(highlightblock->Sprite);
+	app.Draw(mouse2->Sprite);
+
 
 	#ifdef DEBUG
 	app.Draw(inforect);
