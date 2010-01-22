@@ -12,7 +12,8 @@ ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
     m_clientport = 41312; // port for outgoing communication
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
-   	m_mpos.resize(extents[maxplayers][2]);
+    //m_mpos.resize(extents[maxplayers][2]);
+   	m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
    	// Mouse positions m_mpos[player1,2,3,4][x,y]
 }
 
@@ -73,25 +74,29 @@ void ServerApp::HandleRequest() {
     }
 
     #ifdef DEBUG
-    //std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
+    std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
     #endif
     if (buildtype == "mouse") { // add mouse position to the list
         m_mpos[GetPlayerId(name)][0] = sqx;
         m_mpos[GetPlayerId(name)][1] = sqy;
         // std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
+    } else if (buildtype == "block") {
+            SendPacket >> (sf::Uint16) 1 >> sqx >> sqy;
+            Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
+            SendPacket.Clear();
     }
     // Get ready for next package
     RecvPacket.Clear();
 }
 
 void ServerApp::Update() {
-    for(int i = 0; i < m_maxplayers; i++) {
+    /*for(int i = 0; i < m_maxplayers; i++) {
         if (m_clist[0][i] != "") {
             SendPacket >> (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
             Socket.Send(SendPacket, m_clist[0][i], 41312);
             SendPacket.Clear();
         }
-    }
+    }*/
 }
 
 void ServerApp::Die() {

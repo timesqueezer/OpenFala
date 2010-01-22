@@ -51,6 +51,7 @@ private:
 	stringarray2d m_clist;
 	stringarray2d::extent_gen extents;
     uint16array2d m_mpos;
+    uint16array2d m_blocks;
     Network::Socket Socket;
     Network::Packet RecvPacket;
     Network::Packet SendPacket;

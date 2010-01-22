@@ -88,15 +88,12 @@ void ClientApp::Init() {
 
     // TODO: Maybe use shared_ptr later on here?
 	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"), 1);
-	mouse2 = new Block(0, 0, ResMgr.GetImage("mouse"), 1);
+
 
 	mode = 1; // set to build mode
 }
 
 void ClientApp::HandleInput() {
-}
-
-void ClientApp::Update() {
     sf::Event Event;
 	while (app.GetEvent(Event)) {
 		if (Event.Type == sf::Event::Closed) {
@@ -108,33 +105,39 @@ void ClientApp::Update() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "rolf";
+                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "build";
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
-                    PlaceBlock(GetMouseBlock('x','a'), GetMouseBlock('y','a'));
                 }
             }
 		}
 		if (Event.Type == sf::Event::MouseMoved) {
-			SendPacket << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "mouse";
+			SendPacket << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "rolf";
 			Socket.Send(SendPacket, m_bindaddress, m_port);
 			SendPacket.Clear();
 		}
 	}
+}
+
+void ClientApp::Update() {
+
 
 	// Network tests
     // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
 	//SendPacket << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
-	sf::Uint16 playerid;
-	sf::Uint16 posx;
-	sf::Uint16 posy;
+	sf::Uint16 actionid;
+	sf::Uint16 posx = 0;
+	sf::Uint16 posy = 0;
     Network::IPAddress svaddress;
     unsigned short svport;
-    Socket.Receive(RecvPacket, svaddress, svport);
-    RecvPacket >> playerid >> posx >> posy;
-   // mouse2->SetPos((float) posx, (float) posy);
-   // std::cout << playerid << " rolf " << posx << " " << posy << std::endl;
+    if (Socket.Receive(RecvPacket, svaddress, svport)) {
+    RecvPacket >> actionid >> posx >> posy;
+    if (actionid == 1) {
+        PlaceBlock((int) posx, (int) posy);
+    }
+    std::cout << actionid << " " << posx << " " << posy << std::endl;
     RecvPacket.Clear();
+    }
 }
 
 void ClientApp::Draw() {
@@ -150,7 +153,7 @@ void ClientApp::Draw() {
 
 	highlightblock->SetPos((float)GetMouseBlock('x', 'a')*m_ratio, (float)GetMouseBlock('y','a')*m_ratio);
 	app.Draw(highlightblock->Sprite);
-	app.Draw(mouse2->Sprite);
+
 
 
 	#ifdef DEBUG
