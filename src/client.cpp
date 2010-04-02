@@ -51,8 +51,7 @@ void ClientApp::Init() {
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/", "highlight.png", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/", "mouse.png", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "highlight.tga", m_ratio, m_ratio);
 
 	m_blocknbx = app.GetWidth() / m_ratio;
 	m_blocknby = app.GetHeight() / m_ratio;
