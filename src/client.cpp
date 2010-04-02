@@ -104,7 +104,7 @@ void ClientApp::HandleInput() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "build";
+                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block";
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
@@ -130,12 +130,12 @@ void ClientApp::Update() {
     Network::IPAddress svaddress;
     unsigned short svport;
     if (Socket.Receive(RecvPacket, svaddress, svport)) {
-    RecvPacket >> actionid >> posx >> posy;
-    if (actionid == 1) {
-        PlaceBlock((int) posx, (int) posy);
-    }
-    std::cout << actionid << " " << posx << " " << posy << std::endl;
-    RecvPacket.Clear();
+        RecvPacket >> actionid >> posx >> posy;
+        if (actionid == 1) {
+            PlaceBlock((int) posx, (int) posy);
+        }
+        //std::cout << actionid << " " << posx << " " << posy << std::endl;
+        RecvPacket.Clear();
     }
 }
 
@@ -189,27 +189,15 @@ sf::Uint16 ClientApp::GetMouseBlock(char xy, char type) {
 }
 
 bool ClientApp::MouseInPlayableArea() {
-    if ((input->GetMouseX()) < ((m_width-20*m_ratio)/2) or
-       ((input->GetMouseX()) > ((m_width-(m_width - 20*m_ratio)/2)))) {
-        #ifdef DEBUG
-            std::cout << "false" << std::endl;
-        #endif
-        return false;
-    }
-    if ( input->GetMouseY() > 10*m_ratio ) {
-        #ifdef DEBUG
-            std::cout << "false" << std::endl;
-        #endif
-        return false;
-    }
-    return true;
+    return InPlayableArea(input->GetMouseX(), input->GetMouseY());
 }
 
 bool ClientApp::InPlayableArea(int x, int y) {
-    // i was to lazy to implement this at that time i need it
-    return true;
-    //if ( () or () ) {
-    //}
+    bool is_left_of_area  = x < ((m_width-20*m_ratio)/2) ;
+    bool is_right_of_area = x > ((m_width-(m_width - 20*m_ratio)/2));
+    bool is_underground   = y > 10*m_ratio;
+
+    return !(is_left_of_area or is_right_of_area or is_underground);
 }
 
 void ClientApp::PlaceBlock(int x, int y) {
@@ -218,9 +206,8 @@ void ClientApp::PlaceBlock(int x, int y) {
     } else {
         if (m_blocks[x][y+1]->m_type != 1) {
             m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), 2);
-            std::cout << "lol" << std::endl;
         } else {
-            std::cout << m_blocks[x][y-1]->m_type << std::endl << m_blocks[x][y]->m_type << std::endl;
+            std::cout << "Can't place blocks in the air." << std::endl;
         }
     }
     return;

@@ -81,9 +81,9 @@ void ServerApp::HandleRequest() {
         m_mpos[GetPlayerId(name)][1] = sqy;
         // std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
     } else if (buildtype == "block") {
-            SendPacket >> (sf::Uint16) 1 >> sqx >> sqy;
-            Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
-            SendPacket.Clear();
+        SendPacket << (sf::Uint16) 1 << sqx << sqy;
+        Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
+        SendPacket.Clear();
     }
     // Get ready for next package
     RecvPacket.Clear();
