@@ -1,5 +1,6 @@
 bin/**/*
 obj/**/*
+build
 data/images/cached/
 data/images/debug/cached/
 OpenFala.depend
