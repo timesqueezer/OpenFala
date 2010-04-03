@@ -1,20 +1,20 @@
 //cpGUI - Copyright (c) 2009 Jason Cupp
 //
-//This software is provided 'as-is', without any express or implied warranty. 
-//In no event will the authors be held liable for any damages arising from the 
+//This software is provided 'as-is', without any express or implied warranty.
+//In no event will the authors be held liable for any damages arising from the
 //use of this software.
 //
-//Permission is granted to anyone to use this software for any purpose, including 
-//commercial applications, and to alter it and redistribute it freely, subject to 
+//Permission is granted to anyone to use this software for any purpose, including
+//commercial applications, and to alter it and redistribute it freely, subject to
 //the following restrictions:
 //
 //
-//1. The origin of this software must not be misrepresented; you must not claim 
-//that you wrote the original software. If you use this software in a product, an 
+//1. The origin of this software must not be misrepresented; you must not claim
+//that you wrote the original software. If you use this software in a product, an
 //acknowledgment in the product documentation would be appreciated but is not required.
 //
 //
-//2. Altered source versions must be plainly marked as such, and must not be 
+//2. Altered source versions must be plainly marked as such, and must not be
 //misrepresented as being the original software.
 //
 //
@@ -26,13 +26,13 @@
 #define CPGUI
 
 #include <SFML/Graphics.hpp>
-#include <string.h>
+#include <string>
 #include <vector>
 #include <map>
 #include <fstream>
 #include <sstream>
-#include <math.h>
 #include <stdexcept>
+#include <math.h>
 
 namespace cp
 {
@@ -79,7 +79,7 @@ namespace cp
 		std::string defaultFilename;
 		bool acceptsKeys, useArrowKeys, bShow;
 		sf::Clock clock;
-		
+
 	private:
 		typedef std::map<std::string, FontData> FontMap;
 		std::map<std::string, FontData> fontMap;
@@ -139,7 +139,7 @@ namespace cp
 	{
 	public:
 		cpImageButton();
-		cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI, 
+		cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI,
 			sf::Image *image, float posx=0, float posy=0);
 		void Draw();
 		int CheckState(const sf::Input *input);
@@ -157,7 +157,7 @@ namespace cp
 	{
 	public:
 		cpButton();
-		cpButton(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label, 
+		cpButton(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label,
 			float posx=0, float posy=0, float width=CP_DEFAULT, float height=CP_DEFAULT);
 		virtual void Draw();
 		virtual bool SetSize(float width, float height);
@@ -186,10 +186,10 @@ namespace cp
 	{
 	public:
 		cpCheckBox();
-		cpCheckBox(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label, 
+		cpCheckBox(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label,
 			float posx=0, float posy=0);
 		void Draw();
-		int CheckState(const sf::Input *input); 
+		int CheckState(const sf::Input *input);
 		bool SetSize(float width, float height);
 		void SetChecked(bool checked);
 		bool GetChecked();
@@ -296,7 +296,7 @@ namespace cp
 	class cpSelectionBox : public cpObject
 	{
 	public:
-		cpSelectionBox(sf::RenderWindow *parent, cpGuiContainer *GUI, float posx=0, 
+		cpSelectionBox(sf::RenderWindow *parent, cpGuiContainer *GUI, float posx=0,
 			float posy=0, float width=CP_DEFAULT, float height=CP_DEFAULT);
 		cpSelectionBox();
 		~cpSelectionBox();
@@ -365,11 +365,11 @@ namespace cp
 	class cpTextBox : public cpObject
 	{
 	public:
-		cpTextBox(sf::RenderWindow *parent, cpGuiContainer *GUI, float posx=0, 
+		cpTextBox(sf::RenderWindow *parent, cpGuiContainer *GUI, float posx=0,
 			float posy=0, float width=CP_DEFAULT, float height=CP_DEFAULT);
 		~cpTextBox();
 		void Draw();
-		void LoadFile(char *filename);
+		void LoadFile(std::string filename);
 		int CheckState(const sf::Input *input);
 
 		bool SetSize(float width, float height);
@@ -384,7 +384,7 @@ namespace cp
 	private:
 		std::vector<std::string> lineStrings;
 		std::vector<sf::String> lineSFStrings;
-		char* Filename;
+		std::string Filename;
 		int viewableLines, totalLines, startingLine;
 		unsigned int fontSize;
 		cpScrollBar *scrollbar;

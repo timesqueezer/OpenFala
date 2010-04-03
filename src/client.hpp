@@ -5,6 +5,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 #include <boost/multi_array.hpp>
@@ -17,7 +18,8 @@
 #include "filesystem.hpp"
 #include "resources.hpp"
 #include "block.hpp"
-
+#include "gamestate.hpp"
+/*
 typedef boost::multi_array<Block*, 2> blockarray2d;
 
 // Main class for client application.
@@ -57,8 +59,11 @@ public:
     // Get the client socket.
     Network::Socket& GetSocket();
 private:
-	uint16_t m_width;
-	uint16_t m_height;
+
+	//uint16_t m_width;
+	//uint16_t m_height;
+
+
 	const sf::Input* input;
 	uint16_t m_port;
 	uint16_t m_clientport;
@@ -69,10 +74,10 @@ private:
     Network::Packet RecvPacket;
 
 	sf::RenderWindow app;
-	sf::Clock clock;
 	ResourceManager ResMgr;
-	Filesystem::path path;
+
 	sf::String mousepos;
+
 	float m_ratio;
 	Block* highlightblock;
 
@@ -84,12 +89,12 @@ private:
 
 	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
 
-	unsigned int highlightx, highlighty;
-
 	#ifdef DEBUG
 	sf::String fps;
 	sf::Shape inforect;
 	#endif
+
 };
 
+*/
 #endif

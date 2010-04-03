@@ -14,6 +14,8 @@
 #include "block.hpp"
 #include "utility.hpp"
 
+/*
+
 // Big constructor!
 ClientApp::ClientApp(const uint16_t& port, const Network::IPAddress& bind_ad,
 						const std::string& size, const std::string& name) {
@@ -43,7 +45,6 @@ void ClientApp::Init() {
 	m_ratio = m_height / 15;
 
     // Load images
-	path = Filesystem::get_cwd();
 	ResMgr = ResourceManager::ResourceManager();
 	ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
@@ -216,3 +217,4 @@ void ClientApp::PlaceBlock(int x, int y) {
 Network::Socket& ClientApp::GetSocket() {
 	return Socket;
 }
+*/

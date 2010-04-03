@@ -36,8 +36,8 @@ namespace Utility {
 		\n\nAllowed options");
 		desc.add_options()
 		    ("help,h", "this message, obviously")
-		    ("mode,m", po::value<std::string>()->default_value("both"),
-		        "choose mode <modes: 'client', 'server', 'both'>")
+		    ("mode,m", po::value<std::string>()->default_value("normal"),
+		        "choose mode <modes: 'client', 'server', 'both', 'normal'>")
 		    ("address,a", po::value<std::string>()->default_value("127.0.0.1"),
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
 		    ("name,n", po::value<std::string>()->default_value("loldude"),
@@ -62,7 +62,7 @@ namespace Utility {
 		}
 
 		std::string mode = vm["mode"].as<std::string>();
-		if ((mode != "client") and (mode != "server") and (mode != "both")) {
+		if ((mode != "client") and (mode != "server") and (mode != "both") and (mode != "normal")) {
 			std::cout << "ERROR: You need to provide a valid mode!";
 			exit(1);
 		}

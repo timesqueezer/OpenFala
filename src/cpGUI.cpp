@@ -1,20 +1,20 @@
 //cpGUI - Copyright (c) 2009 Jason Cupp
 //
-//This software is provided 'as-is', without any express or implied warranty. 
-//In no event will the authors be held liable for any damages arising from the 
+//This software is provided 'as-is', without any express or implied warranty.
+//In no event will the authors be held liable for any damages arising from the
 //use of this software.
 //
-//Permission is granted to anyone to use this software for any purpose, including 
-//commercial applications, and to alter it and redistribute it freely, subject to 
+//Permission is granted to anyone to use this software for any purpose, including
+//commercial applications, and to alter it and redistribute it freely, subject to
 //the following restrictions:
 //
 //
-//1. The origin of this software must not be misrepresented; you must not claim 
-//that you wrote the original software. If you use this software in a product, an 
+//1. The origin of this software must not be misrepresented; you must not claim
+//that you wrote the original software. If you use this software in a product, an
 //acknowledgment in the product documentation would be appreciated but is not required.
 //
 //
-//2. Altered source versions must be plainly marked as such, and must not be 
+//2. Altered source versions must be plainly marked as such, and must not be
 //misrepresented as being the original software.
 //
 //
@@ -23,7 +23,7 @@
 
 
 
-#include "cpGUI.h"
+#include "cpGUI.hpp"
 using namespace cp;
 
 
@@ -46,7 +46,7 @@ cpGuiContainer::cpGuiContainer()
 	// arial if the others aren't present
 	//
 	// If you're not in Windows, you're on your own and you'll
-	// have to settle for the default font, or use the 
+	// have to settle for the default font, or use the
 	// cpObject::SetFont() function.
 	defaultFont = new sf::Font(sf::Font::GetDefaultFont());
 	defaultFilename = "Default";
@@ -55,7 +55,7 @@ cpGuiContainer::cpGuiContainer()
 	GetWindowsDirectoryA(tempdir, sizeof(tempdir)/sizeof(char));
 	std::string dir;
 	dir.assign(tempdir);
-	
+
 	defaultFilename = dir + "/Fonts/segoeui.ttf";
 	if(!defaultFont->LoadFromFile(defaultFilename, 20))
 	{
@@ -66,12 +66,12 @@ cpGuiContainer::cpGuiContainer()
 			defaultFont->LoadFromFile(defaultFilename, 20);
 		}
 	}
-#endif 
+#endif
 	std::string key = defaultFilename;
 	if(key != "Default")
 		key = key + ";20";
 	FontData data = {defaultFont, 1};
-	fontMap.insert(std::make_pair(key , data)); 
+	fontMap.insert(std::make_pair(key , data));
 }
 
 cpGuiContainer::~cpGuiContainer()
@@ -146,18 +146,18 @@ sf::Font* cpGuiContainer::GetFont(std::string filename, unsigned int fontSize)
 			throw std::runtime_error("Font " + filename + " could not be loaded");
 	}
 	sf::Font *result = it->second.myFont;
-	
+
 	return result;
 }
 
-/// All controls that can accept focus or use the 
+/// All controls that can accept focus or use the
 /// mouse wheel should be registered to the GuiContainer.
 void cpGuiContainer::Register(cpObject *object)
 {
 	control.push_back(object);
 }
 
-/// This is used to "unregister" a control that has been 
+/// This is used to "unregister" a control that has been
 /// registered. Used in classes that are a compilation
 /// of different objects when each separate object should
 /// not receive focus.
@@ -226,7 +226,7 @@ void cpGuiContainer::NextObjectFocus()
 
 /// Sets whether you can use Tab to move focus to the next object.
 /// Also sets whether the arrow keys can move the focus.
-/// Classes that use arrow keys locally should set 
+/// Classes that use arrow keys locally should set
 /// UseArrowKeys to false.
 void cpGuiContainer::AcceptsKeys(bool accept, bool UseArrowKeys)
 {
@@ -235,7 +235,7 @@ void cpGuiContainer::AcceptsKeys(bool accept, bool UseArrowKeys)
 }
 
 /// Used in the event loop to process the focus changing keys.
-/// This function also sends the mouse wheel delta to the 
+/// This function also sends the mouse wheel delta to the
 /// classes that need that information.
 void cpGuiContainer::ProcessKeys(sf::Event *evt)
 {
@@ -391,7 +391,7 @@ void cpObject::SetPosition(float posx, float posy)
 /// Label, it returns false and nothing is changed.
 bool cpObject::SetSize(float width, float height)
 {
-	if(Label.GetRect().GetWidth() > Width || 
+	if(Label.GetRect().GetWidth() > Width ||
 		Label.GetRect().GetHeight() > Height)
 		return false;
 	Width = width;
@@ -458,7 +458,7 @@ void cpObject::SetLabelText(std::string text)
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
@@ -538,9 +538,9 @@ int cpObject::CheckState(const sf::Input *input)
 /// Checks to see if mouse pointer is inside control.  Returns true if it is.
 bool cpObject::CheckMouseEntered(const sf::Input *input)
 {
-	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY()); 
+	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY());
 	return (mousePos.x >= PosX && mousePos.x <= PosX+Width &&
-        mousePos.y >= PosY && mousePos.y <= PosY+Height); 
+        mousePos.y >= PosY && mousePos.y <= PosY+Height);
 }
 
 /// sets the Label's text and recreates the generic background
@@ -675,11 +675,11 @@ sf::Color cpObject::GetMouseoverColor()
 
 
 /// *********************************************************************************
-/// create cpButton constructor which inherits from 
+/// create cpButton constructor which inherits from
 /// cpObject.  Also create all functions for cpButton.
 /// Some functions are unique, but most augment functions from cpObject
 /// *********************************************************************************
-cpButton::cpButton(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label, 
+cpButton::cpButton(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string label,
 				   float posx, float posy, float width, float height) : cpObject(parent,
 				   GUI, label, posx, posy, width, height)
 {
@@ -695,7 +695,7 @@ cpButton::cpButton(sf::RenderWindow* parent, cpGuiContainer *GUI, std::string la
 	gradient.AddPoint(PosX+Width-2, PosY+Height-3, backgroundColor2);
 	gradient.AddPoint(PosX+Width-3, PosY+Height-2, backgroundColor2);
 	gradient.AddPoint(PosX+3, PosY+Height-2, backgroundColor2);
-	gradient.AddPoint(PosX+2, PosY+Height-3, backgroundColor2);	
+	gradient.AddPoint(PosX+2, PosY+Height-3, backgroundColor2);
 }
 
 cpButton::cpButton() : cpObject(NULL, NULL, ""){}
@@ -793,7 +793,7 @@ void cpButton::SetLabelText(std::string text)
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
@@ -873,13 +873,13 @@ void cpButton::TestLabelFit()
 
 /// ******************************************************************
 /// A class of buttons that contain an image.
-/// These buttons cannot be resized; the size is based on the 
+/// These buttons cannot be resized; the size is based on the
 /// size of the image sent to it.  Also, there is no text label.
 /// ******************************************************************
-cpImageButton::cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI, 
+cpImageButton::cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI,
 							 sf::Image *image, float posx, float posy) : cpObject(parent,
 							 GUI, "", posx, posy, (float)image->GetWidth()+3,
-								(float)image->GetHeight()+3)				
+								(float)image->GetHeight()+3)
 {
 	sprite.SetImage(*image);
 	sprite.SetPosition(posx + 1, posy + 1);
@@ -917,14 +917,14 @@ void cpImageButton::Draw()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
 int cpImageButton::CheckState(const sf::Input *input)
 {
 	int state = cpObject::CheckState(input);
-	
+
 	if(state == CP_ST_MOUSE_LBUTTON_DOWN)
 		backgroundColor = sf::Color(140, 140, 140);
 
@@ -966,7 +966,7 @@ void cpImageButton::Show(bool show)
 /// **********************************************************
 /// A simple on/off check box with a label
 /// **********************************************************
-cpCheckBox::cpCheckBox(sf::RenderWindow *parent, cpGuiContainer *GUI, 
+cpCheckBox::cpCheckBox(sf::RenderWindow *parent, cpGuiContainer *GUI,
 					   std::string label, float posx, float posy) : cpButton(parent,
 					   GUI, label, posx, posy, CP_DEFAULT, CP_DEFAULT)
 {
@@ -995,7 +995,7 @@ void cpCheckBox::CreateRects(std::string label)
 
 	gradient = sf::Shape::Rectangle(PosX+2, PosY+2, PosX+Width-2,
 		PosY+Height-2, backgroundColor, 1.f, backgroundColor2);
-	sf::Color color = sf::Color(backgroundColor2.r+35, 
+	sf::Color color = sf::Color(backgroundColor2.r+35,
 		backgroundColor2.g+35, backgroundColor2.b+35);
 	gradient.SetPointColor(0, backgroundColor2);
 	gradient.SetPointColor(1,color);
@@ -1036,7 +1036,7 @@ void cpCheckBox::Draw()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
@@ -1087,7 +1087,7 @@ bool cpCheckBox::GetChecked()
 /// the number of characters that the box can contain.  The
 /// font size is tied to the height of the box, so you can't
 /// change the font size.
-/// 
+///
 /// You can set CP_TXT_LEFT_ALIGN, CP_TXT_RIGHT_ALIGN, or
 /// CP_TXT_CENTER_ALIGN.  This simple text box does not
 /// support text selection, but you can backspace.
@@ -1117,7 +1117,7 @@ cpTextInputBox::cpTextInputBox(sf::RenderWindow *parent, cpGuiContainer *GUI,
 cpTextInputBox::cpTextInputBox() : cpObject(NULL, NULL, ""){}
 
 /// Updates the look of the text input box.
-/// Computes the text alignement and position of the 
+/// Computes the text alignement and position of the
 /// Caret/cursor.
 void cpTextInputBox::CreateRects(std::string label)
 {
@@ -1127,7 +1127,7 @@ void cpTextInputBox::CreateRects(std::string label)
 	tempLabel = Label;
 
 	float thickness = 1.f;
-	backRect = sf::Shape::Rectangle(PosX, PosY, PosX+Width, PosY+Height, 
+	backRect = sf::Shape::Rectangle(PosX, PosY, PosX+Width, PosY+Height,
 		backgroundColor, thickness);
 	for(int t=0; t<4; t++)
 		backRect.SetPointOutlineColor(t, outlineColor);
@@ -1172,7 +1172,7 @@ void cpTextInputBox::Draw()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
@@ -1222,7 +1222,7 @@ void cpTextInputBox::ProcessTextInput(sf::Event *evt)
 	if(CheckTextFit())
 		Label.SetText(tempText);
 }
- 
+
 /// Limits the size of the Label to the size of the box
 bool cpTextInputBox::CheckTextFit()
 {
@@ -1235,7 +1235,7 @@ bool cpTextInputBox::CheckTextFit()
 }
 
 /// Set the width & height dimensions of the text input box.
-/// also reloads the font with the new font size for 
+/// also reloads the font with the new font size for
 /// better text quality
 bool cpTextInputBox::SetSize(float width, float height)
 {
@@ -1299,7 +1299,7 @@ void cpTextInputBox::SetLabelText(std::string text)
 /// **************************************************************
 /// A clickable button based on an sf::Shape.
 /// **************************************************************
-cpShapeButton::cpShapeButton(sf::RenderWindow *parent, cpGuiContainer *GUI, sf::Shape *shape, 
+cpShapeButton::cpShapeButton(sf::RenderWindow *parent, cpGuiContainer *GUI, sf::Shape *shape,
 							 float posx, float posy) : cpObject(parent, GUI, "", posx, posy)
 {
 	button = shape;
@@ -1333,7 +1333,7 @@ void cpShapeButton::Draw()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
@@ -1426,8 +1426,8 @@ void cpShapeButton::SetLabelText(std::string text){}
 /// Vertical scrollbar
 ///
 /// ********************************************************************
-cpScrollBar::cpScrollBar(sf::RenderWindow *parent, cpGuiContainer *GUI, 
-						 float length, int ViewableLines, int TotalLines, 
+cpScrollBar::cpScrollBar(sf::RenderWindow *parent, cpGuiContainer *GUI,
+						 float length, int ViewableLines, int TotalLines,
 						 float posx, float posy)
 {
 	Parent = parent;
@@ -1522,14 +1522,14 @@ int cpScrollBar::CheckState(const sf::Input *input)
 {
 	int upState = upButton->CheckState(input);
 	int dnState = downButton->CheckState(input);
-	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY()); 
+	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY());
 	if(CheckMouseSlider(input) == CP_ST_MOUSE_LBUTTON_DOWN && !mouseDown)
 	{
 		mouseY = mousePos.y;
 		sliderDrag = true;
 		mouseDown = true;
 	}
-	if(sliderDrag && currentPosition > 14 && currentPosition < PosY + Length 
+	if(sliderDrag && currentPosition > 14 && currentPosition < PosY + Length
 		- slLength - 14)
 	{
 		float temp = mousePos.y;
@@ -1538,7 +1538,7 @@ int cpScrollBar::CheckState(const sf::Input *input)
 		MoveLines();
 		mouseY = temp;
 	}
-	if(CheckMouseSlider(input) == CP_ST_MOUSE_LBUTTON_RELEASED || 
+	if(CheckMouseSlider(input) == CP_ST_MOUSE_LBUTTON_RELEASED ||
 		(!input->IsMouseButtonDown(sf::Mouse::Left) && sliderDrag))
 	{
 		sliderDrag = false;
@@ -1553,7 +1553,7 @@ int cpScrollBar::CheckState(const sf::Input *input)
 		clock2.Reset();
 	}
 
-	if(upState == CP_ST_MOUSE_LBUTTON_DOWN && mouseDown && clock.GetElapsedTime() > 0.7f 
+	if(upState == CP_ST_MOUSE_LBUTTON_DOWN && mouseDown && clock.GetElapsedTime() > 0.7f
 		&& clock2.GetElapsedTime() > 0.1f && currentPosition > 14)
 	{
 		MoveSlider(-1);
@@ -1570,7 +1570,7 @@ int cpScrollBar::CheckState(const sf::Input *input)
 		clock2.Reset();
 	}
 
-	if(dnState == CP_ST_MOUSE_LBUTTON_DOWN && mouseDown && clock.GetElapsedTime() > 0.7f 
+	if(dnState == CP_ST_MOUSE_LBUTTON_DOWN && mouseDown && clock.GetElapsedTime() > 0.7f
 		&& clock2.GetElapsedTime() > 0.1f && currentPosition > 14)
 	{
 		MoveSlider(1);
@@ -1579,10 +1579,10 @@ int cpScrollBar::CheckState(const sf::Input *input)
 		clock2.Reset();
 	}
 	if(input->IsMouseButtonDown(sf::Mouse::Left) && !mouseDown && !sliderDrag &&
-		CheckMouseEntered(input)) 
+		CheckMouseEntered(input))
 		clickGroove = true;
 
-	if(!input->IsMouseButtonDown(sf::Mouse::Left) && clickGroove) 
+	if(!input->IsMouseButtonDown(sf::Mouse::Left) && clickGroove)
 	{
 		int d = -1;
 		if(mousePos.y > PosY+currentPosition+slLength)
@@ -1640,7 +1640,7 @@ void cpScrollBar::CheckSliderValid()
 /// Checks to see if mouse pointer is inside control.  Returns true if it is.
 bool cpScrollBar::CheckMouseEntered(const sf::Input *input)
 {
-	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY()); 
+	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY());
 	return (mousePos.x >= PosX && mousePos.x <= PosX+15 &&
 		mousePos.y >= PosY && mousePos.y <= PosY+Length);
 }
@@ -1650,9 +1650,9 @@ bool cpScrollBar::CheckMouseEntered(const sf::Input *input)
 /// represents the mouse activity
 int cpScrollBar::CheckMouseSlider(const sf::Input *input)
 {
-	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY()); 
+	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY());
 	if(mousePos.x >= PosX && mousePos.x <= PosX+15 &&
-		mousePos.y >= PosY+currentPosition && 
+		mousePos.y >= PosY+currentPosition &&
 		mousePos.y <= PosY+currentPosition+slLength)
 	{
 		if(input->IsMouseButtonDown(sf::Mouse::Left))
@@ -1754,7 +1754,7 @@ void cpScrollBar::SetPosition(float posx, float posy)
 /// those choices will be listed in the box.  A selection can
 /// be made either by clicking on the choice, or with the keyboard
 /// *************************************************************************
-cpSelectionBox::cpSelectionBox(sf::RenderWindow *parent, cpGuiContainer *GUI, 
+cpSelectionBox::cpSelectionBox(sf::RenderWindow *parent, cpGuiContainer *GUI,
 							   float posx, float posy, float width, float height) :
 cpObject(parent, GUI, "", posx, posy, width, height)
 {
@@ -1768,7 +1768,7 @@ cpObject(parent, GUI, "", posx, posy, width, height)
 	mouseDown = false;
 	keyDown = false;
 	clock.Reset();
-	
+
 	SetUseWheel(true);
 
 	scrollbar = new cpScrollBar(Parent, gui, Height, viewableLines, choices.size(),
@@ -1806,7 +1806,7 @@ void cpSelectionBox::Draw()
 		int max = choices.size();
 		if(choices.size() > (unsigned int)viewableLines)
 			max = viewableLines;
-		if(currentSelection >= currentStartingLine && currentSelection < 
+		if(currentSelection >= currentStartingLine && currentSelection <
 			currentStartingLine + max)
 		{
 			selBox = sf::Shape::Rectangle(PosX, choices[currentSelection].GetPosition().y,
@@ -1853,7 +1853,7 @@ void cpSelectionBox::RemoveLastChoice()
 }
 
 /// Makes sure the text of all choices fits in the selection box
-/// BEWARE: if the text is too wide for the box, it will be 
+/// BEWARE: if the text is too wide for the box, it will be
 /// truncated never to be seen again.
 void cpSelectionBox::CheckTextWidth()
 {
@@ -1877,17 +1877,17 @@ void cpSelectionBox::CheckTextWidth()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
-/// 
-/// In this class, the mouse wheel delta information is taken from 
+///
+/// In this class, the mouse wheel delta information is taken from
 /// the GuiContainer to update the scrollbar
 int cpSelectionBox::CheckState(const sf::Input *input)
 {
 	int state = cpObject::CheckState(input);
-	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY()); 
+	sf::Vector2f mousePos = Parent->ConvertCoords(input->GetMouseX(), input->GetMouseY());
 
 	if(state == CP_ST_NONE)
 	{
@@ -1911,7 +1911,7 @@ int cpSelectionBox::CheckState(const sf::Input *input)
 		wheelDelta = 0;
 	}
 
-	if(input->IsKeyDown(sf::Key::Down) && (unsigned int)currentSelection < choices.size()-1 
+	if(input->IsKeyDown(sf::Key::Down) && (unsigned int)currentSelection < choices.size()-1
 		&& hasFocus && clock.GetElapsedTime() > .3f)
 	{
 		currentSelection++;
@@ -1922,7 +1922,7 @@ int cpSelectionBox::CheckState(const sf::Input *input)
 		}
 		clock.Reset();
 	}
-	if(input->IsKeyDown(sf::Key::Up) && currentSelection > 0 && 
+	if(input->IsKeyDown(sf::Key::Up) && currentSelection > 0 &&
 		hasFocus && clock.GetElapsedTime() > .3)
 	{
 		currentSelection--;
@@ -1937,7 +1937,7 @@ int cpSelectionBox::CheckState(const sf::Input *input)
 
 	if(input->IsMouseButtonDown(sf::Mouse::Left))
 	{
-		if(mousePos.x > PosX && mousePos.x < PosX+Width-15 && mousePos.y > PosY && 
+		if(mousePos.x > PosX && mousePos.x < PosX+Width-15 && mousePos.y > PosY &&
 			mousePos.y < PosY+Height)
 			mouseDown = true;
 	}
@@ -2058,8 +2058,8 @@ void cpSelectionBox::SetBackgroundColor(sf::Color color)
 // **********************************************************************
 // Drop down box
 // **********************************************************************
-cpDropDownBox::cpDropDownBox(sf::RenderWindow *parent, cpGuiContainer *GUI, 
-							 std::string label, float posx, float posy, 
+cpDropDownBox::cpDropDownBox(sf::RenderWindow *parent, cpGuiContainer *GUI,
+							 std::string label, float posx, float posy,
 							 float width, float height) : cpObject(parent,
 							 GUI, label, posx, posy, width, height)
 {
@@ -2150,11 +2150,11 @@ void cpDropDownBox::CheckTextWidth()
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
-/// 
+///
 /// The Selection Box part of the drop down box also recieves
 /// mouse wheel delta information from the GuiContainer.
 int cpDropDownBox::CheckState(const sf::Input *input)
@@ -2182,7 +2182,7 @@ int cpDropDownBox::CheckState(const sf::Input *input)
 		textColor = tempTextColor;
 	}
 
-	if(btnState == CP_ST_MOUSE_LBUTTON_RELEASED || state == 
+	if(btnState == CP_ST_MOUSE_LBUTTON_RELEASED || state ==
 		CP_ST_MOUSE_LBUTTON_RELEASED)
 	{
 		sBox->Show(!sBox->GetShow());
@@ -2322,12 +2322,12 @@ void cpDropDownBox::SetLabelColor(sf::Color color)
 
 /// *************************************************************
 /// This is a non-editable, read only text box used
-/// for displaying long strings of text, or displaying a 
+/// for displaying long strings of text, or displaying a
 /// txt file.  This class automatically word wraps the text
 /// to fit the size of the box.  Minimum size is 200x200.
 /// *************************************************************
-cpTextBox::cpTextBox(sf::RenderWindow *parent, cpGuiContainer *GUI, 
-					 float posx, float posy, float width, float height) : 
+cpTextBox::cpTextBox(sf::RenderWindow *parent, cpGuiContainer *GUI,
+					 float posx, float posy, float width, float height) :
 cpObject(parent, GUI, "", posx, posy, width, height)
 {
 	backgroundColor = sf::Color::White;
@@ -2383,18 +2383,21 @@ void cpTextBox::Draw()
 /// Loads a simple text file, word wraps it to fit the
 /// Text Box, and sets totalLines for the total number of lines.
 /// Rich text is not supported.
-void cpTextBox::LoadFile(char* filename)
+void cpTextBox::LoadFile(std::string filename)
 {
 	totalLines = 0;
 	Filename = filename;
 	if(Filename == "")
 		return;
 	lineSFStrings.clear();
-	std::ifstream file(filename);
+
+    std::ifstream file;
+    file.open(filename.c_str());
+    //std::ifstream file(filename);
 	if(!file.is_open())
 		return;
 
-	std::string Line, tempWord, tempLine; 
+	std::string Line, tempWord, tempLine;
 	sf::String sfTemp;
 	std::vector<std::string> tokens;
 	sfTemp = Label;
@@ -2456,12 +2459,12 @@ void cpTextBox::LoadFile(char* filename)
 /// possible return values are:
 /// CP_ST_NONE, CP_ST_MOUSE_ENTER, CP_ST_MOUSE_EXIT,
 /// CP_ST_MOUSE_IN, CP_ST_LBUTTON_DOWN, CP_ST_LBUTTON_RELEASED.
-/// 
+///
 /// The difference between CP_ST_MOUSE_ENTER & CP_ST_MOUSE_IN
 /// is that IN is active the entire time the mouse is inside the control
 /// and ENTER is only active right when the mouse enters the control
 ///
-/// This class accepts mouse wheel delta information from the 
+/// This class accepts mouse wheel delta information from the
 /// GuiContainer to update the scrollbar.
 int cpTextBox::CheckState(const sf::Input *input)
 {
