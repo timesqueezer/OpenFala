@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "ParticleSystem.h"
+#include "ParticleSystem.hpp"
 
 namespace part
 {

@@ -25,8 +25,8 @@
 #ifndef _PARTICLE_PARTICLESYSTEM_H_
 #define _PARTICLE_PARTICLESYSTEM_H_
 
-#include "EmitterBase.h"
-#include "AffectorBase.h"
+#include "EmitterBase.hpp"
+#include "AffectorBase.hpp"
 
 namespace part
 {

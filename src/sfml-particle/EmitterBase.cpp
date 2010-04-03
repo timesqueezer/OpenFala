@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "EmitterBase.h"
+#include "EmitterBase.hpp"
 #include <GL/gl.h>
 
 
@@ -34,6 +34,8 @@ namespace part
 		mEmittNew(true) ,
 		mPos(0,0) ,
 		mPositionOffset(0,0) ,
+		mAngleRangeMin(-30) ,
+		mAngleRangeMax(30) ,
 		mStartColor(255, 255, 255, 255),
 		mEndColor(255, 255, 255, 255),
 		mIsGrayScale(false),

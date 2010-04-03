@@ -28,8 +28,8 @@
 
 #include <vector>
 #include "SFML/Graphics.hpp"
-#include "Particle.h"
-#include "AffectorBase.h"
+#include "Particle.hpp"
+#include "AffectorBase.hpp"
 
 namespace part
 {
@@ -60,7 +60,7 @@ namespace part
 		virtual void Init();
 
 		/// Update
-		/// Updates all particles the emitter 
+		/// Updates all particles of the emitter 
 		virtual void Update(float dt);
 
 		virtual void Clean();
@@ -112,6 +112,7 @@ namespace part
 		void SetRotationSpeed(float speed)						{ mRotationSpeed = speed; }
 		void SetBlendMode(sf::Blend::Mode mode)					{ mBlendMode = mode; }
 		void SetOffset(sf::Vector2f offset)						{ mPositionOffset = offset; }
+		void SetAngleRange(sf::Int16 angle_min, sf::Int16 angle_max)	{ mAngleRangeMin = angle_min; mAngleRangeMax = angle_max; }
 
 	protected:
 
@@ -125,6 +126,7 @@ namespace part
 		//Settings
 		sf::Vector2f mPos;
 		sf::Vector2f mPositionOffset;
+		sf::Int16 mAngleRangeMin, mAngleRangeMax;
 		sf::Color mStartColor, mEndColor;
 		bool mIsGrayScale;
 		bool mIsSingle;
