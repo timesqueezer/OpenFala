@@ -22,6 +22,8 @@
 PlayState PlayState::m_PlayState;
 
 void PlayState::Init(GameEngine* game){
+    std::cout << "+ Init PlayState" << std::endl;
+
     mGameEngine = game;
 
     std::cout << "Init PlayState" << std::endl;
@@ -99,6 +101,7 @@ void PlayState::Init(GameEngine* game){
 }
 
 void PlayState::Cleanup(){
+    std::cout << "- Cleanup PlayState" << std::endl;
     Socket.Close();
 }
 
