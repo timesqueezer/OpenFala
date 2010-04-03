@@ -26,7 +26,6 @@ protected:
 	MainMenuState() { }
 
 private:
-    const sf::Input *mInput;
 	static MainMenuState m_MainMenuState;
 
 	cp::cpGuiContainer gui;

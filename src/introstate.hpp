@@ -24,7 +24,6 @@ protected:
 	IntroState() { }
 
 private:
-    const sf::Input *mInput;
 	static IntroState m_IntroState;
 	sf::String m_welcome_message;
 };

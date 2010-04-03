@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 
-#include "client.hpp"
 #include "server.hpp"
 #include "network.hpp"
 #include "block.hpp"
@@ -36,7 +35,6 @@ void startServer(void *UserData) {
 void clientLoop(void *UserData) {
     // We need to get back the passed program arguments here
     po::variables_map vm = *static_cast<po::variables_map*>(UserData);
-    uint16_t port = vm["port"].as<uint16_t>();
     Network::IPAddress address(vm["address"].as<std::string>());
     std::string size_str = vm["size"].as<std::string>();
 	std::string name = vm["name"].as<std::string>();

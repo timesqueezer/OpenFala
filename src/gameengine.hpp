@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 
 #include <vector>
+#include <string>
+
 #include "utility.hpp"
 #include "resources.hpp"
 #include "gamestate.hpp"
@@ -16,7 +18,7 @@ class GameEngine{
 public:
     GameEngine(const po::variables_map& vm);
 
-	void Init(const char* title, int width=800, int height=600, bool fullscreen=false);
+	void Init(std::string title, sf::Uint16 width=800, sf::Uint16 height=600, bool fullscreen=false);
 	void Cleanup();
 
 	void ChangeState(IGameState* state);
@@ -36,8 +38,8 @@ public:
 
 	po::variables_map mProgramOptions;
 
-	uint16_t m_width;
-	uint16_t m_height;
+	sf::Uint16 m_width;
+	sf::Uint16 m_height;
 
 private:
 	// the stack of states

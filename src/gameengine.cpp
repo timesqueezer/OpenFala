@@ -1,4 +1,7 @@
 #include <boost/program_options.hpp>
+#include <SFML/System.hpp>
+
+#include <string>
 
 #include "cpGUI.hpp"
 #include "gameengine.hpp"
@@ -8,7 +11,7 @@ GameEngine::GameEngine(const po::variables_map& vm){
     mProgramOptions = vm;
 };
 
-void GameEngine::Init(const char* title, int width, int height, bool fullscreen)
+void GameEngine::Init(std::string title, sf::Uint16 width, sf::Uint16 height, bool fullscreen)
 {
 	m_width = width;
 	m_height = height;

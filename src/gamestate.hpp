@@ -18,11 +18,9 @@ class IGameState{
         virtual void Update() = 0;
         virtual void Draw() = 0;
 
-    private:
-        const sf::Input* mInput;
-
     protected:
         GameEngine* mGameEngine;
+        const sf::Input* mInput;
         IGameState(){}
 };
 

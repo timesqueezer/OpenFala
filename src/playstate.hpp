@@ -59,7 +59,6 @@ protected:
 	PlayState() { }
 
 private:
-    const sf::Input *mInput;
 	static PlayState m_PlayState;
 
     ResourceManager ResMgr;
