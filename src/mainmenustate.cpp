@@ -8,6 +8,7 @@
 MainMenuState MainMenuState::m_MainMenuState;
 
 void MainMenuState::Init(GameEngine* game){
+    std::cout << "+ Init MainMenuState" << std::endl;
     mGameEngine = game;
 
     mInput = & (mGameEngine->app.GetInput());
@@ -36,6 +37,7 @@ void MainMenuState::Init(GameEngine* game){
 }
 
 void MainMenuState::Cleanup(){
+    std::cout << "- Cleanup MainMenuState" << std::endl;
 }
 
 void MainMenuState::Pause(){

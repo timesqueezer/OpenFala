@@ -6,6 +6,7 @@
 IntroState IntroState::m_IntroState;
 
 void IntroState::Init(GameEngine* game){
+    std::cout << "+ Init IntroState" << std::endl;
     mGameEngine = game;
 
     mInput = & (mGameEngine->app.GetInput());
@@ -20,6 +21,7 @@ void IntroState::Init(GameEngine* game){
 }
 
 void IntroState::Cleanup(){
+    std::cout << "- Cleanup IntroState" << std::endl;
 }
 
 void IntroState::Pause(){
