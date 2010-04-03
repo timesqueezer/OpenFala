@@ -83,8 +83,8 @@ void ServerApp::HandleRequest() {
     std::cout << "Client " << name << ": " << cl_id << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
 
     if (buildtype == "mouse") { // add mouse position to the list
-        m_mpos[0][0] = sqx;
-        m_mpos[0][1] = sqy;
+        m_mpos[cl_id][0] = sqx;
+        m_mpos[cl_id][1] = sqy;
         //Packet << actionid << X << Y << userid
 
     } else if (buildtype == "block") {
@@ -100,10 +100,12 @@ void ServerApp::Update() {
     for(int i = 0; i < m_maxplayers; ++i) {
         if (m_clist[0][i] != "") {
             for (int x = 0; x < m_maxplayers; ++x) {
-                if (i != x) {
-                    SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[x][0] << (sf::Uint16) m_mpos[x][1] << (sf::Uint16) i;
-                    Socket.Send(SendPacket, m_clist[0][i], 41312);
-                    SendPacket.Clear();
+                if (m_clist[0][x] != "") {
+                    if (x != i) {
+                        SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[x][0] << (sf::Uint16) m_mpos[x][1] << (sf::Uint16) x;
+                        Socket.Send(SendPacket, m_clist[0][i], 41312);
+                        SendPacket.Clear();
+                    }
                 }
             }
         }
@@ -128,9 +130,12 @@ Network::Packet& ServerApp::GetSendPacket() {
 }
 
 int ServerApp::GetPlayerId(std::string name) {
+    int playerid = 0;
     for(int i = 0; i < m_maxplayers; i++) {
         if(m_clist[1][i] == name) {
-            return i;
+            playerid = i;
+            break;
         }
     }
+    return playerid;
 }

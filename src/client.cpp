@@ -143,7 +143,7 @@ void ClientApp::Update() {
             PlaceBlock((int) posx, (int) posy);
         }
         if (actionid == 2) { //stands for getting the mouse positions
-            //m_mpos[cl_id]->m_Shape.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+            m_mpos[cl_id]->m_Shape.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
         }
         if (actionid == 3) { // init stuff
             m_cl_id = cl_id;
