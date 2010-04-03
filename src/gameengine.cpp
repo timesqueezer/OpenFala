@@ -87,21 +87,21 @@ void GameEngine::PopState()
 void GameEngine::HandleEvents()
 {
 	// let the state handle events
-	states.back()->HandleEvents(this);
+	states.back()->HandleEvents();
 }
 
 void GameEngine::Update()
 {
 	// Let the state update the game
 	if (!states.empty())
-        states.back()->Update(this);
+        states.back()->Update();
 }
 
 void GameEngine::Draw()
 {
 	// Let the state draw the screen
 	if (!states.empty()){
-		states.back()->Draw(this);
+		states.back()->Draw();
         app.Display();
     }
 }

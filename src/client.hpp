@@ -20,6 +20,7 @@
 #include "block.hpp"
 #include "gamestate.hpp"
 /*
+
 typedef boost::multi_array<Block*, 2> blockarray2d;
 typedef boost::multi_array<Block*, 1> blockarray1d;
 
@@ -99,3 +100,4 @@ private:
 
 */
 #endif
+

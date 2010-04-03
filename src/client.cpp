@@ -13,9 +13,7 @@
 #include "network.hpp"
 #include "block.hpp"
 #include "utility.hpp"
-
 /*
-
 // Big constructor!
 ClientApp::ClientApp(const uint16_t& port, const Network::IPAddress& bind_ad,
 						const std::string& size, const std::string& name) {
@@ -165,9 +163,9 @@ void ClientApp::Draw() {
 		}
 	}
 
-for (short unsigned int x = 0; x < 4; ++x) {
-    app.Draw(m_mpos[x]->m_Shape);
-}
+    for (short unsigned int x = 0; x < 4; ++x) {
+        app.Draw(m_mpos[x]->m_Shape);
+    }
 
 
 	app.Draw(inforect);

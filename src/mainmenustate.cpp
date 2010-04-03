@@ -8,23 +8,25 @@
 MainMenuState MainMenuState::m_MainMenuState;
 
 void MainMenuState::Init(GameEngine* game){
-    mInput = & (game->app.GetInput());
-    game->app.SetFramerateLimit(60);
+    mGameEngine = game;
+
+    mInput = & (mGameEngine->app.GetInput());
+    mGameEngine->app.SetFramerateLimit(60);
 
     uint16_t button_height = 30;
     uint16_t button_width = 120;
-    uint16_t left = game->app.GetWidth() / 2 - button_width/2;
+    uint16_t left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
     // Game Start Button
-    gameStartButton = new cp::cpButton(&game->app, &gui, "Start Game",left, 10, button_width, button_height);
+    gameStartButton = new cp::cpButton(&mGameEngine->app, &gui, "Start Game",left, 10, button_width, button_height);
     gameStartButton->SetFontSize(14);
 
     // Options Button
-    optionsButton = new cp::cpButton(&game->app, &gui, "Options",left, 45, button_width, button_height);
+    optionsButton = new cp::cpButton(&mGameEngine->app, &gui, "Options",left, 45, button_width, button_height);
     optionsButton->SetFontSize(14);
 
     // Exit Button
-    exitButton = new cp::cpButton(&game->app, &gui, "Exit",left, 80, button_width, button_height);
+    exitButton = new cp::cpButton(&mGameEngine->app, &gui, "Exit",left, 80, button_width, button_height);
     exitButton->SetFontSize(14);
 
     if(!m_MenuMusic.OpenFromFile("data/music/menu1.ogg")){
@@ -42,20 +44,20 @@ void MainMenuState::Pause(){
 void MainMenuState::Resume(){
 }
 
-void MainMenuState::HandleEvents(GameEngine* game){
+void MainMenuState::HandleEvents(){
     sf::Event Event;
-	while (game->app.GetEvent(Event)) {
+	while (mGameEngine->app.GetEvent(Event)) {
 		if (Event.Type == sf::Event::Closed) {
-			game->Cleanup();
+			mGameEngine->Cleanup();
 		}
         if ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape)) {
-            game->Cleanup();
+            mGameEngine->Cleanup();
         }
 
         // Game Start Button Click
         if(gameStartButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
             m_MenuMusic.Stop();
-            game->ChangeState( PlayState::Instance() );
+            mGameEngine->ChangeState( PlayState::Instance() );
         }
 
         // Options Button Click
@@ -66,7 +68,7 @@ void MainMenuState::HandleEvents(GameEngine* game){
         // Exit Button Click
         if(exitButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
             m_MenuMusic.Stop();
-            game->Cleanup();
+            mGameEngine->Cleanup();
         }
 
 
@@ -74,13 +76,13 @@ void MainMenuState::HandleEvents(GameEngine* game){
     }
 }
 
-void MainMenuState::Update(GameEngine* game){
+void MainMenuState::Update(){
     sf::Sleep(0.001f); // for music thread
 }
 
-void MainMenuState::Draw(GameEngine* game){
+void MainMenuState::Draw(){
     // Clear Background
-    game->app.Clear(sf::Color(0,0,0));
+    mGameEngine->app.Clear(sf::Color(0,0,0));
 
     // Draw Menu
     gameStartButton->Draw();

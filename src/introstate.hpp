@@ -12,9 +12,9 @@ public:
 	void Pause();
 	void Resume();
 
-	void HandleEvents(GameEngine* game);
-	void Update(GameEngine* game);
-	void Draw(GameEngine* game);
+	void HandleEvents();
+	void Update();
+	void Draw();
 
 	static IntroState* Instance() {
 		return &m_IntroState;
