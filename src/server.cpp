@@ -1,6 +1,6 @@
 #include <SFML/System.hpp>
 
-//#include <boost/foreach.hpp>
+#include <boost/foreach.hpp>
 
 #include <iostream>
 #include <string>
@@ -12,9 +12,10 @@ ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
     m_clientport = 41312; // port for outgoing communication
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
-    //m_mpos.resize(extents[maxplayers][2]);
+    m_mpos.resize(extents[maxplayers][2]);
    	m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
    	// Mouse positions m_mpos[player1,2,3,4][x,y]
+   	m_active_clients = 0;
 }
 
 ServerApp::~ServerApp() {}
@@ -62,26 +63,31 @@ void ServerApp::HandleRequest() {
         else {
             // Record free slot for later
             freeslot = i;
+            break;
         }
     }
 
     // If client is unknown, add client to the list
     if(isknown == false) {
         std::cout << "Adding new client: " << claddress << " \"" << name
-            << "\"" << std::endl;
+            << "\"" << "freeslot: " << freeslot << std::endl;
         m_clist[0][freeslot] = claddress.ToString();
         m_clist[1][freeslot] = name;
+        ++m_active_clients;
     }
 
-    #ifdef DEBUG
     std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
-    #endif
+
     if (buildtype == "mouse") { // add mouse position to the list
-        m_mpos[GetPlayerId(name)][0] = sqx;
-        m_mpos[GetPlayerId(name)][1] = sqy;
-        // std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
+        m_mpos[0][0] = sqx;
+        m_mpos[0][1] = sqy;
+        //Packet << actionid << X << Y << userid
+        SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[GetPlayerId(name)][0] << (sf::Uint16) m_mpos[GetPlayerId(name)][1] << (sf::Uint16) GetPlayerId(name);
+        Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
+        SendPacket.Clear();
+
     } else if (buildtype == "block") {
-        SendPacket << (sf::Uint16) 1 << sqx << sqy;
+        SendPacket << (sf::Uint16) 1 << sqx << sqy << GetPlayerId(name);
         Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
         SendPacket.Clear();
     }
@@ -115,11 +121,10 @@ Network::Packet& ServerApp::GetSendPacket() {
     return SendPacket;
 }
 
-sf::Uint8 ServerApp::GetPlayerId(std::string name) {
+int ServerApp::GetPlayerId(std::string name) {
     for(int i = 0; i < m_maxplayers; i++) {
         if(m_clist[1][i] == name) {
-            return (sf::Uint8) i;
+            return i;
         }
     }
-    return false;
 }
