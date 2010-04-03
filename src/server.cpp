@@ -1,6 +1,6 @@
 #include <SFML/System.hpp>
 
-//#include <boost/foreach.hpp>
+#include <boost/foreach.hpp>
 
 #include <iostream>
 #include <string>
@@ -12,9 +12,10 @@ ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
     m_clientport = 41312; // port for outgoing communication
     m_maxplayers = maxplayers;
    	m_clist.resize(extents[4][maxplayers]);
-    //m_mpos.resize(extents[maxplayers][2]);
+    m_mpos.resize(extents[maxplayers][2]);
    	m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
    	// Mouse positions m_mpos[player1,2,3,4][x,y]
+   	m_active_clients = 0;
 }
 
 ServerApp::~ServerApp() {}
@@ -35,11 +36,12 @@ void ServerApp::HandleRequest() {
     // [1] sqx - horizontal square the client reports the mouse in
     // [2] sqy - vertical square the client reports the mouse in
     // [3] buildtype - what type if any of building the client wants to build
+    sf::Uint16 cl_id;
     std::string name;
     sf::Uint16 sqx;
     sf::Uint16 sqy;
     std::string buildtype;
-    RecvPacket >> name >> sqx >> sqy >> buildtype;
+    RecvPacket >> cl_id >> sqx >> sqy >> buildtype >> name;
 
     // Client list has format:
     // [0][0] client 0 IP
@@ -62,27 +64,32 @@ void ServerApp::HandleRequest() {
         else {
             // Record free slot for later
             freeslot = i;
+            break;
         }
     }
 
     // If client is unknown, add client to the list
     if(isknown == false) {
         std::cout << "Adding new client: " << claddress << " \"" << name
-            << "\"" << std::endl;
+            << "\"" << "freeslot: " << freeslot << std::endl;
         m_clist[0][freeslot] = claddress.ToString();
         m_clist[1][freeslot] = name;
+        ++m_active_clients;
+        SendPacket << (sf::Uint16) 3 << (sf::Uint16) 0 << (sf::Uint16) 0 << (sf::Uint16) freeslot;
+        Socket.Send(SendPacket, m_clist[0][freeslot], 41312);
+        SendPacket.Clear();
     }
 
-    #ifdef DEBUG
-    std::cout << "Client: " << name << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
-    #endif
+    std::cout << "Client " << name << ": " << cl_id << " SQX: " << sqx << " SQY: " << sqy << " type: " << buildtype << std::endl;
+
     if (buildtype == "mouse") { // add mouse position to the list
-        m_mpos[GetPlayerId(name)][0] = sqx;
-        m_mpos[GetPlayerId(name)][1] = sqy;
-        // std::cout << "Success adding xy to mpos" << sqx << " " << sqy << std::endl;
+        m_mpos[cl_id][0] = sqx;
+        m_mpos[cl_id][1] = sqy;
+        //Packet << actionid << X << Y << userid
+
     } else if (buildtype == "block") {
-        SendPacket << (sf::Uint16) 1 << sqx << sqy;
-        Socket.Send(SendPacket, m_clist[0][GetPlayerId(name)], 41312);
+        SendPacket << (sf::Uint16) 1 << sqx << sqy << cl_id;
+        Socket.Send(SendPacket, m_clist[0][cl_id], 41312);
         SendPacket.Clear();
     }
     // Get ready for next package
@@ -90,13 +97,20 @@ void ServerApp::HandleRequest() {
 }
 
 void ServerApp::Update() {
-    /*for(int i = 0; i < m_maxplayers; i++) {
+    for(int i = 0; i < m_maxplayers; ++i) {
         if (m_clist[0][i] != "") {
-            SendPacket >> (sf::Uint16) i >> m_mpos[i][0] >> m_mpos[i][1];
-            Socket.Send(SendPacket, m_clist[0][i], 41312);
-            SendPacket.Clear();
+            for (int x = 0; x < m_maxplayers; ++x) {
+                if (m_clist[0][x] != "") {
+                    if (x != i) {
+                        SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[x][0] << (sf::Uint16) m_mpos[x][1] << (sf::Uint16) x;
+                        Socket.Send(SendPacket, m_clist[0][i], 41312);
+                        SendPacket.Clear();
+                    }
+                }
+            }
         }
-    }*/
+    }
+    std::cout << "LOL" << std::endl;
 }
 
 void ServerApp::Die() {
@@ -115,11 +129,13 @@ Network::Packet& ServerApp::GetSendPacket() {
     return SendPacket;
 }
 
-sf::Uint8 ServerApp::GetPlayerId(std::string name) {
+int ServerApp::GetPlayerId(std::string name) {
+    int playerid = 0;
     for(int i = 0; i < m_maxplayers; i++) {
         if(m_clist[1][i] == name) {
-            return (sf::Uint8) i;
+            playerid = i;
+            break;
         }
     }
-    return false;
+    return playerid;
 }

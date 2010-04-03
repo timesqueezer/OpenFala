@@ -26,10 +26,8 @@ ClientApp::ClientApp(const uint16_t& port, const Network::IPAddress& bind_ad,
     m_clientport = 41312; // port for incoming communication
 	m_name = name;
 
-	#ifdef DEBUG
 	inforect = sf::Shape::Rectangle(0, app.GetHeight() - 40, app.GetWidth(),
                                  app.GetHeight(), sf::Color(20, 20, 20));
-	#endif
 }
 
 ClientApp::~ClientApp() {}
@@ -52,12 +50,21 @@ void ClientApp::Init() {
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/", "highlight.svg", m_ratio, m_ratio);
+
+
 
 	m_blocknbx = app.GetWidth() / m_ratio;
 	m_blocknby = app.GetHeight() / m_ratio;
 
+
 	std::cout << m_blocknbx << " " << m_blocknby << " " << m_ratio << std::endl;
+
+    m_mpos.resize(extents[4]);
+
+    //Initialisation of the Shapes to show each player
+    for (short unsigned int i = 0; i < 4; ++i) {
+        m_mpos[i] = new Block(0, 0, sf::Shape::Rectangle(0.f, 0.f, m_ratio, m_ratio, sf::Color(255,128,0,128), 1.f, sf::Color(255,128,255,128)));
+    }
 
 	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
@@ -86,10 +93,7 @@ void ClientApp::Init() {
 			++i;
 	}
 
-    // TODO: Maybe use shared_ptr later on here?
-	highlightblock = new Block(0, 0, ResMgr.GetImage("highlight"), 1);
-
-
+    m_cl_id = 0;
 	mode = 1; // set to build mode
 }
 
@@ -105,35 +109,45 @@ void ClientApp::HandleInput() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block";
+                    SendPacket << m_cl_id << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block" << m_name;
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
             }
 		}
 		if (Event.Type == sf::Event::MouseMoved) {
-			SendPacket << m_name << (sf::Uint16) input->GetMouseX() << (sf::Uint16) input->GetMouseY() << "rolf";
-			Socket.Send(SendPacket, m_bindaddress, m_port);
-			SendPacket.Clear();
+		    float mouse_x = (m_mpos[0]->m_Shape.GetPosition().x)/m_ratio;
+		    float mouse_y = (m_mpos[0]->m_Shape.GetPosition().y)/m_ratio;
+
+            if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
+		    	SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
+		    	Socket.Send(SendPacket, m_bindaddress, m_port);
+		    	SendPacket.Clear();
+		    	m_mpos[0]->m_Shape.SetPosition(GetMouseBlock('x', 'p')*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
+		    }
 		}
+
 	}
 }
 
 void ClientApp::Update() {
-
-
-	// Network tests
-    // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
-	//SendPacket << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
-	sf::Uint16 actionid;
+	sf::Uint16 actionid = 5;
 	sf::Uint16 posx = 0;
 	sf::Uint16 posy = 0;
+	sf::Uint16 cl_id = 0;
     Network::IPAddress svaddress;
     unsigned short svport;
-    if (Socket.Receive(RecvPacket, svaddress, svport)) {
-        RecvPacket >> actionid >> posx >> posy;
-        if (actionid == 1) {
+    if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
+        RecvPacket >> actionid >> posx >> posy >> cl_id;
+        std::cout << "Server sent following Package: " << actionid << " (actionid), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
+        if (actionid == 1) { // stands for placing a block
             PlaceBlock((int) posx, (int) posy);
+        }
+        if (actionid == 2) { //stands for getting the mouse positions
+            m_mpos[cl_id]->m_Shape.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+        }
+        if (actionid == 3) { // init stuff
+            m_cl_id = cl_id;
         }
         //std::cout << actionid << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
@@ -146,26 +160,27 @@ void ClientApp::Draw() {
 	for (short unsigned int x = 0;x<m_blocknbx;++x) {
 		for (short unsigned int y = 0;y<m_blocknby;++y) {
 			if (mode == 1) {
-				app.Draw(m_blocks[x][y]->Sprite);
+                app.Draw(m_blocks[x][y]->Sprite);
 			}
 		}
 	}
 
-	highlightblock->SetPos((float)GetMouseBlock('x', 'a')*m_ratio, (float)GetMouseBlock('y','a')*m_ratio);
-	app.Draw(highlightblock->Sprite);
+for (short unsigned int x = 0; x < 4; ++x) {
+    app.Draw(m_mpos[x]->m_Shape);
+}
 
 
-
-	#ifdef DEBUG
 	app.Draw(inforect);
-		fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
+    fps.SetText("FPS: "+boost::lexical_cast<std::string>(framerate));
 	fps.SetPosition(10, app.GetHeight() - 40);
 	app.Draw(fps);
 		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x','p'))+
-                       	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y','p')));
+                       	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y','p'))+
+                        " BlockX: "+boost::lexical_cast<std::string>(m_mpos[0]->m_Shape.GetPosition().x)+
+                        " BlockY: "+boost::lexical_cast<std::string>(m_mpos[0]->m_Shape.GetPosition().y));
 	mousepos.SetPosition(150, app.GetHeight() - 40);
 	app.Draw(mousepos);
-	#endif
+
 	app.Display();
 }
 
@@ -174,19 +189,21 @@ void ClientApp::Die() {
 }
 
 sf::Uint16 ClientApp::GetMouseBlock(char xy, char type) {
+    sf::Uint16 block;
     if (type == 'p') { //this stands for playable area
         if (xy == 'x') {
-            return (sf::Uint16) ((input->GetMouseX() / m_ratio) - ((m_width - 20*m_ratio)/2) / m_ratio);
+            block = ((input->GetMouseX() / m_ratio) - ((m_width - 20*m_ratio)/2) / m_ratio);
         } else {
-            return (sf::Uint16) (input->GetMouseY() / m_ratio);
+            block = (input->GetMouseY() / m_ratio);
         }
     } else {
         if (xy == 'x') {
-            return (sf::Uint16) (input->GetMouseX() / m_ratio);
+            block = (input->GetMouseX() / m_ratio);
         } else {
-            return (sf::Uint16) (input->GetMouseY() / m_ratio);
+            block = (input->GetMouseY() / m_ratio);
         }
     }
+    return block;
 }
 
 bool ClientApp::MouseInPlayableArea() {

@@ -21,6 +21,7 @@
 #include "gamestate.hpp"
 /*
 typedef boost::multi_array<Block*, 2> blockarray2d;
+typedef boost::multi_array<Block*, 1> blockarray1d;
 
 // Main class for client application.
 class ClientApp {
@@ -73,27 +74,27 @@ private:
     Network::Packet SendPacket;
     Network::Packet RecvPacket;
 
+    sf::Uint16 m_cl_id;
+
+
 	sf::RenderWindow app;
 	ResourceManager ResMgr;
 
 	sf::String mousepos;
 
 	float m_ratio;
-	Block* highlightblock;
 
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;
+	blockarray1d m_mpos;
 
 	int m_blocknbx;
 	int m_blocknby;
 
 	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
 
-	#ifdef DEBUG
 	sf::String fps;
 	sf::Shape inforect;
-	#endif
-
 };
 
 */

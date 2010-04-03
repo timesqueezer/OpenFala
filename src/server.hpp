@@ -43,8 +43,9 @@ public:
 	Network::Packet& GetSendPacket();
 
 	// Get
-	sf::Uint8 GetPlayerId(std::string);
+	int GetPlayerId(std::string);
 private:
+    uint8_t m_active_clients;
     uint16_t m_port;
     uint16_t m_maxplayers;
     uint16_t m_clientport;
