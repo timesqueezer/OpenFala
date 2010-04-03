@@ -69,6 +69,8 @@ private:
     Network::Packet SendPacket;
     Network::Packet RecvPacket;
 
+    sf::Uint16 m_cl_id;
+
 
 	sf::RenderWindow app;
 	sf::Clock clock;

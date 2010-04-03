@@ -92,7 +92,7 @@ void ClientApp::Init() {
 			++i;
 	}
 
-
+    m_cl_id = 0;
 	mode = 1; // set to build mode
 }
 
@@ -108,7 +108,7 @@ void ClientApp::HandleInput() {
 		if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << m_name << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block";
+                    SendPacket << m_cl_id << (sf::Uint16) (GetMouseBlock('x','p') - (m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block" << m_name;
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
@@ -119,7 +119,7 @@ void ClientApp::HandleInput() {
 		    float mouse_y = (m_mpos[0]->m_Shape.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
-		    	SendPacket << m_name << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse"; //GetMouseBlock('y', 'p') << "mouse";
+		    	SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
 		    	Socket.Send(SendPacket, m_bindaddress, m_port);
 		    	SendPacket.Clear();
 		    	m_mpos[0]->m_Shape.SetPosition(GetMouseBlock('x', 'p')*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
@@ -130,25 +130,23 @@ void ClientApp::HandleInput() {
 }
 
 void ClientApp::Update() {
-
-
-	// Network tests
-    // std::cout << input->GetMouseX() << " - " << input->GetMouseY() << "\n";
-	//SendPacket << (sf::Uint16)input->GetMouseX() << (sf::Uint16)input->GetMouseY();
 	sf::Uint16 actionid = 5;
 	sf::Uint16 posx = 0;
 	sf::Uint16 posy = 0;
-	sf::Uint8 cl_id = 0;
+	sf::Uint16 cl_id = 0;
     Network::IPAddress svaddress;
     unsigned short svport;
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
         RecvPacket >> actionid >> posx >> posy >> cl_id;
         std::cout << "Server sent following Package: " << actionid << " (actionid), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
-        if (actionid == 1) {
+        if (actionid == 1) { // stands for placing a block
             PlaceBlock((int) posx, (int) posy);
         }
-        if (actionid == 2) {
+        if (actionid == 2) { //stands for getting the mouse positions
             //m_mpos[cl_id]->m_Shape.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+        }
+        if (actionid == 3) { // init stuff
+            m_cl_id = cl_id;
         }
         //std::cout << actionid << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
