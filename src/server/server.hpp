@@ -8,6 +8,8 @@
 
 #include <string>
 
+//#include <ClientManager.hpp>
+
 typedef boost::multi_array<std::string, 2> stringarray2d;
 typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
 
@@ -34,9 +36,6 @@ public:
     // Get server socket.
 	sf::SocketUDP& GetSocket();
 
-    // Get server packet for receiving client data.
-	sf::Packet& GetRecvPacket();
-
 	// Get server packet for sending client data.
 	sf::Packet& GetSendPacket();
 
@@ -51,9 +50,10 @@ private:
 	stringarray2d::extent_gen extents;
     uint16array2d m_mpos;
     uint16array2d m_blocks;
-    sf::SocketUDP Socket;
-    sf::Packet RecvPacket;
+    sf::SelectorUDP Selector;
+    sf::SocketUDP Listener;
     sf::Packet SendPacket;
+    //ClientManager ClMan;
 };
 
 #endif
