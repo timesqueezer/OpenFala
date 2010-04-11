@@ -60,6 +60,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "highlight-orange.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-blue.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-green.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "highlight-red.svg", m_ratio, m_ratio);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -74,10 +75,10 @@ void PlayState::Init(GameEngine* game){
 
     //Initialisation of the Shapes to show each player
 
-        m_mpos[0] = new Block(0.f, 0.f, ResMgr.GetImage("highlight-orange"), BLOCKTYPE_EMPTY);
-        m_mpos[1] = new Block(0.f, 0.f, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_EMPTY);
-        m_mpos[2] = new Block(0.f, 0.f, ResMgr.GetImage("highlight-green"), BLOCKTYPE_EMPTY);
-        m_mpos[3] = new Block(0.f, 0.f, ResMgr.GetImage("highlight-orange"), BLOCKTYPE_EMPTY);
+        m_mpos[0] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-red"), BLOCKTYPE_EMPTY);
+        m_mpos[1] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_EMPTY);
+        m_mpos[2] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-green"), BLOCKTYPE_EMPTY);
+        m_mpos[3] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-orange"), BLOCKTYPE_EMPTY);
 
 	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
