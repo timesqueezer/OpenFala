@@ -10,6 +10,9 @@ public:
     virtual ~IEntity() {}
     virtual void Update(float dt) = 0;
 
+    sf::Sprite& GetSprite(float blockSize);
+    void SetImage(sf::Image* img);
+
     sf::Uint16 GetAnimationIndex();
     void SetAnimationIndex(sf::Uint16 index);
 
@@ -32,7 +35,8 @@ public:
     sf::Uint16 GetAnimationFPS();
     void SetAnimationFPS(sf::Uint16 FPS);
 
-private:
+protected:
+    static const sf::Uint16 mCost = 0;
     sf::Sprite mSprite;
     sf::Uint16 mAnimationIndex;
     sf::Uint16 mAnimationFPS;
