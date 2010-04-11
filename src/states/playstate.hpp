@@ -61,7 +61,7 @@ protected:
 private:
 	static PlayState m_PlayState;
 
-    ResourceManager ResMgr;
+
 
 	sf::Uint16 m_port;
 	sf::Uint16 m_clientport;

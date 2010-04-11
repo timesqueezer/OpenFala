@@ -8,6 +8,7 @@
 #include "gamestate.hpp"
 
 GameEngine::GameEngine(const po::variables_map& vm){
+    mResMgr = ResourceManager::ResourceManager();
     mProgramOptions = vm;
 };
 
@@ -107,4 +108,8 @@ void GameEngine::Draw()
 		states.back()->Draw();
         app.Display();
     }
+}
+
+ResourceManager& GameEngine::GetResMgr(){
+    return mResMgr;
 }

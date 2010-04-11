@@ -32,9 +32,9 @@ public:
 	bool Running() { return m_running; }
 	void Quit() { m_running = false; }
 
+	ResourceManager& GetResMgr();
+
 	sf::RenderWindow app;
-	// TODO: Singleton
-	ResourceManager mResMgr;
 
 	po::variables_map mProgramOptions;
 
@@ -42,8 +42,11 @@ public:
 	sf::Uint16 m_height;
 
 private:
-	// the stack of states
 
+	// TODO: Singleton
+	ResourceManager mResMgr;
+
+    // the stack of states
 	// TODO: boost.ptr_vector
 	std::vector<IGameState*> states;
 

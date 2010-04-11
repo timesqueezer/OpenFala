@@ -50,7 +50,7 @@ void PlayState::Init(GameEngine* game){
 	m_ratio = mGameEngine->m_height / 15;
 
     // Load images
-	ResMgr = ResourceManager::ResourceManager();
+	ResourceManager& ResMgr = mGameEngine->GetResMgr();
 	//ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
@@ -282,6 +282,7 @@ void PlayState::PlaceBlock(int x, int y) {
         std::cout << "Cannot place the block right there!";
     } else {
         if (m_blocks[x][y+1]->m_type != 1) {
+            ResourceManager& ResMgr = mGameEngine->GetResMgr();
             m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), 2);
         } else {
             std::cout << "Can't place blocks in the air." << std::endl;

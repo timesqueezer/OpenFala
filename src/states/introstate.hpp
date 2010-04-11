@@ -25,6 +25,7 @@ protected:
 
 private:
 	static IntroState m_IntroState;
+	sf::Sprite m_title_image;
 	sf::String m_welcome_message;
 };
 
