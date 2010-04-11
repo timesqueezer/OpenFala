@@ -135,22 +135,48 @@ namespace cp
 		cpGuiContainer *gui;
 	};
 
+    enum ButtonState{
+        BUTTONSTATE_NORMAL,
+        BUTTONSTATE_ACTIVE,
+        BUTTONSTATE_HOVER
+    };
+
 	class cpImageButton : public cpObject
 	{
 	public:
 		cpImageButton();
 		cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI,
-			sf::Image *image, float posx=0, float posy=0);
+			sf::Image *image, std::string label, float posx=0, float posy=0);
 		void Draw();
 		int CheckState(const sf::Input *input);
 		bool SetSize(float width, float height);
 		void SetPosition(float posx, float posy);
 		void SetBackgroundColor(sf::Color color);
 		void SetImage(sf::Image *image);
+		void SetNormalImage(sf::Image *image);
+		void SetHoverImage(sf::Image *image);
+		void SetActiveImage(sf::Image *image);
+		void SetTextColor(sf::Color col);
+		void SetTextNormalColor(sf::Color col);
+		void SetTextActiveColor(sf::Color col);
+		void SetTextHoverColor(sf::Color col);
+		void SetLabelText(std::string);
+		void SetLabelSize(float size);
 		void Show(bool show);
 
 	private:
-		sf::Sprite sprite;
+        void CreateRects(std::string label);
+
+		sf::Sprite spriteNormal;
+		sf::Sprite spriteActive;
+		sf::Sprite spriteHover;
+
+		sf::String m_label;
+		sf::Color textNormalColor;
+		sf::Color textActiveColor;
+		sf::Color textHoverColor;
+
+		ButtonState m_state;
 	};
 
 	class cpButton : public cpObject

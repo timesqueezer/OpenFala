@@ -22,6 +22,15 @@ void MainMenuState::Init(GameEngine* game){
     mGameEngine->GetResMgr().AddImage("data/images","title.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
     mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title"));
 
+    mGameEngine->GetResMgr().AddImage("data/images","menu_button_normal.svg", 300, 100);
+    mGameEngine->GetResMgr().AddImage("data/images","menu_button_hover.svg", 300, 100);
+
+    imgButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Test Button" ,10,10);
+    imgButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    imgButton->SetTextColor(sf::Color(255,195,21));
+    imgButton->SetTextHoverColor(sf::Color(255,255,255));
+
+    // Test Button
     testShape = Utility::GradientRectangle(0,0,100,100,sf::Color(255,255,0), sf::Color(255,128,0));
     testButton = new cp::cpShapeButton(&mGameEngine->app, &gui, &testShape, 10.f, 20.f );
     testButton->SetLabelText("Test Button");
@@ -79,7 +88,7 @@ void MainMenuState::HandleEvents(){
             mGameEngine->StopMusic();
             mGameEngine->Cleanup();
         }
-
+        imgButton->CheckState(mInput);
 
         gui.ProcessKeys(&Event);
     }
@@ -98,6 +107,8 @@ void MainMenuState::Draw(){
     optionsButton->Draw();
     exitButton->Draw();
 
-    testButton->Draw();
+    imgButton->Draw();
+
+    //testButton->Draw();
 }
 

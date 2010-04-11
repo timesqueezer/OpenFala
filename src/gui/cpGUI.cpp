@@ -877,12 +877,14 @@ void cpButton::TestLabelFit()
 /// size of the image sent to it.  Also, there is no text label.
 /// ******************************************************************
 cpImageButton::cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI,
-							 sf::Image *image, float posx, float posy) : cpObject(parent,
-							 GUI, "", posx, posy, (float)image->GetWidth()+3,
-								(float)image->GetHeight()+3)
+							 sf::Image *image, std::string label, float posx, float posy) : cpObject(parent,
+							 GUI, "", posx, posy, (float)image->GetWidth(),
+								(float)image->GetHeight())
 {
-	sprite.SetImage(*image);
-	sprite.SetPosition(posx + 1, posy + 1);
+	SetImage(image);
+	SetPosition(posx, posy);
+	m_label.SetText(label);
+
 }
 
 cpImageButton::cpImageButton() : cpObject(NULL, NULL, ""){}
@@ -891,11 +893,49 @@ cpImageButton::cpImageButton() : cpObject(NULL, NULL, ""){}
 /// the sprite is used to display the image in the button.
 void cpImageButton::SetImage(sf::Image *image)
 {
-	Width = (float)image->GetWidth()+3;
-	Height = (float)image->GetHeight()+3;
-	sprite.SetImage(sf::Image());
-	sprite.SetImage(*image);
+	SetNormalImage(image);
+	SetActiveImage(image);
+	SetHoverImage(image);
 	CreateRects("");
+}
+
+void cpImageButton::SetNormalImage(sf::Image *image){
+    Width = (float)image->GetWidth();
+	Height = (float)image->GetHeight();
+    spriteNormal.SetImage(*image);
+    CreateRects("");
+}
+
+void cpImageButton::SetActiveImage(sf::Image *image){
+    spriteActive.SetImage(*image);
+    CreateRects("");
+}
+
+void cpImageButton::SetHoverImage(sf::Image *image){
+    spriteHover.SetImage(*image);
+    CreateRects("");
+}
+
+
+void cpImageButton::SetTextColor(sf::Color col){
+    SetTextNormalColor(col);
+    SetTextActiveColor(col);
+    SetTextHoverColor(col);
+}
+void cpImageButton::SetTextNormalColor(sf::Color col){
+    textNormalColor = col;
+}
+void cpImageButton::SetTextActiveColor(sf::Color col){
+    textActiveColor = col;
+}
+void cpImageButton::SetTextHoverColor(sf::Color col){
+    textHoverColor = col;
+}
+void cpImageButton::SetLabelText(std::string text){
+    m_label.SetText(text);
+}
+void cpImageButton::SetLabelSize(float size){
+    m_label.SetSize(size);
 }
 
 /// Draws the different parts that make up an image button
@@ -904,11 +944,23 @@ void cpImageButton::Draw()
 	if(!bShow)
 		return;
 
-	Parent->Draw(backRect);
-	Parent->Draw(sprite);
+	//Parent->Draw(backRect);
 
-	if(hasFocus)
-		DrawDashedRect(PosX+2, PosY+2, Width-4, Height-4);
+    if(m_state == BUTTONSTATE_ACTIVE) {
+        Parent->Draw(spriteActive);
+        m_label.SetColor(textActiveColor);
+    }else if(m_state == BUTTONSTATE_HOVER) {
+        Parent->Draw(spriteHover);
+        m_label.SetColor(textHoverColor);
+    }else {
+        Parent->Draw(spriteNormal);
+        m_label.SetColor(textNormalColor);
+    }
+
+    Parent->Draw(m_label);
+
+	//if(hasFocus)
+	//	DrawDashedRect(PosX, PosY, Width, Height);
 }
 
 /// This function checks for mouse events within the control.
@@ -923,28 +975,36 @@ void cpImageButton::Draw()
 /// and ENTER is only active right when the mouse enters the control
 int cpImageButton::CheckState(const sf::Input *input)
 {
-	int state = cpObject::CheckState(input);
+	int st = cpObject::CheckState(input);
 
-	if(state == CP_ST_MOUSE_LBUTTON_DOWN)
-		backgroundColor = sf::Color(140, 140, 140);
+    if(st == CP_ST_NONE)
+        m_state = BUTTONSTATE_NORMAL;
 
-	if(state == CP_ST_MOUSE_LBUTTON_RELEASED)
-		backgroundColor = backgroundColorTemp;
+    if(st == CP_ST_MOUSE_IN or st == CP_ST_MOUSE_LBUTTON_RELEASED)
+		m_state = BUTTONSTATE_HOVER;
+
+	if(st == CP_ST_MOUSE_LBUTTON_DOWN)
+		m_state = BUTTONSTATE_ACTIVE;
 
 	CreateRects("");
-	return state;
+	return st;
 }
 
 /// Sets the image button's width & height dimensions
 bool cpImageButton::SetSize(float width, float height)
 {
-	return false;
+    return false;
 }
+
+
 
 /// Sets the image button's position coordinates in the window
 void cpImageButton::SetPosition(float posx, float posy)
 {
-	cpObject::SetPosition(posx, posy);
+    spriteNormal.SetPosition(posx, posy);
+    spriteActive.SetPosition(posx, posy);
+    spriteHover.SetPosition(posx, posy);
+	//cpObject::SetPosition(posx, posy);
 	CreateRects("");
 }
 
@@ -960,6 +1020,11 @@ void cpImageButton::Show(bool show)
 {
 	cpObject::Show(show);
 	CreateRects("");
+}
+
+void cpImageButton::CreateRects(std::string label){
+    m_label.SetPosition(spriteNormal.GetPosition().x + Width/2 - m_label.GetRect().GetWidth()/2,
+                        spriteNormal.GetPosition().y + Height/2 - m_label.GetRect().GetHeight()/2);
 }
 
 

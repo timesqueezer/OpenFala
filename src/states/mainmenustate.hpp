@@ -34,6 +34,8 @@ private:
 	cp::cpButton *exitButton;
 
 	cp::cpShapeButton *testButton;
+	cp::cpImageButton *imgButton;
+
 	sf::Shape testShape;
 
 	sf::Sprite mBackgroundImage;
