@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${SFML_INCLUDE_DIRS} ${ImageMagick_INC
 AUX_SOURCE_DIRECTORY(src/ OpenFala_SRCS)
 AUX_SOURCE_DIRECTORY(src/block/ OpenFala_block_SRCS)
 AUX_SOURCE_DIRECTORY(src/client/ OpenFala_client_SRCS)
+AUX_SOURCE_DIRECTORY(src/entity/ OpenFala_entity_SRCS)
 AUX_SOURCE_DIRECTORY(src/filesystem OpenFala_filesystem_SRCS)
 AUX_SOURCE_DIRECTORY(src/gui OpenFala_gui_SRCS)
 AUX_SOURCE_DIRECTORY(src/network OpenFala_network_SRCS)
@@ -30,6 +31,7 @@ ADD_EXECUTABLE(OpenFala
     ${OpenFala_SRCS} 
     ${OpenFala_block_SRCS} 
     ${OpenFala_client_SRCS} 
+    ${OpenFala_entity_SRCS} 
     ${OpenFala_filesystem_SRCS} 
     ${OpenFala_gui_SRCS} 
     ${OpenFala_network_SRCS}
