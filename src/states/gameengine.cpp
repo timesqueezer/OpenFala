@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "cpGUI.hpp"
+#include "../gui/cpGUI.hpp"
 #include "gameengine.hpp"
 #include "gamestate.hpp"
 

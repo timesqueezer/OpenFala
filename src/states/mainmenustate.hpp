@@ -3,7 +3,7 @@
 
 #include <SFML/Audio.hpp>
 #include "gamestate.hpp"
-#include "cpGUI.hpp"
+#include "../gui/cpGUI.hpp"
 
 class MainMenuState : public IGameState
 {
