@@ -33,6 +33,9 @@ void GameEngine::Init(std::string title, sf::Uint16 width, sf::Uint16 height, bo
 
 void GameEngine::Cleanup()
 {
+    // Stop the Music
+    mBackgroundMusic.Stop();
+
 	// Cleanup the all states
 	while ( !states.empty() ) {
 		states.back()->Cleanup();
@@ -96,6 +99,9 @@ void GameEngine::HandleEvents()
 
 void GameEngine::Update()
 {
+    if (mBackgroundMusic.GetStatus() == sf::Music::Playing)
+        sf::Sleep(0.001f); // for music thread
+
 	// Let the state update the game
 	if (!states.empty())
         states.back()->Update();
@@ -112,4 +118,27 @@ void GameEngine::Draw()
 
 ResourceManager& GameEngine::GetResMgr(){
     return mResMgr;
+}
+
+
+void GameEngine::StartMusic(std::string filename){
+    // stop music if it is running
+    if (mBackgroundMusic.GetStatus() == sf::Music::Playing)
+        StopMusic();
+
+    // load new music file
+    if(!mBackgroundMusic.OpenFromFile(filename)){
+        std::cerr << "ERROR: Cound not load music file: " << filename << std::endl;
+    }
+    // background music should always run in loop
+    mBackgroundMusic.SetLoop(true);
+    // play it!
+    mBackgroundMusic.Play();
+
+}
+void GameEngine::StopMusic(){
+    mBackgroundMusic.Stop();
+}
+bool GameEngine::MusicPlaying(){
+    return (mBackgroundMusic.GetStatus() == sf::Music::Playing);
 }

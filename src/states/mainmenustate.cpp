@@ -38,10 +38,9 @@ void MainMenuState::Init(GameEngine* game){
     exitButton = new cp::cpButton(&mGameEngine->app, &gui, "Exit",left, 80, button_width, button_height);
     exitButton->SetFontSize(14);
 
-    if(!m_MenuMusic.OpenFromFile("data/music/menu1.ogg")){
-        std::cerr << "ERROR: Cound not load menu music." << std::endl;
-    }
-    m_MenuMusic.Play();
+    if (!mGameEngine->MusicPlaying())
+        mGameEngine->StartMusic("data/music/menu1.ogg");
+
 }
 
 void MainMenuState::Cleanup(){
@@ -66,7 +65,7 @@ void MainMenuState::HandleEvents(){
 
         // Game Start Button Click
         if(gameStartButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
-            m_MenuMusic.Stop();
+            mGameEngine->StopMusic();
             mGameEngine->ChangeState( PlayState::Instance() );
         }
 
@@ -77,7 +76,7 @@ void MainMenuState::HandleEvents(){
 
         // Exit Button Click
         if(exitButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
-            m_MenuMusic.Stop();
+            mGameEngine->StopMusic();
             mGameEngine->Cleanup();
         }
 
@@ -87,7 +86,6 @@ void MainMenuState::HandleEvents(){
 }
 
 void MainMenuState::Update(){
-    sf::Sleep(0.001f); // for music thread
 }
 
 void MainMenuState::Draw(){

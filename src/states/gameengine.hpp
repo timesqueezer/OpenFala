@@ -3,6 +3,7 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include <vector>
 #include <string>
@@ -34,6 +35,10 @@ public:
 
 	ResourceManager& GetResMgr();
 
+	void StartMusic(std::string filename);
+	void StopMusic();
+	bool MusicPlaying();
+
 	sf::RenderWindow app;
 
 	po::variables_map mProgramOptions;
@@ -42,7 +47,7 @@ public:
 	sf::Uint16 m_height;
 
 private:
-
+    sf::Music mBackgroundMusic;
 	// TODO: Singleton
 	ResourceManager mResMgr;
 

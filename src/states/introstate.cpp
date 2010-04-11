@@ -26,6 +26,10 @@ void IntroState::Init(GameEngine* game){
     // Center the message
     m_welcome_message.SetPosition(mGameEngine->app.GetWidth()/2 - m_welcome_message.GetRect().GetWidth()/2,
                                   mGameEngine->app.GetHeight() - m_welcome_message.GetRect().GetHeight()*2);
+
+
+    // Start the Music!!
+    mGameEngine->StartMusic("data/music/menu1.ogg");
 }
 
 void IntroState::Cleanup(){
