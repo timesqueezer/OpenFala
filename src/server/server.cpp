@@ -10,29 +10,23 @@
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
 
-ServerApp::ServerApp(const sf::Uint16& port, const sf::Uint16& maxplayers) {
-    m_port = port; // port for incoming communication (default 41311)
-    m_clientport = 41312; // port for outgoing communication
-    m_maxplayers = maxplayers;
-   	m_clist.resize(extents[4][maxplayers]);
-    m_mpos.resize(extents[maxplayers][2]);
-   	m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
-   	// Mouse positions m_mpos[player1,2,3,4][x,y]
-   	m_active_clients = 0;
-
-
+ServerApp::ServerApp(const sf::Uint16 port, const sf::Uint16 max_players) {
+    sf::Uint16 m_port = port;
+    // TODO Blockmanager  
+   	//m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
+    m_ClMan = ClientManager();
+    m_ClMan.SetMaxPlayers(max_players);
 }
 
 ServerApp::~ServerApp() {}
 
 void ServerApp::Init() {
-    if (!Listener.Bind(m_clientport)) {
-        std::cout << "Fail while binding the listening socket." << std::endl;
+    if (!Listener.Bind(m_port)) {
+        std::cout << "Fail while binding the listening socket." << std::endl;        
     }
     Selector.Add(Listener);
 	std::cout << "OpenFala server started on port: " << m_port << std::endl;
-	std::cout << "Max players: " << m_maxplayers << std::endl;
-
+	std::cout << "Max players: " << m_ClMan.GetMaxPlayers() << std::endl;
 
 }
 
@@ -60,20 +54,20 @@ void ServerApp::HandleRequest() {
 
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-
             SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint8) 1;
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
 
         } else if (PacketType == 2) { // "Handshake" getting client's name
 
-            /*if (!ClMan.IsKnown(Address)) {
 
+            if (!m_ClMan.IsKnown(Address)) {
+                
                 std::string cl_name;
-                Packet >> name;
-                ClMan.Add(Address, name);
-
-            }*/
+                Packet >> cl_name;
+                m_ClMan.Add(Address, cl_name);
+            }
+        
 
         } else {
 
@@ -85,45 +79,12 @@ void ServerApp::HandleRequest() {
 }
 
 
-void ServerApp::Update() {
-    for(int i = 0; i < m_maxplayers; ++i) {
-        if (m_clist[0][i] != "") {
-            for (int x = 0; x < m_maxplayers; ++x) {
-                if (m_clist[0][x] != "") {
-                    if (x != i) {
-                        SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[x][0] << (sf::Uint16) m_mpos[x][1] << (sf::Uint16) x;
-                        Listener.Send(SendPacket, m_clist[0][i], 41312);
-                        SendPacket.Clear();
-                    }
-                }
-            }
-        }
-    }
-}
+void ServerApp::Update() {}
 
 void ServerApp::Die() {
     Listener.Close();
 }
 
-sf::SocketUDP& ServerApp::GetSocket() {
-    return Listener;
-}
-
-
-sf::Packet& ServerApp::GetSendPacket() {
-    return SendPacket;
-}
-
-int ServerApp::GetPlayerId(std::string name) {
-    int playerid = 0;
-    for(int i = 0; i < m_maxplayers; i++) {
-        if(m_clist[1][i] == name) {
-            playerid = i;
-            break;
-        }
-    }
-    return playerid;
-}
 
 
 
