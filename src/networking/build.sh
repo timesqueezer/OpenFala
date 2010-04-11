@@ -6,6 +6,6 @@ if [ ! -d "./bin" ]; then
 fi 
 
 
-g++ -Wall -o bin/client -lsfml-system -lsfml-network client.cpp
+clang++ -Wall -o bin/client -lsfml-system -lsfml-network client.cpp
 
-g++ -Wall -o bin/server -lsfml-system -lsfml-network server.cpp
+clang++ -Wall -o bin/server -lsfml-system -lsfml-network server.cpp

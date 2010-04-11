@@ -1,8 +1,18 @@
 #include <iostream>
+#include <string>
 #include <SFML/Network.hpp>
 
 int main(void) {
+
+    enum PacketType {
+        Handshake,
+        Msg,
+        Default
+    };
     
+    PacketType t_msg = Msg;
+    PacketType t_hs = Handshake;
+
     sf::SocketUDP Socket;
     sf::Packet Packet;
 
@@ -18,12 +28,17 @@ int main(void) {
         std::cout << "fail" << std::endl;
         exit(0);
     }
+    //Packet << t_hs << "Hallo";
+//    Socket.Send(Packet, Address, port);
+  //  Packet.Clear();
 
     while (true) {
-        std::cout << "Data to send to the server: ";
-        std::cin >> data;
+//        Packet << t_hs << t_msg;
+   //     std::cout << "Data to send to the server: ";
+//        std::cin >> data;
+        data = "lol";
 
-        Packet << data;
+        Packet << t_msg;
 
         Socket.Send(Packet, Address, port);
 
