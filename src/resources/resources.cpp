@@ -8,15 +8,17 @@ ResourceManager::~ResourceManager() {};
 bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
     const sf::Uint16& width, const sf::Uint16& height, std::string key) {
 
-    // create Paths
+    // create Original File Path
     std::string originalFile = (path / imgname).string();
-    Filesystem::path cacheDir = (path / "cached").string();
-    std::string cacheFile = (cacheDir / key).string()+".png";
 
     // if the optional param key is not given, use the basename as key
     if(key == "") {
         key = boost::filesystem::basename(originalFile);
     }
+
+    // Create Cache Paths
+    Filesystem::path cacheDir = (path / "cached").string();
+    std::string cacheFile = (cacheDir / key).string()+".png";
 
     // if an image with that key already exists in the dictionary, return
     if(m_images.count(key) != 0) {
