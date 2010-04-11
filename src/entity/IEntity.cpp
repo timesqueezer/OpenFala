@@ -1,49 +1,83 @@
 #include "IEntity.hpp"
 
-sf::Uint16 IEntity::GetAnimationIndex()
+sf::Uint16 IEntity::GetAnimationIndex(){
     return mAnimationIndex;
+}
 
-void IEntity::SetAnimationIndex(sf::Uint16 index)
+void IEntity::SetAnimationIndex(sf::Uint16 index){
     mAnimationIndex = index;
+}
 
-float IEntity::GetLifeTime()
+float IEntity::GetLifeTime(){
     return mLifeTime;
+}
 
-sf::Vector2f IEntity::GetPosition()
+sf::Vector2f IEntity::GetPosition(){
     return sf::Vector2f(mPosX, mPosY);
+}
 
 void IEntity::SetPosition(sf::Vector2f position) {
-    mPosX = position.X; 
-    mPosY = position.Y;
+    mPosX = position.x;
+    mPosY = position.y;
 }
 
-void IEntity::SetX(float x)
+void IEntity::SetX(float x){
     mPosX = x;
+}
 
-void IEntity::SetY(float y)
+void IEntity::SetY(float y){
     mPosY = y;
+}
 
-sf::Vector2f IEntity::GetDimension()
+sf::Vector2f IEntity::GetDimension(){
     return sf::Vector2f(mDimX, mDimY);
+}
 
 void IEntity::SetDimension(sf::Vector2f dimension) {
-    mDimX = dimension.X;
-    mDimY = dimension.Y;
+    mDimX = dimension.x;
+    mDimY = dimension.y;
 }
 
-float IEntity::GetMass()
+float IEntity::GetMass(){
     return mMass;
+}
 
-void IEntity::SetMass(float mass)
+void IEntity::SetMass(float mass){
     mMass = mass;
+}
 
-sf::Uint16 IEntity::GetPlayerID()
+sf::Uint16 IEntity::GetPlayerID(){
     return mPlayerID;
+}
 
-void IEntity::SetPlayerID(sf::Uint16 id)
+void IEntity::SetPlayerID(sf::Uint16 id){
     mPlayerID = id;
+}
+
+sf::Uint16 IEntity::GetAnimationFPS(){
+    return mAnimationFPS;
+}
+void IEntity::SetAnimationFPS(sf::Uint16 FPS){
+    mAnimationFPS = FPS;
+}
+
 
 void IEntity::UpdateAnimation() {
-    sf::Uint16 imageY = mAnimationIndex * mSprite.GetHeight();
-    sf::Uint16 imageX = 0;
+    // Get Length of Animation in Frames
+    sf::Uint16 framesPerLoop = mSprite.GetImage()->GetWidth() / mDimX;
+
+    // Get number of frames since start
+    sf::Uint16 frameNb = (mLifeTime * mAnimationFPS);
+
+    // Get number of frames since last loop start
+    frameNb = frameNb % framesPerLoop;
+
+    // x-Coordinate = frame Number * frame Width
+    sf::Uint16 imageX =  frameNb * mDimX;
+
+    // y-Coordinate = row Number * frame Height
+    sf::Uint16 imageY = mAnimationIndex * mDimY;
+
+    // Set Subrect
+    mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX, imageY+mDimY) );
 }

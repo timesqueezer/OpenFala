@@ -9,7 +9,7 @@ class IEntity : boost::noncopyable {
 public:
     virtual ~IEntity() {}
     virtual void Update(float dt) = 0;
-    
+
     sf::Uint16 GetAnimationIndex();
     void SetAnimationIndex(sf::Uint16 index);
 
@@ -28,6 +28,9 @@ public:
 
     sf::Uint16 GetPlayerID();
     void SetPlayerID(sf::Uint16 id);
+
+    sf::Uint16 GetAnimationFPS();
+    void SetAnimationFPS(sf::Uint16 FPS);
 
 private:
     sf::Sprite mSprite;
