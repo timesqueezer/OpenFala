@@ -18,7 +18,8 @@ void MainMenuState::Init(GameEngine* game){
     sf::Uint16 button_width = 120;
     sf::Uint16 left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
-    // Init Background Image
+    // Load and Init Background Image
+    mGameEngine->GetResMgr().AddImage("data/images","title.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
     mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title"));
 
     testShape = Utility::GradientRectangle(0,0,100,100,sf::Color(255,255,0), sf::Color(255,128,0));
