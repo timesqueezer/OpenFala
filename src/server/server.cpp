@@ -53,13 +53,16 @@ void ServerApp::HandleRequest() {
             sf::Uint16 sqx, sqy;
 
             Packet >> sqx >> sqy;
+            
+            std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
-            BOOST_FOREACH(sf::Uint8 id, m_ClMan.GetIDs()) {
+            BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
                 if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << (sf::Uint16) 2 << sqx << sqy << m_ClMan.GetID(Address);
-                    Listener.Send(SendPacket, Address, port);
+                    SendPacket << (sf::Uint16) 2 << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
+                    Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
+                    SendPacket.Clear();
                 }
             }
             
@@ -68,9 +71,18 @@ void ServerApp::HandleRequest() {
 
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-            SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint8) 1;
+            SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint8) m_ClMan.GetID(Address);
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
+            std::cout << "BUILD " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
+
+            BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
+                if (id != m_ClMan.GetID(Address)) {
+                    SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
+                    Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
+                    SendPacket.Clear();
+                }
+            }
 
         } else if (PacketType == 2) { // "Handshake" getting client's name
 
@@ -80,6 +92,11 @@ void ServerApp::HandleRequest() {
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
+                std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
+                SendPacket << (sf::Uint16) 3 << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+                Listener.Send(SendPacket, Address, port);
+                SendPacket.Clear();
+
             }
 
 

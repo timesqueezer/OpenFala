@@ -14,14 +14,15 @@ ClientManager::~ClientManager() {}
 
 void ClientManager::Add(sf::IPAddress address, std::string name) {
     
-    std::map<sf::Uint8, Client>::iterator it;
+    std::map<int, Client>::iterator it;
     it = m_clients.end();
     Client client;
     client.address = address;
     client.name = name;
     client.posx = 0;
     client.posy = 0;
-    m_clients.insert(std::pair<sf::Uint8, Client>(it->first, client));
+    std::cout << it->first << std::endl << m_clients.size() << std::endl;
+    m_clients.insert(std::pair<int, Client>(it->first, client));
 }
 
 void ClientManager::Remove(sf::Uint8 id) {
@@ -30,7 +31,7 @@ void ClientManager::Remove(sf::Uint8 id) {
 
 bool ClientManager::IsKnown(sf::IPAddress address) {
     bool isknown = false;
-    std::map<sf::Uint8, Client>::iterator it;
+    std::map<int, Client>::iterator it;
     for(it=m_clients.begin(); it != m_clients.end(); ++it) {
         if (it->second.address == address) {
             isknown = true;
@@ -48,10 +49,10 @@ bool ClientManager::IsSlotAvailable() {
     }
 }
 
-std::vector<sf::Uint8> ClientManager::GetIDs() {
-    std::vector<sf::Uint8> ids;
-    std::map<sf::Uint8, Client>::iterator it;
-    sf::Uint8 tmp = 0;
+std::vector<int> ClientManager::GetIDs() {
+    std::vector<int> ids;
+    std::map<int, Client>::iterator it;
+    int tmp = 0;
     for ( it=m_clients.begin() ; it != m_clients.end(); it++ ) {
         tmp = (*it).first;
         ids.push_back(tmp);
@@ -59,9 +60,9 @@ std::vector<sf::Uint8> ClientManager::GetIDs() {
     return ids;
 }
 
-sf::Uint8 ClientManager::GetID(sf::IPAddress address) {
-    std::map<sf::Uint8, Client>::iterator it;
-    sf::Uint8 tmp = 0;
+int ClientManager::GetID(sf::IPAddress address) {
+    std::map<int, Client>::iterator it;
+    int tmp = 0;
     for ( it = m_clients.begin() ; it != m_clients.end(); it++ ) {
         if (it->second.address == address) {
             tmp = it->first;
