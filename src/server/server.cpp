@@ -67,13 +67,13 @@ void ServerApp::HandleRequest() {
         
         } else if (PacketType == 2) { // "Handshake" getting client's name
 
-            /*if (!ClMan.IsKnown(Address)) {
+            if (!ClMan.IsKnown(Address)) {
                 
                 std::string cl_name;
                 Packet >> name;
                 ClMan.Add(Address, name);
 
-            }*/
+            }
         
         } else {
             
