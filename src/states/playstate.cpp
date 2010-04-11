@@ -216,8 +216,8 @@ void PlayState::Draw(){
     sf::Uint16 framerate = (sf::Uint16) (1.f / mGameEngine->app.GetFrameTime());
 
 	for(sf::Uint8 x = 0;x<m_blocknbx;++x) {
-		for(sf::Uint8 y = 10;y<m_blocknby;++y) {
-			if(mode == 1) {
+		for(sf::Uint8 y = 0;y<m_blocknby;++y) {
+			if(m_blocks[x][y]!=0 && mode == 1) {
                 mGameEngine->app.Draw(m_blocks[x][y]->Sprite);
 			}
 		}
