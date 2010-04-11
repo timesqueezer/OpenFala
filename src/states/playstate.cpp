@@ -155,14 +155,14 @@ void PlayState::HandleEvents(){
             }
 		}
 		if (Event.Type == sf::Event::MouseMoved) { // What happens when the mouse is moved
-            float mouse_x = (m_mpos[0]->m_Shape.GetPosition().x)/m_ratio;
-		    float mouse_y = (m_mpos[0]->m_Shape.GetPosition().y)/m_ratio;
+            float mouse_x = (m_mpos[0]->Sprite.GetPosition().x)/m_ratio;
+		    float mouse_y = (m_mpos[0]->Sprite.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
 		    	//SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
 		    	//Socket.Send(SendPacket, m_bindaddress, m_port);
 		    	//SendPacket.Clear();
-		    	m_mpos[0]->m_Shape.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
+		    	m_mpos[0]->Sprite.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
 		    }
 		}
 	}
@@ -182,7 +182,7 @@ void PlayState::Update(){
             PlaceBlock((int) posx, (int) posy);
         }
         if (actionid == 2) { //stands for getting the mouse positions
-            m_mpos[cl_id]->m_Shape.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+            m_mpos[cl_id]->Sprite.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
         }
         if (actionid == 3) { // init stuff
             m_cl_id = cl_id;
@@ -223,7 +223,7 @@ void PlayState::Draw(){
 	}
 
     for(sf::Uint8 x = 0; x < 4; ++x) {
-        mGameEngine->app.Draw(m_mpos[x]->m_Shape);
+        mGameEngine->app.Draw(m_mpos[x]->Sprite);
     }
 
 
@@ -233,8 +233,8 @@ void PlayState::Draw(){
 	mGameEngine->app.Draw(fps);
 		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x','p'))+
                        	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y','p'))+
-                        " BlockX: "+boost::lexical_cast<std::string>(m_mpos[0]->m_Shape.GetPosition().x)+
-                        " BlockY: "+boost::lexical_cast<std::string>(m_mpos[0]->m_Shape.GetPosition().y));
+                        " BlockX: "+boost::lexical_cast<std::string>(m_mpos[0]->Sprite.GetPosition().x)+
+                        " BlockY: "+boost::lexical_cast<std::string>(m_mpos[0]->Sprite.GetPosition().y));
 	mousepos.SetPosition(150, mGameEngine->app.GetHeight() - 40);
 	mGameEngine->app.Draw(mousepos);
 }
@@ -281,7 +281,7 @@ void PlayState::PlaceBlock(int x, int y) {
     if (!InPlayableArea(x,y)) {
         std::cout << "Cannot place the block right there!";
     } else {
-        if (m_blocks[x][y+1]->m_type != 1) {
+        if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             ResourceManager& ResMgr = mGameEngine->GetResMgr();
             m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), BLOCKTYPE_TOWER);
         } else {

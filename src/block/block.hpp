@@ -15,9 +15,9 @@ class Block {
 public:
     Block(float x, float y, sf::Image* Image, BlockType type);
 
-    Block(float x, float y, sf::Shape Shape);
+    // TODO: ganz hässlich!!!
     sf::Sprite Sprite;
-    sf::Shape m_Shape;
+
     BlockType m_type;
     void SetPos(int, int);
 };
