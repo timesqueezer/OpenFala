@@ -159,10 +159,10 @@ void PlayState::HandleEvents(){
 		    float mouse_y = (m_mpos[0]->Sprite.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
-		    	//SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
-		    	//Socket.Send(SendPacket, m_bindaddress, m_port);
-		    	//SendPacket.Clear();
-		    	m_mpos[0]->Sprite.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
+		    	SendPacket << (sf::Uint8) 0 << (sf::Uint16) (GetMouseBlock('x', 'p')+GetNonPlayableAreaSize()) << GetMouseBlock('y', 'p');
+		    	Socket.Send(SendPacket, m_bindaddress, m_port);
+		    	SendPacket.Clear();
+		    	m_mpos[0]->m_Shape.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
 		    }
 		}
 	}
