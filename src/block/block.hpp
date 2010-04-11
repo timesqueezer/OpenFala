@@ -4,15 +4,21 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+enum BlockType{
+    BLOCKTYPE_GROUND,
+    BLOCKTYPE_EMPTY,
+    BLOCKTYPE_TOWER
+};
+
 // Generic class to represent a block in the game world.
 class Block {
 public:
-    Block(float, float, sf::Image*, unsigned short);
+    Block(float x, float y, sf::Image* Image, BlockType type);
 
     Block(float x, float y, sf::Shape Shape);
     sf::Sprite Sprite;
     sf::Shape m_Shape;
-    unsigned short m_type; // type 0 for ground type 1 for sky and type 2 for tower
+    BlockType m_type;
     void SetPos(int, int);
 };
 

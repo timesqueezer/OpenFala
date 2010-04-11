@@ -33,6 +33,11 @@ private:
 	cp::cpButton *optionsButton;
 	cp::cpButton *exitButton;
 
+	cp::cpShapeButton *testButton;
+	sf::Shape testShape;
+
+	sf::Sprite mBackgroundImage;
+
 	sf::Music m_MenuMusic;
 };
 

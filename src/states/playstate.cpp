@@ -51,12 +51,13 @@ void PlayState::Init(GameEngine* game){
 
     // Load images
 	ResourceManager& ResMgr = mGameEngine->GetResMgr();
-	//ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
+
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "highlight.svg", m_ratio, m_ratio);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -70,31 +71,31 @@ void PlayState::Init(GameEngine* game){
     m_mpos.resize(extents[4]);
 
     //Initialisation of the Shapes to show each player
-    for (short unsigned int i = 0; i < 4; ++i) {
-        m_mpos[i] = new Block(0, 0, sf::Shape::Rectangle(0.f, 0.f, m_ratio, m_ratio, sf::Color(255,128,0,128), 1.f, sf::Color(255,128,255,128)));
+    for(sf::Uint8 i = 0; i < 4; ++i) {
+        m_mpos[i] = new Block(0.f, 0.f, ResMgr.GetImage("highlight"), BLOCKTYPE_EMPTY);
     }
 
 	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
-	for (short unsigned int x = 0;x < m_blocknbx;++x) {
-		for (short unsigned int y = 0;y <= m_blocknby;++y) {
+	for (sf::Uint8 x = 0;x < m_blocknbx;++x) {
+		for (sf::Uint8 y = 0;y <= m_blocknby;++y) {
             if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2)-1 ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
 //					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), 0);
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), BLOCKTYPE_GROUND);
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"), 0);
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"), BLOCKTYPE_GROUND);
 		        }
             } else {
                 // This is the playable area
             	if (y < 10) {
 //					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), 0);
+				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), BLOCKTYPE_GROUND);
 				} else {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"), 0);
+					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"), BLOCKTYPE_GROUND);
 		        }
             }
         }
@@ -103,7 +104,8 @@ void PlayState::Init(GameEngine* game){
 
     // Create Sky Rectangle
     mSkyRect = Utility::GradientRectangle(0,0,mGameEngine->app.GetWidth(),10*m_ratio,
-                                          sf::Color(128,128,255), sf::Color(255,255,255) );
+                                          //sf::Color(0,0,60), sf::Color(60,60,60) );
+                                          sf::Color(128,128,255), sf::Color(240,240,255) );
 
 
     // Create Clouds
@@ -111,7 +113,7 @@ void PlayState::Init(GameEngine* game){
     for (sf::Uint8 i = 0; i<numClouds; ++i){
 
         sf::Uint16 x = sf::Randomizer::Random(-3*m_ratio,mGameEngine->app.GetWidth() + 3*m_ratio);
-        sf::Uint16 y = sf::Randomizer::Random(-3*m_ratio, 13*m_ratio);
+        sf::Uint16 y = sf::Randomizer::Random(-3*m_ratio, 6*m_ratio);
 
         std::string cloudName = "cloud0" + boost::lexical_cast<std::string>(sf::Randomizer::Random(1,5));
         // Create Cloud Sprite
@@ -210,19 +212,17 @@ void PlayState::Draw(){
         mGameEngine->app.Draw(cloud);
     }
 
-
-
     sf::Uint16 framerate = (sf::Uint16) (1.f / mGameEngine->app.GetFrameTime());
 
-	for (short unsigned int x = 0;x<m_blocknbx;++x) {
-		for (short unsigned int y = 10;y<m_blocknby;++y) {
-			if (mode == 1) {
+	for(sf::Uint8 x = 0;x<m_blocknbx;++x) {
+		for(sf::Uint8 y = 10;y<m_blocknby;++y) {
+			if(mode == 1) {
                 mGameEngine->app.Draw(m_blocks[x][y]->Sprite);
 			}
 		}
 	}
 
-    for (short unsigned int x = 0; x < 4; ++x) {
+    for(sf::Uint8 x = 0; x < 4; ++x) {
         mGameEngine->app.Draw(m_mpos[x]->m_Shape);
     }
 
@@ -240,7 +240,7 @@ void PlayState::Draw(){
 }
 
 sf::Uint8 PlayState::GetNonPlayableAreaSize() {
-   unsigned short size = (sf::Uint8) (m_blocknbx -20) / 2;
+   sf::Uint8 size = (m_blocknbx -20) / 2;
    return size;
 }
 
@@ -283,7 +283,7 @@ void PlayState::PlaceBlock(int x, int y) {
     } else {
         if (m_blocks[x][y+1]->m_type != 1) {
             ResourceManager& ResMgr = mGameEngine->GetResMgr();
-            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), 2);
+            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), BLOCKTYPE_TOWER);
         } else {
             std::cout << "Can't place blocks in the air." << std::endl;
         }
