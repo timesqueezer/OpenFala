@@ -109,14 +109,13 @@ void PlayState::Init(GameEngine* game){
     // Create Clouds
     sf::Uint8 numClouds = sf::Randomizer::Random(10,30);
     for (sf::Uint8 i = 0; i<numClouds; ++i){
-        // x between 0 and (width - cloudwidth)
-        sf::Uint16 x = sf::Randomizer::Random(0.f,mGameEngine->app.GetWidth() - 3*m_ratio);
-        // y between 0 and (skyheight - cloudheight) = 10*m_ratio - 3*m_ratio = 7*m_ratio
-        sf::Uint16 y = sf::Randomizer::Random(0.f , 7*m_ratio);
 
-        //std::string cloudName
+        sf::Uint16 x = sf::Randomizer::Random(-3*m_ratio,mGameEngine->app.GetWidth() + 3*m_ratio);
+        sf::Uint16 y = sf::Randomizer::Random(-3*m_ratio, 13*m_ratio);
+
+        std::string cloudName = "cloud0" + boost::lexical_cast<std::string>(sf::Randomizer::Random(1,5));
         // Create Cloud Sprite
-        mClouds.push_back( new sf::Sprite(*ResMgr.GetImage("cloud01"), sf::Vector2f(x,y)) );
+        mClouds.push_back( new sf::Sprite(*ResMgr.GetImage(cloudName), sf::Vector2f(x-100,y)) );
     }
 
     m_cl_id = 0;
@@ -188,6 +187,14 @@ void PlayState::Update(){
         }
         //std::cout << actionid << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
+    }
+
+    // Move clouds
+    BOOST_FOREACH(sf::Drawable& cloud , mClouds){
+        float x = cloud.GetPosition().x - 1;
+        if (x<-3*m_ratio) x = mGameEngine->app.GetWidth();
+        cloud.SetX(x);
+
     }
 }
 
