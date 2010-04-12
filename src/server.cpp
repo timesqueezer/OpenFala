@@ -85,7 +85,14 @@ void ServerApp::HandleRequest() {
     if (buildtype == "mouse") { // add mouse position to the list
         m_mpos[cl_id][0] = sqx;
         m_mpos[cl_id][1] = sqy;
-        //Packet << actionid << X << Y << userid
+        for (int i; i < m_maxplayers; ++i) {
+            if (m_clist[0][i] != "") {
+                if (i != cl_id) {
+                    SendPacket << (sf::Uint16) 2 << (sf::Uint16) m_mpos[cl_id][0] << (sf::Uint16) m_mpos[cl_id][1] << (sf::Uint16) i;
+                    Socket.Send(SendPacket,m_clist[0][cl_id], 41312);
+                }
+            }
+        }
 
     } else if (buildtype == "block") {
         SendPacket << (sf::Uint16) 1 << sqx << sqy << cl_id;

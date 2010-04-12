@@ -18,8 +18,8 @@ uint8_t ResourceManager::AddImage(const Filesystem::path& path, const std::strin
         Magick::Geometry ss(width, height);
         mimage.sample(Magick::Geometry(width, height));
         mimage.depth(8);
-        mimage.write((path / "cached/" / basename).string()+".tga");
-        sfimage.LoadFromFile((path / "cached/" / basename).string()+".tga");
+        mimage.write((path / "cached/" / basename).string()+".png");
+        sfimage.LoadFromFile((path / "cached/" / basename).string()+".png");
         ResourceManager::m_images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
     }
     catch (std::exception &error_) {
