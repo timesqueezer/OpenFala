@@ -1,5 +1,7 @@
 #include "EntityManager.hpp"
 
+#include <iostream>
+
 void EntityManager::AddEntity(IEntity* entity) {
     mEntities.push_back(entity);
 }

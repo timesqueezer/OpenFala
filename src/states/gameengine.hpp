@@ -11,6 +11,7 @@
 #include "../utility/utility.hpp"
 #include "../resources/resources.hpp"
 #include "gamestate.hpp"
+#include "../entity/EntityManager.hpp"
 
 //class IGameState;
 
@@ -34,6 +35,7 @@ public:
 	void Quit() { m_running = false; }
 
 	ResourceManager& GetResMgr();
+	EntityManager& GetEntMgr();
 
 	void StartMusic(std::string filename);
 	void StopMusic();
@@ -50,6 +52,9 @@ private:
     sf::Music mBackgroundMusic;
 	// TODO: Singleton
 	ResourceManager mResMgr;
+
+	// TODO: Singleton
+	EntityManager mEntMgr;
 
     // the stack of states
 	// TODO: boost.ptr_vector
