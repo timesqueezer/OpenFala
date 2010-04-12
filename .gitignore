@@ -3,5 +3,4 @@ obj/**/*
 build
 data/images/cached/
 data/images/debug/cached/
-src/networking/client
-src/networking/server
+src/networking/bin
