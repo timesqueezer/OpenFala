@@ -172,6 +172,20 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4043"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4065"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -180,9 +194,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.490625"
-     inkscape:cx="237.68161"
-     inkscape:cy="316.77353"
+     inkscape:zoom="2.98125"
+     inkscape:cx="308.07648"
+     inkscape:cy="173.41409"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -265,32 +279,32 @@
        x="212.21173"
        y="864.57391" />
     <rect
-       style="fill:#ff0000;fill-opacity:1;stroke:none"
-       id="rect3986"
-       width="10"
-       height="10"
-       x="160"
-       y="682.36218" />
-    <rect
        style="fill:#00ff00;fill-opacity:1;stroke:none"
        id="rect3986-7"
-       width="10"
-       height="10"
-       x="360"
-       y="682.36218" />
+       width="20"
+       height="20"
+       x="340"
+       y="692.36218" />
     <rect
        style="fill:#ff0000;fill-opacity:1;stroke:none"
        id="rect3986-2"
-       width="10"
-       height="10"
-       x="160"
+       width="40"
+       height="40"
+       x="130"
        y="882.36218" />
     <rect
+       style="fill:#ff0000;fill-opacity:1;stroke:none"
+       id="rect3986-2-4"
+       width="20"
+       height="20"
+       x="340"
+       y="892.36218" />
+    <rect
        style="fill:#00ff00;fill-opacity:1;stroke:none"
-       id="rect3986-7-9"
-       width="10"
-       height="10"
-       x="360"
-       y="882.36218" />
+       id="rect3986-7-8"
+       width="40"
+       height="40"
+       x="130"
+       y="682.36218" />
   </g>
 </svg>

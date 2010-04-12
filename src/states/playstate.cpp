@@ -193,7 +193,7 @@ void PlayState::Update(){
 
 
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
-        RecvPacket >> request_id;        
+        RecvPacket >> request_id;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
             PlaceBlock((int) posx, (int) posy);
