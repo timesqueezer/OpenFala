@@ -14,8 +14,9 @@ void Building::Update(float dt){
     UpdateAnimation();
 
     // Destroy Building after 5 seconds (for testing purposes)
-    if (dt > 5 and mAnimationIndex!=1)
+    if (mLifeTime > 5 and mAnimationIndex!=1){
         mAnimationIndex = 1;
+    }
 }
 
 void Building::SetHealth(sf::Uint16 health){

@@ -92,7 +92,6 @@ void IEntity::UpdateAnimation() {
     // y-Coordinate = row Number * frame Height
     sf::Uint16 imageY = mAnimationIndex * mDimY;
 
-    std::cout << "Subrect: " << imageX << " | " << imageY << " | " << imageX+mDimX << " | " << imageY+mDimY << std::endl;
     // Set Subrect
     mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX, imageY+mDimY) );
 }
