@@ -40,7 +40,7 @@ public:
 	// Get server packet for sending client data.
 	sf::Packet& GetSendPacket();
 
-	// Get
+	// Get player id.
 	int GetPlayerId(std::string);
 private:
     sf::Uint8 m_active_clients;
