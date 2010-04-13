@@ -40,7 +40,7 @@ class ClientManager {
         // Get Block under cursor for client ID
         std::vector<sf::Uint8> GetBlockUnderCursor(sf::Uint8 id);
         
-        sf::Uint8 GetMaxPlayers();
+        sf::Uint16 GetMaxPlayers();
 
         // Set name of client ID
         void SetName(sf::Uint8 id, std::string name);
@@ -48,7 +48,7 @@ class ClientManager {
         // Set Block under cursor for client ID
         void SetBlockUnderCursor(sf::Uint8 id, sf::Uint8 posx, sf::Uint8 posy);
 
-        void SetMaxPlayers(sf::Uint8 max_players);
+        void SetMaxPlayers(sf::Uint16 max_players);
 
     private:
         sf::Uint8 m_max_players;

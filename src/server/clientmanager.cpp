@@ -1,5 +1,6 @@
 #include <SFML/Network.hpp>
 
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -73,7 +74,7 @@ std::vector<sf::Uint8> ClientManager::GetBlockUnderCursor(sf::Uint8 id) {
     return blocks;
 }
 
-sf::Uint8 ClientManager::GetMaxPlayers() {
+sf::Uint16 ClientManager::GetMaxPlayers() {
     return m_max_players;
 }
 
@@ -86,6 +87,6 @@ void ClientManager::SetBlockUnderCursor(sf::Uint8 id, sf::Uint8 posx, sf::Uint8 
     m_clients[id].posy = posy; 
 }
 
-void ClientManager::SetMaxPlayers(sf::Uint8 max_players) {
+void ClientManager::SetMaxPlayers(sf::Uint16 max_players) {
     m_max_players = max_players;
 }
