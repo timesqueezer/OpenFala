@@ -1,7 +1,14 @@
 #include <iostream>
+#include <string>
 #include <SFML/Network.hpp>
 
 int main() {
+
+    enum PacketType {
+        Handshake,
+        Msg,
+        Default
+    };
 
     sf::SelectorUDP Selector;
 
@@ -13,7 +20,7 @@ int main() {
 
     Selector.Add(Listener);
 
-
+    //Listener.SetBlocking(true);
 
     while (true) {
     
@@ -28,11 +35,15 @@ int main() {
             unsigned short port;
             cSocket.Receive(Packet, Address, port);
             std::string data;
-
-            Packet >> data;
-            std::cout << "Client [" << Address << ":" << port << "] sent: " << data << std::endl;
+            PacketType t_hs = Default;
+            PacketType t_msg = Default;
+            int i = 0;
+            Packet >> i;
+            std::cout << i;
+            //std::cout << "Client [" << Address << ":" << port << "] sent: " << data << " with type: " << t_hs << " " << t_msg << std::endl;
             
             Packet.Clear();
+            //sf::Sleep(0.2f);
 
         }
     

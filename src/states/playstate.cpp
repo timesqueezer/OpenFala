@@ -4,13 +4,14 @@
 #include <boost/program_options.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/foreach.hpp>
 
 #include <iostream>
 #include <string>
 
-#include "server.hpp"
-#include "block.hpp"
-#include "utility.hpp"
+#include "../server/server.hpp"
+#include "../block/block.hpp"
+#include "../utility/utility.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
@@ -50,12 +51,18 @@ void PlayState::Init(GameEngine* game){
 
     // Load images
 	ResMgr = ResourceManager::ResourceManager();
-	ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
+	//ResMgr.AddImage("data/images/", "block-sky.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-lava.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-rock.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "tower-generic.svg", m_ratio, m_ratio);
+
+	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
+	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
+	ResMgr.AddImage("data/images/", "cloud03.svg", 3*m_ratio, 3*m_ratio);
+	ResMgr.AddImage("data/images/", "cloud04.svg", 3*m_ratio, 3*m_ratio);
+	ResMgr.AddImage("data/images/", "cloud05.svg", 3*m_ratio, 3*m_ratio);
 
 	m_blocknbx = mGameEngine->app.GetWidth() / m_ratio;
 	m_blocknby = mGameEngine->app.GetHeight() / m_ratio;
@@ -74,7 +81,7 @@ void PlayState::Init(GameEngine* game){
             if ((x < (m_blocknbx - 20) / 2) or (x > (m_blocknbx - ((m_blocknbx - 20) / 2)-1 ))) {
             	// This is to create only m_blocks in the non playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
+//					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
 				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), 0);
 				} else {
@@ -83,7 +90,7 @@ void PlayState::Init(GameEngine* game){
             } else {
                 // This is the playable area
             	if (y < 10) {
-					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
+//					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
 				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), 0);
 				} else {
@@ -93,6 +100,24 @@ void PlayState::Init(GameEngine* game){
         }
         ++i;
 	}
+
+    // Create Sky Rectangle
+    mSkyRect = Utility::GradientRectangle(0,0,mGameEngine->app.GetWidth(),10*m_ratio,
+                                          sf::Color(128,128,255), sf::Color(255,255,255) );
+
+
+    // Create Clouds
+    sf::Uint8 numClouds = sf::Randomizer::Random(10,30);
+    for (sf::Uint8 i = 0; i<numClouds; ++i){
+        // x between 0 and (width - cloudwidth)
+        sf::Uint16 x = sf::Randomizer::Random(0.f,mGameEngine->app.GetWidth() - 3*m_ratio);
+        // y between 0 and (skyheight - cloudheight) = 10*m_ratio - 3*m_ratio = 7*m_ratio
+        sf::Uint16 y = sf::Randomizer::Random(0.f , 7*m_ratio);
+
+        //std::string cloudName
+        // Create Cloud Sprite
+        mClouds.push_back( new sf::Sprite(*ResMgr.GetImage("cloud01"), sf::Vector2f(x,y)) );
+    }
 
     m_cl_id = 0;
 	mode = 1; // set to build mode
@@ -122,7 +147,7 @@ void PlayState::HandleEvents(){
         if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << m_cl_id << (sf::Uint16) (GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2) << GetMouseBlock('y','p') << "block" << m_name;
+                    SendPacket << 1 << (sf::Uint16) (GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2) << GetMouseBlock('y','p');
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
@@ -133,9 +158,9 @@ void PlayState::HandleEvents(){
 		    float mouse_y = (m_mpos[0]->m_Shape.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
-		    	SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
-		    	Socket.Send(SendPacket, m_bindaddress, m_port);
-		    	SendPacket.Clear();
+		    	//SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
+		    	//Socket.Send(SendPacket, m_bindaddress, m_port);
+		    	//SendPacket.Clear();
 		    	m_mpos[0]->m_Shape.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
 		    }
 		}
@@ -170,10 +195,20 @@ void PlayState::Draw(){
     // Clear the screen
     mGameEngine->app.Clear(sf::Color(0,0,0));
 
+    // Draw sky
+    mGameEngine->app.Draw(mSkyRect);
+
+    // Draw clouds
+    BOOST_FOREACH(sf::Drawable& cloud , mClouds){
+        mGameEngine->app.Draw(cloud);
+    }
+
+
+
     sf::Uint16 framerate = (sf::Uint16) (1.f / mGameEngine->app.GetFrameTime());
 
 	for (short unsigned int x = 0;x<m_blocknbx;++x) {
-		for (short unsigned int y = 0;y<m_blocknby;++y) {
+		for (short unsigned int y = 10;y<m_blocknby;++y) {
 			if (mode == 1) {
                 mGameEngine->app.Draw(m_blocks[x][y]->Sprite);
 			}

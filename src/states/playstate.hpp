@@ -9,14 +9,15 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 #include <boost/multi_array.hpp>
+#include <boost/ptr_container/ptr_container.hpp>
 
 #include <ImageMagick/Magick++.h>
 
 #include <string>
 
-#include "filesystem.hpp"
-#include "resources.hpp"
-#include "block.hpp"
+#include "../filesystem/filesystem.hpp"
+#include "../resources/resources.hpp"
+#include "../block/block.hpp"
 
 #include "gamestate.hpp"
 
@@ -85,6 +86,10 @@ private:
 
 	sf::String fps;
 	sf::Shape inforect;
+
+	sf::Shape mSkyRect;
+
+	boost::ptr_vector<sf::Sprite> mClouds;
 };
 
 #endif

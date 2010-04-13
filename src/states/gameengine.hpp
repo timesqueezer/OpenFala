@@ -7,8 +7,8 @@
 #include <vector>
 #include <string>
 
-#include "utility.hpp"
-#include "resources.hpp"
+#include "../utility/utility.hpp"
+#include "../resources/resources.hpp"
 #include "gamestate.hpp"
 
 //class IGameState;

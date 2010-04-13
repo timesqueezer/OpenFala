@@ -6,14 +6,14 @@
 #include <iostream>
 #include <string>
 
-#include "server.hpp"
-#include "block.hpp"
-#include "utility.hpp"
-#include "gameengine.hpp"
+#include "server/server.hpp"
+#include "block/block.hpp"
+#include "utility/utility.hpp"
+#include "states/gameengine.hpp"
 
-#include "introstate.hpp"
-#include "mainmenustate.hpp"
-#include "playstate.hpp"
+#include "states/introstate.hpp"
+#include "states/mainmenustate.hpp"
+#include "states/playstate.hpp"
 
 #define AREAX 20
 #define AREAY 15

@@ -113,4 +113,20 @@ namespace Utility {
         S.SetOutlineWidth(Outline);
         return S;
     }
+
+
+
+    sf::Shape GradientRectangle(float P1X, float P1Y, float P2X, float P2Y,
+                                const sf::Color& Col1, const sf::Color& Col2,
+                                float Outline, const sf::Color& OutlineCol1,
+                                const sf::Color& OutlineCol2){
+
+        sf::Shape S;
+        S.AddPoint( sf::Vector2f(P1X, P1Y) , Col1, OutlineCol1);  // Top left
+        S.AddPoint( sf::Vector2f(P1X, P2Y) , Col2, OutlineCol2);  // Bottom left
+        S.AddPoint( sf::Vector2f(P2X, P2Y) , Col2, OutlineCol2);  // Bottom right
+        S.AddPoint( sf::Vector2f(P2X, P1Y) , Col1, OutlineCol1);  // Top right
+        S.SetOutlineWidth(Outline);
+        return S;
+    }
 }
