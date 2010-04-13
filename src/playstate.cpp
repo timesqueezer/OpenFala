@@ -9,7 +9,6 @@
 #include <string>
 
 #include "server.hpp"
-#include "network.hpp"
 #include "block.hpp"
 #include "utility.hpp"
 
@@ -148,7 +147,7 @@ void PlayState::Update(){
 	sf::Uint16 posx = 0;
 	sf::Uint16 posy = 0;
 	sf::Uint16 cl_id = 0;
-    Network::IPAddress svaddress;
+    sf::IPAddress svaddress;
     unsigned short svport;
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
         RecvPacket >> actionid >> posx >> posy >> cl_id;
@@ -247,8 +246,4 @@ void PlayState::PlaceBlock(int x, int y) {
         }
     }
     return;
-}
-
-Network::Socket& PlayState::GetSocket() {
-	return Socket;
 }

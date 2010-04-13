@@ -8,8 +8,6 @@
 
 #include <string>
 
-#include "network.hpp"
-
 typedef boost::multi_array<std::string, 2> stringarray2d;
 typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
 
@@ -34,13 +32,13 @@ public:
 	void Die();
 
     // Get server socket.
-	Network::Socket& GetSocket();
+	sf::SocketUDP& GetSocket();
 
     // Get server packet for receiving client data.
-	Network::Packet& GetRecvPacket();
+	sf::Packet& GetRecvPacket();
 
 	// Get server packet for sending client data.
-	Network::Packet& GetSendPacket();
+	sf::Packet& GetSendPacket();
 
 	// Get
 	int GetPlayerId(std::string);
@@ -53,9 +51,9 @@ private:
 	stringarray2d::extent_gen extents;
     uint16array2d m_mpos;
     uint16array2d m_blocks;
-    Network::Socket Socket;
-    Network::Packet RecvPacket;
-    Network::Packet SendPacket;
+    sf::SocketUDP Socket;
+    sf::Packet RecvPacket;
+    sf::Packet SendPacket;
 };
 
 #endif

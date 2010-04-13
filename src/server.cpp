@@ -28,7 +28,7 @@ void ServerApp::Init() {
 
 void ServerApp::HandleRequest() {
    	// IP Address reference only needed for connecting clients
-   	Network::IPAddress claddress;
+   	sf::IPAddress claddress;
  	Socket.Receive(RecvPacket, claddress, m_port);
 
     // We will expect client packages in this format
@@ -124,15 +124,15 @@ void ServerApp::Die() {
     Socket.Close();
 }
 
-Network::Socket& ServerApp::GetSocket() {
+sf::SocketUDP& ServerApp::GetSocket() {
 	return Socket;
 }
 
-Network::Packet& ServerApp::GetRecvPacket() {
+sf::Packet& ServerApp::GetRecvPacket() {
 	return RecvPacket;
 }
 
-Network::Packet& ServerApp::GetSendPacket() {
+sf::Packet& ServerApp::GetSendPacket() {
     return SendPacket;
 }
 

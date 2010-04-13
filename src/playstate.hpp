@@ -14,7 +14,6 @@
 
 #include <string>
 
-#include "network.hpp"
 #include "filesystem.hpp"
 #include "resources.hpp"
 #include "block.hpp"
@@ -54,8 +53,6 @@ public:
     // Get the block beneath mouse cursor.
     sf::Uint16 GetMouseBlock(char, char);
 
-    // Get the client socket.
-    Network::Socket& GetSocket();
 
 protected:
 	PlayState() { }
@@ -68,10 +65,10 @@ private:
 	sf::Uint16 m_port;
 	sf::Uint16 m_clientport;
 	std::string m_name;
-    Network::IPAddress m_bindaddress;
-    Network::Socket Socket;
-    Network::Packet SendPacket;
-    Network::Packet RecvPacket;
+    sf::IPAddress m_bindaddress;
+    sf::SocketUDP Socket;
+    sf::Packet SendPacket;
+    sf::Packet RecvPacket;
 
     sf::Uint16 m_cl_id;
 	sf::String mousepos;
