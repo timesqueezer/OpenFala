@@ -75,4 +75,43 @@ namespace Utility {
 
 		return vm;
 	}
+
+	sf::Shape RoundedRectangle(float P1X, float P1Y, float P2X, float P2Y,
+                               float radius, const sf::Color& Col,
+                               float Outline, const sf::Color& OutlineCol){
+
+        // radius can't be bigger than half of a side
+        if (2*radius > abs(P1X-P2X))
+            radius = abs(P1X-P2X) / 2;
+        if (2*radius > abs(P1Y-P2Y))
+            radius = abs(P1Y-P2Y) / 2;
+
+        static const int NbSegments = 40;
+        static const float PI = 3.141592654f;
+
+        sf::Shape S;
+        sf::Vector2f TL(P1X+radius,P1Y+radius);
+        sf::Vector2f TR(P2X-radius,P1Y+radius);
+        sf::Vector2f BL(P1X+radius,P2Y-radius);
+        sf::Vector2f BR(P2X-radius,P2Y-radius);
+
+        // Assemble visual shape
+        for (int i = 0; i <= NbSegments; ++i) {
+            float Angle = i * 2 * PI / NbSegments;
+
+            sf::Vector2f Offset(cos(Angle), sin(Angle));
+
+            // Move quarter circles to Rectangle corners (TL, TB, RL, RB)
+            if ((Angle >= 0 or Angle>=2*PI)     and  Angle <= PI/2)
+                S.AddPoint(BR + Offset * radius, Col, OutlineCol);
+            if (Angle >= PI/2   and  Angle <= PI)
+                S.AddPoint(BL + Offset * radius, Col, OutlineCol);
+            if (Angle >= PI     and  Angle <= PI*1.5)
+                S.AddPoint(TL + Offset * radius, Col, OutlineCol);
+            if (Angle >= PI*1.5 and  Angle <= 2*PI)
+                S.AddPoint(TR + Offset * radius, Col, OutlineCol);
+        }
+        S.SetOutlineWidth(Outline);
+        return S;
+    }
 }

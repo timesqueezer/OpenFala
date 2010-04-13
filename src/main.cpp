@@ -69,6 +69,7 @@ void clientLoop(void *UserData) {
 }
 
 int main(int argc, char *argv[]) {
+
 	po::variables_map opts = Utility::usage ( argc, argv );
 
 	std::string mode = opts["mode"].as<std::string>();
