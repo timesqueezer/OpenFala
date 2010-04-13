@@ -10,8 +10,8 @@
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
 ServerApp::ServerApp(const sf::Uint16 port, const sf::Uint16 max_players) {
-    sf::Uint16 m_port = port;
-    // TODO Blockmanager  
+    m_port = port;
+    // TODO Blockmanager
    	//m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
     m_ClMan = ClientManager();
     m_ClMan.SetMaxPlayers(max_players);
@@ -21,7 +21,7 @@ ServerApp::~ServerApp() {}
 
 void ServerApp::Init() {
     if (!Listener.Bind(m_port)) {
-        std::cout << "Fail while binding the listening socket." << std::endl;        
+        std::cout << "Fail while binding the listening socket." << std::endl;
     }
     Selector.Add(Listener);
 	std::cout << "OpenFala server started on port: " << m_port << std::endl;
@@ -61,12 +61,12 @@ void ServerApp::HandleRequest() {
 
 
             if (!m_ClMan.IsKnown(Address)) {
-                
+
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
             }
-        
+
 
         } else {
 

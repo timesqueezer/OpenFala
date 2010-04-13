@@ -5,11 +5,15 @@
 ResourceManager::ResourceManager() {};
 ResourceManager::~ResourceManager() {};
 
-sf::Uint8 ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
+bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
     const sf::Uint16& width, const sf::Uint16& height) {
     Magick::Image mimage;
     sf::Image sfimage;
     std::string basename = boost::filesystem::basename(path / "cached/" / imgname);
+
+    if(m_images.count(basename) != 0)
+        return true;
+
     try {
         std::cout << "Caching image ";
         mimage.backgroundColor(Magick::Color(0,0,0,65535));
@@ -22,13 +26,13 @@ sf::Uint8 ResourceManager::AddImage(const Filesystem::path& path, const std::str
 
         mimage.write((path / "cached/" / basename).string()+".png");
         sfimage.LoadFromFile((path / "cached/" / basename).string()+".png");
-        ResourceManager::m_images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
+        m_images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
     }
     catch (std::exception &error_) {
         std::cout << "ERROR: " << error_.what() << std::endl;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 sf::Image* ResourceManager::GetImage(const std::string& img) {

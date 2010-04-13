@@ -1574,8 +1574,8 @@ int cpScrollBar::CheckState(const sf::Input *input)
 		&& clock2.GetElapsedTime() > 0.1f && currentPosition > 14)
 	{
 		MoveSlider(1);
-		float c1 = clock.GetElapsedTime();
-		float c2 = clock2.GetElapsedTime();
+		//float c1 = clock.GetElapsedTime();
+		//float c2 = clock2.GetElapsedTime();
 		clock2.Reset();
 	}
 	if(input->IsMouseButtonDown(sf::Mouse::Left) && !mouseDown && !sliderDrag &&
