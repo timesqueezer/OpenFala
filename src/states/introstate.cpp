@@ -2,6 +2,7 @@
 #include "gamestate.hpp"
 #include "introstate.hpp"
 #include "mainmenustate.hpp"
+#include <iostream>
 
 IntroState IntroState::m_IntroState;
 
@@ -12,12 +13,19 @@ void IntroState::Init(GameEngine* game){
     mInput = & (mGameEngine->app.GetInput());
     mGameEngine->app.SetFramerateLimit(60);
 
+    // Load title screen image
+    mGameEngine->GetResMgr().AddImage("data/images","title.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
+    //std::cout << mGameEngine->GetResMgr().GetImage("title") << std::endl;
+    m_title_image.SetImage(*mGameEngine->GetResMgr().GetImage("title"));
+    m_title_image.SetPosition(0,0);
+
     // Create the Welcome Message
-    m_welcome_message.SetText("Press Enter to get to the Main Menu");
-    m_welcome_message.SetColor(sf::Color(0,0,0));
+    m_welcome_message.SetText("Press <Enter> to get to the Main Menu");
+    m_welcome_message.SetColor(sf::Color(255,255,255));
+    m_welcome_message.SetSize(14);
     // Center the message
     m_welcome_message.SetPosition(mGameEngine->app.GetWidth()/2 - m_welcome_message.GetRect().GetWidth()/2,
-                                  mGameEngine->app.GetHeight()/2 - m_welcome_message.GetRect().GetHeight()/2);
+                                  mGameEngine->app.GetHeight() - m_welcome_message.GetRect().GetHeight()*2);
 }
 
 void IntroState::Cleanup(){
@@ -46,7 +54,8 @@ void IntroState::Update(){
 }
 
 void IntroState::Draw(){
-    mGameEngine->app.Clear(sf::Color(200,200,200));
+    mGameEngine->app.Clear(sf::Color(0,0,0));
+    mGameEngine->app.Draw(m_title_image);
     // draw welcome message
     mGameEngine->app.Draw(m_welcome_message);
 }
