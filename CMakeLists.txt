@@ -32,7 +32,7 @@ ADD_EXECUTABLE(OpenFala
     ${OpenFala_filesystem_SRCS} 
     ${OpenFala_gui_SRCS} 
     ${OpenFala_particle_SRCS} 
-    ${OpenFala_resouces_SRCS} 
+    ${OpenFala_resources_SRCS} 
     ${OpenFala_server_SRCS} 
     ${OpenFala_states_SRCS} 
     ${OpenFala_utility_SRCS} 
