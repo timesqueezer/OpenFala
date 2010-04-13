@@ -193,8 +193,7 @@ void PlayState::Update(){
 
     // Move clouds
     BOOST_FOREACH(sf::Drawable& cloud , mClouds){
-        sf::Uint16 speed = sf::Randomizer::Random(0.1,10);
-        float x = cloud.GetPosition().x - speed;
+        float x = cloud.GetPosition().x - 0.7;
         if (x<-3*m_ratio) x = mGameEngine->app.GetWidth();
         cloud.SetX(x);
 
