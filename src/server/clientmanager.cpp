@@ -59,6 +59,19 @@ std::vector<sf::Uint8> ClientManager::GetIDs() {
     return ids;
 }
 
+sf::Uint8 ClientManager::GetID(sf::IPAddress address) {
+    std::map<sf::Uint8, Client>::iterator it;
+    sf::Uint8 tmp = 0;
+    for ( it = m_clients.begin() ; it != m_clients.end(); it++ ) {
+        if (it->second.address == address) {
+            tmp = it->first;
+            break;
+        }
+    }
+    return tmp;
+
+}
+
 sf::IPAddress ClientManager::GetIP(sf::Uint8 id) {
    return m_clients[id].address;
 }
