@@ -53,7 +53,7 @@ void ServerApp::HandleRequest() {
     bool isknown = false;
     sf::Uint16 freeslot = 0;
     std::string ip = claddress.ToString();
-    for(int i = 0; i < m_maxplayers; i++) {
+    for(sf::Uint8 i = 0; i < m_maxplayers; ++i) {
         // Only check if slot is filled by client
         if(m_clist[0][i] != "") {
             if(ip == m_clist[0][i]) {
