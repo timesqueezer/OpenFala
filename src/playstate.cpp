@@ -18,7 +18,6 @@
 #include "playstate.hpp"
 #include "mainmenustate.hpp"
 
-
 PlayState PlayState::m_PlayState;
 
 void PlayState::Init(GameEngine* game){
