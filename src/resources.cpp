@@ -5,8 +5,8 @@
 ResourceManager::ResourceManager() {};
 ResourceManager::~ResourceManager() {};
 
-uint8_t ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
-    const uint16_t& width, const uint16_t& height) {
+sf::Uint8 ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
+    const sf::Uint16& width, const sf::Uint16& height) {
     Magick::Image mimage;
     sf::Image sfimage;
     std::string basename = boost::filesystem::basename(path / "cached/" / imgname);

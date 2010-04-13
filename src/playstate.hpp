@@ -63,8 +63,8 @@ private:
 
     ResourceManager ResMgr;
 
-	uint16_t m_port;
-	uint16_t m_clientport;
+	sf::Uint16 m_port;
+	sf::Uint16 m_clientport;
 	std::string m_name;
     Network::IPAddress m_bindaddress;
     Network::Socket Socket;

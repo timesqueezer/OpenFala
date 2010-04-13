@@ -14,9 +14,9 @@ void MainMenuState::Init(GameEngine* game){
     mInput = & (mGameEngine->app.GetInput());
     mGameEngine->app.SetFramerateLimit(60);
 
-    uint16_t button_height = 30;
-    uint16_t button_width = 120;
-    uint16_t left = mGameEngine->app.GetWidth() / 2 - button_width/2;
+    sf::Uint16 button_height = 30;
+    sf::Uint16 button_width = 120;
+    sf::Uint16 left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
     // Game Start Button
     gameStartButton = new cp::cpButton(&mGameEngine->app, &gui, "Start Game",left, 10, button_width, button_height);

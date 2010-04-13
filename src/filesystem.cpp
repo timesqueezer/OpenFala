@@ -3,7 +3,7 @@
 #include "filesystem.hpp"
 
 namespace Filesystem {
-	uint8_t make_dir(const std::string &dir) {
+	sf::Uint8 make_dir(const std::string &dir) {
 		if (!boost::filesystem::exists(dir)) {
 			boost::filesystem::create_directory(dir);
 			return 0;
@@ -13,7 +13,7 @@ namespace Filesystem {
 		}
 	}
 
-	uint8_t remove_file(const std::string &file) {
+	sf::Uint8 remove_file(const std::string &file) {
 		if (boost::filesystem::exists(file)) {
 			boost::filesystem::remove(file);
 			return 0;
@@ -23,7 +23,7 @@ namespace Filesystem {
 		}
 	}
 
-	uint8_t copy_file(const std::string &source, const std::string &dest) {
+	sf::Uint8 copy_file(const std::string &source, const std::string &dest) {
 		if (!boost::filesystem::exists(dest)) {
 			if (boost::filesystem::exists(source)) {
 				boost::filesystem::copy_file(source, dest);

@@ -11,10 +11,13 @@
 namespace po = boost::program_options;
 
 namespace Utility {
-    uint16_t rndInt(uint16_t, uint16_t);
-    float rndFloat(float, float);
-	std::vector<uint16_t> splitSize (const std::string&);
-    po::variables_map usage ( int&, char**);
+    // Split size_str seperated by 'x' into vector
+    // Example: split "4x4" to int{4,4}
+	std::vector<sf::Uint16> splitSize(const std::string& size_str);
+
+    // For boost/program_options. 
+    // Returns a variable map with options specified as arguments.
+    po::variables_map usage(int& ac, char* ac[]);
 }
 
 

@@ -6,17 +6,16 @@
 #include "utility.hpp"
 
 namespace Utility {
-    uint16_t rndInt(uint16_t min, uint16_t max) {
+    sf::Uint16 rndInt(sf::Uint16 min, sf::Uint16 max) {
         return sf::Randomizer::Random(min, max);
     }
     float rndFloat(float min, float max) {
         return sf::Randomizer::Random(min, max);
     }
 
-	std::vector<uint16_t> splitSize (const std::string& size_str) {
-		// split "4x4" to int{4,4}
-		std::vector<uint16_t> size_vec;
-		uint16_t sep;
+	std::vector<sf::Uint16> splitSize(const std::string& size_str) {
+		std::vector<sf::Uint16> size_vec;
+        sf::Uint8 sep;
 		std::string width,height;
 
 		sep = size_str.find("x");
@@ -24,13 +23,13 @@ namespace Utility {
 		width = size_str.substr(0,sep);
 		height = size_str.substr(sep+1);
 
-		size_vec.push_back(boost::lexical_cast<uint16_t>(width));
-		size_vec.push_back(boost::lexical_cast<uint16_t>(height));
+		size_vec.push_back(boost::lexical_cast<sf::Uint16>(width));
+		size_vec.push_back(boost::lexical_cast<sf::Uint16>(height));
 
 		return size_vec;
 	}
 
-	po::variables_map usage ( int& ac, char *av[] ) {
+	po::variables_map usage(int& ac, char* av[]) {
 		// Declare the supported options.
 		po::options_description desc("OpenFala multiplayer tower strategy game.\
 		\n\nAllowed options");
@@ -42,14 +41,14 @@ namespace Utility {
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
 		    ("name,n", po::value<std::string>()->default_value("loldude"),
 		    	"player name (ignored for server)")
-		    ("port,p", po::value<uint16_t>()->default_value(41311),
+		    ("port,p", po::value<sf::Uint16>()->default_value(41311),
 		    	"port to bind to/connect to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
 		    	"sets the window size <e.g.: 800x600>")
-		    ("maxplayers,p", po::value<uint16_t>()->default_value(4),
+		    ("maxplayers,p", po::value<sf::Uint16>()->default_value(4),
 		    	"maximum number of players (ignored for client)")
-		    //("verbose,v", po::value<uint16_t>()->implicit_value(1), "be verbose")
-		    //("quiet,q", po::value<uint16_t>()->implicit_value(1), "be quiet")
+		    //("verbose,v", po::value<sf::Uint16>()->implicit_value(1), "be verbose")
+		    //("quiet,q", po::value<sf::Uint16>()->implicit_value(1), "be quiet")
 		;
 
 		po::variables_map vm;

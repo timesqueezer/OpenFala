@@ -16,7 +16,7 @@ typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
 // Main class for server application.
 class ServerApp {
 public:
-    ServerApp(const uint16_t&, const uint16_t&);
+    ServerApp(const sf::Uint16&, const sf::Uint16&);
     ~ServerApp();
 
     // Initializes server.
@@ -45,10 +45,10 @@ public:
 	// Get
 	int GetPlayerId(std::string);
 private:
-    uint8_t m_active_clients;
-    uint16_t m_port;
-    uint16_t m_maxplayers;
-    uint16_t m_clientport;
+    sf::Uint8 m_active_clients;
+    sf::Uint16 m_port;
+    sf::Uint16 m_maxplayers;
+    sf::Uint16 m_clientport;
 	stringarray2d m_clist;
 	stringarray2d::extent_gen extents;
     uint16array2d m_mpos;

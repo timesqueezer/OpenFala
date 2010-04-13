@@ -7,7 +7,7 @@
 
 #include "server.hpp"
 
-ServerApp::ServerApp(const uint16_t& port, const uint16_t& maxplayers) {
+ServerApp::ServerApp(const sf::Uint16& port, const sf::Uint16& maxplayers) {
     m_port = port; // port for incoming communication (default 41311)
     m_clientport = 41312; // port for outgoing communication
     m_maxplayers = maxplayers;
@@ -51,7 +51,7 @@ void ServerApp::HandleRequest() {
 
     // First check whether client is already in our list
     bool isknown = false;
-    uint16_t freeslot = 0;
+    sf::Uint16 freeslot = 0;
     std::string ip = claddress.ToString();
     for(int i = 0; i < m_maxplayers; i++) {
         // Only check if slot is filled by client

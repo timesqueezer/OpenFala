@@ -19,8 +19,8 @@
 void startServer(void *UserData) {
     // We need to get back the passed program arguments here
     po::variables_map vm = *static_cast<po::variables_map*>(UserData);
-    uint16_t port = vm["port"].as<uint16_t>();
-	uint16_t max_players = vm["maxplayers"].as<uint16_t>();
+    sf::Uint16 port = vm["port"].as<sf::Uint16>();
+	sf::Uint16 max_players = vm["maxplayers"].as<sf::Uint16>();
 
     // Create actual server in this thread
     ServerApp Server(port, max_players);
@@ -39,8 +39,8 @@ void clientLoop(void *UserData) {
     std::string size_str = vm["size"].as<std::string>();
 	std::string name = vm["name"].as<std::string>();
 
-	uint16_t width = Utility::splitSize(size_str)[0];
-	uint16_t height = Utility::splitSize(size_str)[1];
+	sf::Uint16 width = Utility::splitSize(size_str)[0];
+	sf::Uint16 height = Utility::splitSize(size_str)[1];
 
     // Create and initialize GameEngine
     GameEngine game_engine(vm);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 
 	// TODO: Not needed here but left for reference
     //std::string address = opts["address"].as<std::string>();
-	//uint16_t port = opts["port"].as<uint16_t>();
+	//sf::Uint16 port = opts["port"].as<sf::Uint16>();
 
     // Pass the program arguments along to both threads
 	sf::Thread ServerThread(&startServer, &opts);

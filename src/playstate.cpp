@@ -35,7 +35,7 @@ void PlayState::Init(GameEngine* game){
     mGameEngine->m_width = Utility::splitSize(size)[0];
 	mGameEngine->m_height = Utility::splitSize(size)[1];
 	m_bindaddress = mGameEngine->mProgramOptions["address"].as<std::string>();
-	m_port = mGameEngine->mProgramOptions["port"].as<uint16_t>(); // port for outgoing communication (default 41311)
+	m_port = mGameEngine->mProgramOptions["port"].as<sf::Uint16>(); // port for outgoing communication (default 41311)
     m_clientport = 41312; // port for incoming communication
 	m_name = mGameEngine->mProgramOptions["name"].as<std::string>();;
 
@@ -172,7 +172,7 @@ void PlayState::Draw(){
     // Clear the screen
     mGameEngine->app.Clear(sf::Color(0,0,0));
 
-    uint16_t framerate = (uint16_t) (1.f / mGameEngine->app.GetFrameTime());
+    sf::Uint16 framerate = (sf::Uint16) (1.f / mGameEngine->app.GetFrameTime());
 
 	for (short unsigned int x = 0;x<m_blocknbx;++x) {
 		for (short unsigned int y = 0;y<m_blocknby;++y) {
