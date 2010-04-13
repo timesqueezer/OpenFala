@@ -122,6 +122,12 @@ void PlayState::Init(GameEngine* game){
 
     m_cl_id = 0;
 	mode = 1; // set to build mode
+
+    // Server handshake
+    SendPacket << (sf::Uint8) 2 << m_name;
+    Socket.Send(SendPacket, m_bindaddress, m_port);
+    SendPacket.Clear();
+
 }
 
 void PlayState::Cleanup(){

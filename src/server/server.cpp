@@ -53,6 +53,8 @@ void ServerApp::HandleRequest() {
             sf::Uint16 sqx, sqy;
 
             Packet >> sqx >> sqy;
+            
+            std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
@@ -80,6 +82,7 @@ void ServerApp::HandleRequest() {
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
+                std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
             }
 
 
