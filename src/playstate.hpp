@@ -41,6 +41,8 @@ public:
 		return &m_PlayState;
 	}
 
+    sf::Uint8 GetNonPlayableAreaSize();
+
 	// places a block to the specified area
     void PlaceBlock(int x, int y);
 
@@ -75,10 +77,9 @@ private:
 	sf::String mousepos;
 
 	float m_ratio;
-
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;
-	blockarray1d m_mpos;
+     blockarray1d m_mpos;
 
 	int m_blocknbx;
 	int m_blocknby;

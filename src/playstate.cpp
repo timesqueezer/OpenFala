@@ -82,7 +82,7 @@ void PlayState::Init(GameEngine* game){
 					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"), 0);
 		        }
             } else {
-            	// TODO: other graphics here, this is the playable area
+                // This is the playable area
             	if (y < 10) {
 					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
@@ -129,15 +129,15 @@ void PlayState::HandleEvents(){
                 }
             }
 		}
-		if (Event.Type == sf::Event::MouseMoved) {
-		    float mouse_x = (m_mpos[0]->m_Shape.GetPosition().x)/m_ratio;
+		if (Event.Type == sf::Event::MouseMoved) { // What happens when the mouse is moved
+            float mouse_x = (m_mpos[0]->m_Shape.GetPosition().x)/m_ratio;
 		    float mouse_y = (m_mpos[0]->m_Shape.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
 		    	SendPacket << m_cl_id << GetMouseBlock('x', 'p') << GetMouseBlock('y', 'p') << "mouse" << m_name;
 		    	Socket.Send(SendPacket, m_bindaddress, m_port);
 		    	SendPacket.Clear();
-		    	m_mpos[0]->m_Shape.SetPosition(GetMouseBlock('x', 'p')*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
+		    	m_mpos[0]->m_Shape.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
 		    }
 		}
 	}
@@ -198,11 +198,19 @@ void PlayState::Draw(){
 	mGameEngine->app.Draw(mousepos);
 }
 
+sf::Uint8 PlayState::GetNonPlayableAreaSize() {
+   unsigned short size = (sf::Uint8) (m_blocknbx -20) / 2;
+   return size;
+}
+
 sf::Uint16 PlayState::GetMouseBlock(char xy, char type) {
     sf::Uint16 block;
-    if (type == 'p') { //this stands for playable area
+    if (type == 'p') { // this stands for playable area
         if (xy == 'x') {
-            block = ((mInput->GetMouseX() / m_ratio) - ((mGameEngine->m_width - 20*m_ratio)/2) / m_ratio);
+            block = ((mInput->GetMouseX() / m_ratio) - ((m_blocknbx - 20)/2));
+            if (block <= 0) {
+                block = 0;
+            }
         } else {
             block = (mInput->GetMouseY() / m_ratio);
         }

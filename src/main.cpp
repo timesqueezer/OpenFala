@@ -16,6 +16,10 @@
 #include "mainmenustate.hpp"
 #include "playstate.hpp"
 
+#define AREAX 20
+#define AREAY 15
+
+
 void startServer(void *UserData) {
     // We need to get back the passed program arguments here
     po::variables_map vm = *static_cast<po::variables_map*>(UserData);
