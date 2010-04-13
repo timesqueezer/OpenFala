@@ -9,7 +9,6 @@
 
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
-
 ServerApp::ServerApp(const sf::Uint16 port, const sf::Uint16 max_players) {
     sf::Uint16 m_port = port;
     // TODO Blockmanager  

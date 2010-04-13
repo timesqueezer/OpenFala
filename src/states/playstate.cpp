@@ -105,7 +105,7 @@ void PlayState::Init(GameEngine* game){
     // Create Sky Rectangle
     mSkyRect = Utility::GradientRectangle(0,0,mGameEngine->app.GetWidth(),10*m_ratio,
                                           //sf::Color(0,0,60), sf::Color(60,60,60) );
-                                          sf::Color(128,128,255), sf::Color(240,240,255) );
+                                          sf::Color(128,128,255), sf::Color(255,240,240) );
 
 
     // Create Clouds
@@ -148,7 +148,7 @@ void PlayState::HandleEvents(){
         if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << 1 << (sf::Uint16) (GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2) << GetMouseBlock('y','p');
+                    SendPacket << (sf::Uint8) 1 << (sf::Uint16) ((GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock('y','p');
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
@@ -193,7 +193,8 @@ void PlayState::Update(){
 
     // Move clouds
     BOOST_FOREACH(sf::Drawable& cloud , mClouds){
-        float x = cloud.GetPosition().x - 1;
+        sf::Uint16 speed = sf::Randomizer::Random(0.1,10);
+        float x = cloud.GetPosition().x - speed;
         if (x<-3*m_ratio) x = mGameEngine->app.GetWidth();
         cloud.SetX(x);
 

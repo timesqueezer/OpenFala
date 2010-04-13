@@ -35,7 +35,7 @@ namespace Utility {
 		\n\nAllowed options");
 		desc.add_options()
 		    ("help,h", "this message, obviously")
-		    ("mode,m", po::value<std::string>()->default_value("both"),
+		    ("mode,m", po::value<std::string>()->default_value("normal"),
 		        "choose mode <modes: 'client', 'server', 'both', 'normal'>")
 		    ("address,a", po::value<std::string>()->default_value("127.0.0.1"),
 		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
