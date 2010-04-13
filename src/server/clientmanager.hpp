@@ -1,3 +1,11 @@
+#ifndef CLIENTMANAGER_HPP_INCLUDED
+#define CLIENTMANAGER_HPP_INCLUDED
+
+#include <SFML/Network.hpp>
+
+#include <string>
+#include <map>
+
 struct Client {
     sf::IPAddress address;
     std::string name;
@@ -8,13 +16,13 @@ struct Client {
 
 class ClientManager {
     public:
-        ClientManager(sf::Uint8 max_players);
+        ClientManager(sf::Uint8 max_players=4);
 
         ~ClientManager();
 
-        void Add(sf::IPAddress address, std::string name)
+        void Add(sf::IPAddress address, std::string name);
 
-        void Remove(sf::IPAddress address);
+        void Remove(sf::Uint8 id);
 
         bool IsKnown(sf::IPAddress address);
 
@@ -32,14 +40,20 @@ class ClientManager {
         // Get Block under cursor for client ID
         std::vector<sf::Uint8> GetBlockUnderCursor(sf::Uint8 id);
         
+        sf::Uint8 GetMaxPlayers();
+
         // Set name of client ID
         void SetName(sf::Uint8 id, std::string name);
 
         // Set Block under cursor for client ID
         void SetBlockUnderCursor(sf::Uint8 id, sf::Uint8 posx, sf::Uint8 posy);
 
+        void SetMaxPlayers(sf::Uint8 max_players);
+
     private:
         sf::Uint8 m_max_players;
 
         std::map<sf::Uint8, Client> m_clients;
 };
+
+#endif

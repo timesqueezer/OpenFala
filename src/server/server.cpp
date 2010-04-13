@@ -10,17 +10,15 @@
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
 
-ServerApp::ServerApp(const sf::Uint16& port, const sf::Uint16& maxplayers) {
+ServerApp::ServerApp(const sf::Uint16& port, const sf::Uint16& max_players) {
     m_port = port; // port for incoming communication (default 41311)
     m_clientport = 41312; // port for outgoing communication
-    m_maxplayers = maxplayers;
-   	m_clist.resize(extents[4][maxplayers]);
-    m_mpos.resize(extents[maxplayers][2]);
+    m_maxplayers = max_players;
+   	m_clist.resize(extents[4][max_players]);
+    m_mpos.resize(extents[max_players][2]);
    	m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
-   	// Mouse positions m_mpos[player1,2,3,4][x,y]
    	m_active_clients = 0;
-    
-
+    m_ClMan = ClientManager(max_players); 
 }
 
 ServerApp::~ServerApp() {}
@@ -32,7 +30,6 @@ void ServerApp::Init() {
     Selector.Add(Listener);
 	std::cout << "OpenFala server started on port: " << m_port << std::endl;
 	std::cout << "Max players: " << m_maxplayers << std::endl;
-
 
 }
 
@@ -60,19 +57,17 @@ void ServerApp::HandleRequest() {
             
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-
             SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint8) 1;
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
         
         } else if (PacketType == 2) { // "Handshake" getting client's name
 
-            if (!ClMan.IsKnown(Address)) {
+            if (!m_ClMan.IsKnown(Address)) {
                 
                 std::string cl_name;
-                Packet >> name;
-                ClMan.Add(Address, name);
-
+                Packet >> cl_name;
+                m_ClMan.Add(Address, cl_name);
             }
         
         } else {

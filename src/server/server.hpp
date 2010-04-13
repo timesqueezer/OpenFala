@@ -1,14 +1,14 @@
 #ifndef SERVER_HPP_INCLUDED
 #define SERVER_HPP_INCLUDED
 
+#include <boost/multi_array.hpp>
+
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
-#include <boost/multi_array.hpp>
-
 #include <string>
 
-//#include <ClientManager.hpp>
+#include "clientmanager.hpp"
 
 typedef boost::multi_array<std::string, 2> stringarray2d;
 typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
@@ -53,7 +53,7 @@ private:
     sf::SelectorUDP Selector;
     sf::SocketUDP Listener;
     sf::Packet SendPacket;
-    //ClientManager ClMan;
+    ClientManager m_ClMan;
 };
 
 #endif
