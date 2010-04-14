@@ -62,6 +62,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "highlight-blue.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-green.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-red.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "building.svg", m_ratio, m_ratio);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -185,15 +186,26 @@ void PlayState::Update(){
 	sf::Uint16 posy = 0;
 	sf::Uint16 cl_id = 0;
     sf::IPAddress svaddress;
+    
     unsigned short svport;
+
+
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
-        RecvPacket >> request_id >> posx >> posy >> cl_id;
+        RecvPacket >> request_id;        
         std::cout << "Server sent following Package: " << request_id << " (request_id), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
         if (request_id == PACKET_BUILD) { // stands for placing a block
+            RecvPacket >> posx >> posy >> cl_id;
             PlaceBlock((int) posx, (int) posy);
         }
         if (request_id == PACKET_MOUSE) { //stands for getting the mouse positions
-            m_mpos[cl_id]->Sprite.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+            sf::Uint16 num_clients;
+            RecvPacket >> num_clients;
+            for (sf::Uint16 i = 0; i < num_clients; ++i) {
+                    RecvPacket >> cl_id >> posx >> posy;
+                    if (cl_id != m_cl_id) {
+                        m_mpos[cl_id]->Sprite.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
+                    }
+            }
         }
         if (request_id == PACKET_HANDSHAKE) { // init stuff
             m_cl_id = cl_id;
@@ -294,7 +306,7 @@ void PlayState::PlaceBlock(int x, int y) {
     } else {
         if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             ResourceManager& ResMgr = mGameEngine->GetResMgr();
-            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_TOWER);
+            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
         } else {
             std::cout << "Can't place blocks in the air." << std::endl;
         }

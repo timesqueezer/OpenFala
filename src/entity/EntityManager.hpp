@@ -3,7 +3,7 @@
 
 #include <boost/ptr_container/ptr_container.hpp>
 
-#inlucde "IEntity.hpp"
+#include "IEntity.hpp"
 
 class EntityManager {
 public:
