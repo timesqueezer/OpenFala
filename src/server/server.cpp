@@ -59,23 +59,16 @@ void ServerApp::HandleRequest() {
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
-            BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
-                if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << PACKET_MOUSE << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
-                    Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
-                    SendPacket.Clear();
-                }
-            }
         } else if (command_id == PACKET_BUILD) { // "build" type for building blocks
 
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-            SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint8) m_ClMan.GetID(Address);
+            SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
             std::cout << "BUILD " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
-            BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
+            BOOST_FOREACH(sf::Uint16 id, m_ClMan.GetIDs()) {
                 if (id != m_ClMan.GetID(Address)) {
                     SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
                     Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
@@ -87,7 +80,7 @@ void ServerApp::HandleRequest() {
 
                 std::string cl_name;
                 Packet >> cl_name;
-                m_ClMan.Add(Address, cl_name);
+                m_ClMan.Add(Address, port, cl_name);
                 std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
                 SendPacket << PACKET_HANDSHAKE << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
                 Listener.Send(SendPacket, Address, port);
@@ -102,7 +95,17 @@ void ServerApp::HandleRequest() {
 }
 
 
-void ServerApp::Update() {}
+void ServerApp::Update() {
+    BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
+        SendPacket << PACKET_MOUSE << m_ClMan.GetActiveClients();
+        BOOST_FOREACH(sf::Uint16 iddata, m_ClMan.GetIDs()) {
+            std::vector<sf::Uint16> tmpvec = m_ClMan.GetBlockUnderCursor(iddata);
+            SendPacket << iddata << tmpvec[0] << tmpvec[1]; 
+        }
+        Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));
+        SendPacket.Clear();
+    }
+}
 
 void ServerApp::Die() {
     Listener.Close();
