@@ -34,7 +34,7 @@ void ServerApp::Init() {
 
 void ServerApp::HandleRequest() {
 
-    unsigned int NbSockets = Selector.Wait(0.2f);
+    unsigned int NbSockets = Selector.Wait(0.02f);
 
     if (NbSockets) {
 
