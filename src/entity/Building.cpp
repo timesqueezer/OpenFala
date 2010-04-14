@@ -1,7 +1,11 @@
 #include "Building.hpp"
+#include <iostream>
 
 Building::Building(){
-    SetAnimationFPS(1);
+    mAnimationFPS = 1;
+    mAnimationIndex = 0;
+    mPosX = 0;
+    mPosY = 0;
 }
 
 void Building::Update(float dt){
@@ -11,7 +15,7 @@ void Building::Update(float dt){
 
     // Destroy Building after 5 seconds (for testing purposes)
     if (dt > 5 and mAnimationIndex!=1)
-        SetAnimationIndex(1);
+        mAnimationIndex = 1;
 }
 
 void Building::SetHealth(sf::Uint16 health){

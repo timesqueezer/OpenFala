@@ -1,5 +1,7 @@
 #include "IEntity.hpp"
 
+#include <iostream>
+
 sf::Uint16 IEntity::GetAnimationIndex(){
     return mAnimationIndex;
 }
@@ -79,7 +81,10 @@ void IEntity::UpdateAnimation() {
     sf::Uint16 frameNb = (mLifeTime * mAnimationFPS);
 
     // Get number of frames since last loop start
-    frameNb = frameNb % framesPerLoop;
+    if (framesPerLoop!=0)
+        frameNb = frameNb % framesPerLoop;
+    else
+        frameNb = 0;
 
     // x-Coordinate = frame Number * frame Width
     sf::Uint16 imageX =  frameNb * mDimX;
@@ -87,6 +92,7 @@ void IEntity::UpdateAnimation() {
     // y-Coordinate = row Number * frame Height
     sf::Uint16 imageY = mAnimationIndex * mDimY;
 
+    std::cout << "Subrect: " << imageX << " | " << imageY << " | " << imageX+mDimX << " | " << imageY+mDimY << std::endl;
     // Set Subrect
     mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX, imageY+mDimY) );
 }

@@ -13,11 +13,13 @@
 #include "../block/block.hpp"
 #include "../utility/utility.hpp"
 #include "../network/network.hpp"
+#include "../entity/Building.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
 #include "playstate.hpp"
 #include "mainmenustate.hpp"
+
 
 PlayState PlayState::m_PlayState;
 
@@ -62,7 +64,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "highlight-blue.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-green.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-red.svg", m_ratio, m_ratio);
-	ResMgr.AddImage("data/images/", "building.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "building.svg", m_ratio*2, m_ratio*2);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -77,10 +79,10 @@ void PlayState::Init(GameEngine* game){
 
     //Initialisation of the Shapes to show each player
 
-        m_mpos[0] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-red"), BLOCKTYPE_EMPTY);
-        m_mpos[1] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_EMPTY);
-        m_mpos[2] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-green"), BLOCKTYPE_EMPTY);
-        m_mpos[3] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-orange"), BLOCKTYPE_EMPTY);
+    m_mpos[0] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-red"), BLOCKTYPE_EMPTY);
+    m_mpos[1] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_EMPTY);
+    m_mpos[2] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-green"), BLOCKTYPE_EMPTY);
+    m_mpos[3] = new Block(-m_ratio, 0.f, ResMgr.GetImage("highlight-orange"), BLOCKTYPE_EMPTY);
 
 	m_blocks.resize(extents[m_blocknbx+1][m_blocknby+1]);
 	int i = 0;
@@ -91,7 +93,7 @@ void PlayState::Init(GameEngine* game){
             	if (y < 10) {
 //					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), BLOCKTYPE_GROUND);
+                    m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-lava"), BLOCKTYPE_GROUND);
 				} else {
 					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-rock"), BLOCKTYPE_GROUND);
 		        }
@@ -100,7 +102,7 @@ void PlayState::Init(GameEngine* game){
             	if (y < 10) {
 //					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-sky"), 1);
 				} else if (y == 10) {
-				m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), BLOCKTYPE_GROUND);
+                    m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-grass"), BLOCKTYPE_GROUND);
 				} else {
 					m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("block-dirt"), BLOCKTYPE_GROUND);
 		        }
@@ -186,7 +188,7 @@ void PlayState::Update(){
 	sf::Uint16 posy = 0;
 	sf::Uint16 cl_id = 0;
     sf::IPAddress svaddress;
-    
+
     unsigned short svport;
 
 
@@ -212,6 +214,11 @@ void PlayState::Update(){
         }
         //std::cout << request_id << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
+    }
+
+    // Update Entities
+    BOOST_FOREACH(IEntity& entity, mGameEngine->GetEntMgr().GetEntities()){
+        entity.Update(mGameEngine->app.GetFrameTime());
     }
 
     // Move clouds
@@ -244,6 +251,10 @@ void PlayState::Draw(){
 			}
 		}
 	}
+
+    BOOST_FOREACH(IEntity& entity, mGameEngine->GetEntMgr().GetEntities()){
+        mGameEngine->app.Draw(entity.GetSprite(m_ratio));
+    }
 
     for(sf::Uint8 x = 0; x < 4; ++x) {
         mGameEngine->app.Draw(m_mpos[x]->Sprite);
@@ -305,7 +316,14 @@ void PlayState::PlaceBlock(int x, int y) {
     } else {
         if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             ResourceManager& ResMgr = mGameEngine->GetResMgr();
-            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
+
+            Building* b = new Building();
+            b->SetImage(ResMgr.GetImage("building"));
+            b->SetPosition(sf::Vector2f(x,y));
+            b->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+            mGameEngine->GetEntMgr().AddEntity(b);
+
+            //m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
         } else {
             std::cout << "Can't place blocks in the air." << std::endl;
         }
