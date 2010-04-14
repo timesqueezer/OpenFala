@@ -26,6 +26,7 @@ bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& 
 
         mimage.write((path / "cached/" / basename).string()+".png");
         sfimage.LoadFromFile((path / "cached/" / basename).string()+".png");
+        sfimage.SetSmooth(false);
         m_images.insert(std::pair<std::string, sf::Image>(basename, sfimage));
     }
     catch (std::exception &error_) {
