@@ -14,13 +14,13 @@ public:
     ~EntityManager() {}
 
     // Adds an entity to the internal entity list mEntities
-    void AddEntity(IEntity entity);
+    void AddEntity(IEntity* entity);
 
     // Remove an entity from the internal entity list mEntities
     //bool RemoveEntity(IEntity entity);
 
     // Return internal entity list mEntities
-    boost::ptr_vector<IEntity> GetEntities();
+    boost::ptr_vector<IEntity>& GetEntities();
 
 private:
     boost::ptr_vector<IEntity> mEntities;

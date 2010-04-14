@@ -1,6 +1,6 @@
 #include "EntityManager.hpp"
 
-void EntityManager::AddEntity(IEntity entity) {
+void EntityManager::AddEntity(IEntity* entity) {
     mEntities.push_back(entity);
 }
 
@@ -8,6 +8,6 @@ void EntityManager::AddEntity(IEntity entity) {
 
 }*/
 
-boost::ptr_vector<IEntity> EntityManager::GetEntities() {
+boost::ptr_vector<IEntity>& EntityManager::GetEntities() {
     return mEntities;
 }
