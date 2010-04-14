@@ -55,7 +55,7 @@ void ServerApp::HandleRequest() {
 
             Packet >> sqx >> sqy;
             
-            std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
+            //std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
@@ -81,8 +81,8 @@ void ServerApp::HandleRequest() {
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, port, cl_name);
-                std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
-                SendPacket << PACKET_HANDSHAKE << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+                std::cout << "Added Client " << cl_name << "[" << Address << "][id" << m_ClMan.GetID(Address) << "]" << std::endl;
+                SendPacket << PACKET_HANDSHAKE << (sf::Uint16) m_ClMan.GetID(Address);
                 Listener.Send(SendPacket, Address, port);
                 SendPacket.Clear();
             }
@@ -98,13 +98,16 @@ void ServerApp::HandleRequest() {
 void ServerApp::Update() {
     BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
         SendPacket << PACKET_MOUSE << m_ClMan.GetActiveClients();
+        //std::cout << "PacketType: " << PACKET_MOUSE << ", activeClients: " << m_ClMan.GetActiveClients() << "|";
         BOOST_FOREACH(sf::Uint16 iddata, m_ClMan.GetIDs()) {
             std::vector<sf::Uint16> tmpvec = m_ClMan.GetBlockUnderCursor(iddata);
             SendPacket << iddata << tmpvec[0] << tmpvec[1]; 
+            //std::cout << "ID: " << iddata << " X: " << tmpvec[0] << "Y: " << tmpvec[1] << std::endl; 
         }
         Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));
         SendPacket.Clear();
     }
+
 }
 
 void ServerApp::Die() {

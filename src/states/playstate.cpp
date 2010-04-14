@@ -192,7 +192,6 @@ void PlayState::Update(){
 
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
         RecvPacket >> request_id;        
-        std::cout << "Server sent following Package: " << request_id << " (request_id), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
             PlaceBlock((int) posx, (int) posy);
@@ -208,6 +207,7 @@ void PlayState::Update(){
             }
         }
         if (request_id == PACKET_HANDSHAKE) { // init stuff
+            RecvPacket >> cl_id;
             m_cl_id = cl_id;
         }
         //std::cout << request_id << " " << posx << " " << posy << std::endl;
@@ -256,8 +256,7 @@ void PlayState::Draw(){
 	mGameEngine->app.Draw(fps);
 		mousepos.SetText("MouseX: "+boost::lexical_cast<std::string>(GetMouseBlock('x','p'))+
                        	" MouseY: "+boost::lexical_cast<std::string>(GetMouseBlock('y','p'))+
-                        " BlockX: "+boost::lexical_cast<std::string>(m_mpos[0]->Sprite.GetPosition().x)+
-                        " BlockY: "+boost::lexical_cast<std::string>(m_mpos[0]->Sprite.GetPosition().y));
+                        " ID: "+boost::lexical_cast<std::string>(m_cl_id));
 	mousepos.SetPosition(150, mGameEngine->app.GetHeight() - 40);
 	mGameEngine->app.Draw(mousepos);
 }
