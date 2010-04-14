@@ -93,7 +93,9 @@ void ServerApp::HandleRequest() {
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
                 std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
-                SendPacket << (sf::Uint8) 3 << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+                SendPacket << (sf::Uint16) 3 << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+                Listener.Send(SendPacket, Address, port);
+                SendPacket.Clear();
 
             }
 
