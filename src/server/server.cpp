@@ -58,13 +58,13 @@ void ServerApp::HandleRequest() {
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
-           /* BOOST_FOREACH(sf::Uint8 id, m_ClMan.GetIDs()) {
+            BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
                 if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << (sf::Uint16) 2 << sqx << sqy << m_ClMan.GetID(Address);
+                    SendPacket << (sf::Uint16) 2 << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
                     Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
                     SendPacket.Clear();
                 }
-            }*/
+            }
             
         
         } else if (PacketType == 1) { // "build" type for building blocks
@@ -93,6 +93,8 @@ void ServerApp::HandleRequest() {
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
                 std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
+                SendPacket << (sf::Uint8) 3 << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+
             }
 
 
