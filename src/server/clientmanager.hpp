@@ -29,9 +29,9 @@ class ClientManager {
         bool IsSlotAvailable();
 
         // Returns vector of currently active (connected) client IDs
-        std::vector<sf::Uint8> GetIDs();
+        std::vector<int> GetIDs();
 
-        sf::Uint8 GetID(sf::IPAddress address);
+        int GetID(sf::IPAddress address);
 
         // Get IP of client ID
         sf::IPAddress GetIP(sf::Uint8 id);
@@ -55,7 +55,7 @@ class ClientManager {
     private:
         sf::Uint8 m_max_players;
 
-        std::map<sf::Uint8, Client> m_clients;
+        std::map<int, Client> m_clients;
 };
 
 #endif
