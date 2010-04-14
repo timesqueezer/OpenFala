@@ -36,7 +36,7 @@ bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& 
         Magick::Image mimage;
         mimage.backgroundColor(Magick::Color(0,0,0,65535));
         mimage.read(originalFile);
-        mimage.sample(Magick::Geometry(width, height));
+        mimage.zoom(Magick::Geometry(width, height));
         mimage.depth(8);
         mimage.write(cacheFile);
 
