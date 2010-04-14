@@ -16,8 +16,8 @@ class ResourceManager {
 public:
     ResourceManager();
     ~ResourceManager();
-    bool AddImage(const Filesystem::path&, const std::string&,
-                  const sf::Uint16&, const sf::Uint16&);
+    bool AddImage(const Filesystem::path& path, const std::string& imgname,
+        const sf::Uint16& width, const sf::Uint16& height, std::string key="");
     sf::Image* GetImage(const std::string&);
 private:
     std::map<std::string, sf::Image> m_images;

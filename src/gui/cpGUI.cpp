@@ -884,7 +884,7 @@ cpImageButton::cpImageButton(sf::RenderWindow *parent, cpGuiContainer *GUI,
 	SetImage(image);
 	SetPosition(posx, posy);
 	m_label.SetText(label);
-
+	CreateRects("");
 }
 
 cpImageButton::cpImageButton() : cpObject(NULL, NULL, ""){}
@@ -933,9 +933,11 @@ void cpImageButton::SetTextHoverColor(sf::Color col){
 }
 void cpImageButton::SetLabelText(std::string text){
     m_label.SetText(text);
+    CreateRects("");
 }
 void cpImageButton::SetLabelSize(float size){
     m_label.SetSize(size);
+    CreateRects("");
 }
 
 /// Draws the different parts that make up an image button
@@ -949,7 +951,7 @@ void cpImageButton::Draw()
     if(m_state == BUTTONSTATE_ACTIVE) {
         Parent->Draw(spriteActive);
         m_label.SetColor(textActiveColor);
-    }else if(m_state == BUTTONSTATE_HOVER) {
+    }else if(hasFocus or m_state == BUTTONSTATE_HOVER) {
         Parent->Draw(spriteHover);
         m_label.SetColor(textHoverColor);
     }else {
@@ -977,11 +979,13 @@ int cpImageButton::CheckState(const sf::Input *input)
 {
 	int st = cpObject::CheckState(input);
 
-    if(st == CP_ST_NONE)
+    if(st == CP_ST_NONE){
         m_state = BUTTONSTATE_NORMAL;
+    }
 
-    if(st == CP_ST_MOUSE_IN or st == CP_ST_MOUSE_LBUTTON_RELEASED)
-		m_state = BUTTONSTATE_HOVER;
+    if(st == CP_ST_MOUSE_ENTER or st == CP_ST_MOUSE_LBUTTON_RELEASED){
+		gui->SetObjectFocus(this, true);
+    }
 
 	if(st == CP_ST_MOUSE_LBUTTON_DOWN)
 		m_state = BUTTONSTATE_ACTIVE;

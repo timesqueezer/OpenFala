@@ -29,14 +29,9 @@ private:
 	static MainMenuState m_MainMenuState;
 
 	cp::cpGuiContainer gui;
-	cp::cpButton *gameStartButton;
-	cp::cpButton *optionsButton;
-	cp::cpButton *exitButton;
-
-	cp::cpShapeButton *testButton;
-	cp::cpImageButton *imgButton;
-
-	sf::Shape testShape;
+	cp::cpImageButton *gameStartButton;
+	cp::cpImageButton *optionsButton;
+	cp::cpImageButton *exitButton;
 
 	sf::Sprite mBackgroundImage;
 
