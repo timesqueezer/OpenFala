@@ -4,6 +4,15 @@ sf::Uint16 IEntity::GetAnimationIndex(){
     return mAnimationIndex;
 }
 
+sf::Sprite& IEntity::GetSprite(float blockSize){
+    mSprite.SetPosition(mPosX*blockSize, mPosY*blockSize);
+    return mSprite;
+}
+
+void IEntity::SetImage(sf::Image* img){
+    mSprite.SetImage(*img);
+}
+
 void IEntity::SetAnimationIndex(sf::Uint16 index){
     mAnimationIndex = index;
 }
