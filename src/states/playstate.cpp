@@ -294,7 +294,7 @@ void PlayState::PlaceBlock(int x, int y) {
     } else {
         if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             ResourceManager& ResMgr = mGameEngine->GetResMgr();
-            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("tower-generic"), BLOCKTYPE_TOWER);
+            m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("highlight-blue"), BLOCKTYPE_TOWER);
         } else {
             std::cout << "Can't place blocks in the air." << std::endl;
         }

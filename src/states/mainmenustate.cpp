@@ -19,8 +19,8 @@ void MainMenuState::Init(GameEngine* game){
     sf::Uint16 left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
     // Load and Init Background Image
-    mGameEngine->GetResMgr().AddImage("data/images","title.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
-    mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title"));
+    mGameEngine->GetResMgr().AddImage("data/images","title2.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
+    mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title2"));
 
     mGameEngine->GetResMgr().AddImage("data/images","menu_button_normal.svg", button_width, button_height);
     mGameEngine->GetResMgr().AddImage("data/images","menu_button_hover.svg", button_width, button_height);
