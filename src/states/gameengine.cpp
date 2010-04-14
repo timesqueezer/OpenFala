@@ -120,6 +120,9 @@ ResourceManager& GameEngine::GetResMgr(){
     return mResMgr;
 }
 
+EntityManager& GameEngine::GetEntMgr(){
+    return mEntMgr;
+}
 
 void GameEngine::StartMusic(std::string filename){
     // stop music if it is running
