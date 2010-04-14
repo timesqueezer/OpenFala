@@ -14,38 +14,34 @@ void MainMenuState::Init(GameEngine* game){
     mInput = & (mGameEngine->app.GetInput());
     mGameEngine->app.SetFramerateLimit(60);
 
-    sf::Uint16 button_height = 30;
-    sf::Uint16 button_width = 120;
+    sf::Uint16 button_height = 100;
+    sf::Uint16 button_width = 300;
     sf::Uint16 left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
     // Load and Init Background Image
     mGameEngine->GetResMgr().AddImage("data/images","title.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
     mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title"));
 
-    mGameEngine->GetResMgr().AddImage("data/images","menu_button_normal.svg", 300, 100);
-    mGameEngine->GetResMgr().AddImage("data/images","menu_button_hover.svg", 300, 100);
-
-    imgButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Test Button" ,10,10);
-    imgButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
-    imgButton->SetTextColor(sf::Color(255,195,21));
-    imgButton->SetTextHoverColor(sf::Color(255,255,255));
-
-    // Test Button
-    testShape = Utility::GradientRectangle(0,0,100,100,sf::Color(255,255,0), sf::Color(255,128,0));
-    testButton = new cp::cpShapeButton(&mGameEngine->app, &gui, &testShape, 10.f, 20.f );
-    testButton->SetLabelText("Test Button");
+    mGameEngine->GetResMgr().AddImage("data/images","menu_button_normal.svg", button_width, button_height);
+    mGameEngine->GetResMgr().AddImage("data/images","menu_button_hover.svg", button_width, button_height);
 
     // Game Start Button
-    gameStartButton = new cp::cpButton(&mGameEngine->app, &gui, "Start Game",left, 10, button_width, button_height);
-    gameStartButton->SetFontSize(14);
+    gameStartButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Start Game" ,left, 0);
+    gameStartButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    gameStartButton->SetTextColor(sf::Color(255,195,21));
+    gameStartButton->SetTextHoverColor(sf::Color(255,255,255));
 
     // Options Button
-    optionsButton = new cp::cpButton(&mGameEngine->app, &gui, "Options",left, 45, button_width, button_height);
-    optionsButton->SetFontSize(14);
+    optionsButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Options" ,left, 100);
+    optionsButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    optionsButton->SetTextColor(sf::Color(255,195,21));
+    optionsButton->SetTextHoverColor(sf::Color(255,255,255));
 
     // Exit Button
-    exitButton = new cp::cpButton(&mGameEngine->app, &gui, "Exit",left, 80, button_width, button_height);
-    exitButton->SetFontSize(14);
+    exitButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Exit" ,left, 200);
+    exitButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    exitButton->SetTextColor(sf::Color(255,195,21));
+    exitButton->SetTextHoverColor(sf::Color(255,255,255));
 
     if (!mGameEngine->MusicPlaying())
         mGameEngine->StartMusic("data/music/menu1.ogg");
@@ -88,7 +84,6 @@ void MainMenuState::HandleEvents(){
             mGameEngine->StopMusic();
             mGameEngine->Cleanup();
         }
-        imgButton->CheckState(mInput);
 
         gui.ProcessKeys(&Event);
     }
@@ -106,9 +101,5 @@ void MainMenuState::Draw(){
     gameStartButton->Draw();
     optionsButton->Draw();
     exitButton->Draw();
-
-    imgButton->Draw();
-
-    //testButton->Draw();
 }
 
