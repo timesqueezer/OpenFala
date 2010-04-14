@@ -15,6 +15,7 @@ AUX_SOURCE_DIRECTORY(src/block/ OpenFala_block_SRCS)
 AUX_SOURCE_DIRECTORY(src/client/ OpenFala_client_SRCS)
 AUX_SOURCE_DIRECTORY(src/filesystem OpenFala_filesystem_SRCS)
 AUX_SOURCE_DIRECTORY(src/gui OpenFala_gui_SRCS)
+AUX_SOURCE_DIRECTORY(src/network OpenFala_network_SRCS)
 AUX_SOURCE_DIRECTORY(src/particle OpenFala_particle_SRCS)
 AUX_SOURCE_DIRECTORY(src/resources OpenFala_resources_SRCS)
 AUX_SOURCE_DIRECTORY(src/server OpenFala_server_SRCS)
@@ -31,6 +32,7 @@ ADD_EXECUTABLE(OpenFala
     ${OpenFala_client_SRCS} 
     ${OpenFala_filesystem_SRCS} 
     ${OpenFala_gui_SRCS} 
+    ${OpenFala_network_SRCS}
     ${OpenFala_particle_SRCS} 
     ${OpenFala_resources_SRCS} 
     ${OpenFala_server_SRCS} 

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 
+#include "../network/network.hpp"
+
 #include "server.hpp"
 
 // TODO Adding UID support for clients
@@ -44,12 +46,11 @@ void ServerApp::HandleRequest() {
         sf::IPAddress Address;
         sf::Uint16 port;
         cSocket.Receive(Packet, Address, port);
-        sf::Uint8 PacketType;
+        sf::Uint16 command_id = 0;
 
-        Packet >> PacketType;
+        Packet >> command_id;
 
-        if (PacketType == 0) { // type "mouse", client sends mouse/block information
-            
+        if (command_id == PACKET_MOUSE) { // type "mouse", client sends mouse/block information
             sf::Uint16 sqx, sqy;
 
             Packet >> sqx >> sqy;
@@ -60,50 +61,41 @@ void ServerApp::HandleRequest() {
 
             BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
                 if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << (sf::Uint16) 2 << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
+                    SendPacket << PACKET_MOUSE << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
                     Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
                     SendPacket.Clear();
                 }
             }
-            
-        
-        } else if (PacketType == 1) { // "build" type for building blocks
+        } else if (command_id == PACKET_BUILD) { // "build" type for building blocks
 
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-            SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint8) m_ClMan.GetID(Address);
+            SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint8) m_ClMan.GetID(Address);
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
             std::cout << "BUILD " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
             BOOST_FOREACH(int id, m_ClMan.GetIDs()) {
                 if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << (sf::Uint16) 1 << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
+                    SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
                     Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
                     SendPacket.Clear();
                 }
             }
-
-        } else if (PacketType == 2) { // "Handshake" getting client's name
-
-
+        } else if (command_id == PACKET_HANDSHAKE) { // "Handshake" getting client's name
             if (!m_ClMan.IsKnown(Address)) {
 
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, cl_name);
                 std::cout << "Added Client " << cl_name << "[" << Address << "]" << std::endl;
-                SendPacket << (sf::Uint16) 3 << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
+                SendPacket << PACKET_HANDSHAKE << (sf::Uint16) 1 << (sf::Uint16) 1 << (sf::Uint16) m_ClMan.GetID(Address);
                 Listener.Send(SendPacket, Address, port);
                 SendPacket.Clear();
-
             }
 
-
         } else {
-
-            std::cout << "Bad PacketType" << std::endl;
-
+            std::cout << "Bad command_id" << std::endl;
         }
         Packet.Clear();
     }

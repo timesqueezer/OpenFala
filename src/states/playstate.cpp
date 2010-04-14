@@ -12,6 +12,7 @@
 #include "../server/server.hpp"
 #include "../block/block.hpp"
 #include "../utility/utility.hpp"
+#include "../network/network.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
@@ -129,10 +130,9 @@ void PlayState::Init(GameEngine* game){
 	mode = 1; // set to build mode
 
     // Server handshake
-    SendPacket << (sf::Uint8) 2 << m_name;
+    SendPacket << PACKET_HANDSHAKE << m_name;
     Socket.Send(SendPacket, m_bindaddress, m_port);
     SendPacket.Clear();
-
 }
 
 void PlayState::Cleanup(){
@@ -159,7 +159,7 @@ void PlayState::HandleEvents(){
         if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode==1) {
                 if (MouseInPlayableArea()) {
-                    SendPacket << (sf::Uint8) 1 << (sf::Uint16) ((GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock('y','p');
+                    SendPacket << PACKET_BUILD << (sf::Uint16) ((GetMouseBlock('x','p') - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock('y','p');
                     Socket.Send(SendPacket, m_bindaddress, m_port);
                     SendPacket.Clear();
                 }
@@ -170,7 +170,7 @@ void PlayState::HandleEvents(){
 		    float mouse_y = (m_mpos[0]->Sprite.GetPosition().y)/m_ratio;
 
             if ((GetMouseBlock('x', 'p') != mouse_x) or (GetMouseBlock('y', 'p') != mouse_y)) {
-		    	SendPacket << (sf::Uint8) 0 << (sf::Uint16) (GetMouseBlock('x', 'p')+GetNonPlayableAreaSize()) << GetMouseBlock('y', 'p');
+		    	SendPacket << PACKET_MOUSE << (sf::Uint16) (GetMouseBlock('x', 'p')+GetNonPlayableAreaSize()) << GetMouseBlock('y', 'p');
 		    	Socket.Send(SendPacket, m_bindaddress, m_port);
 		    	SendPacket.Clear();
 		    	m_mpos[m_cl_id]->Sprite.SetPosition((GetMouseBlock('x', 'p')+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock('y', 'p')*m_ratio);
@@ -180,25 +180,25 @@ void PlayState::HandleEvents(){
 }
 
 void PlayState::Update(){
-    sf::Uint16 actionid = 5;
+    sf::Uint16 request_id = 0;
 	sf::Uint16 posx = 0;
 	sf::Uint16 posy = 0;
 	sf::Uint16 cl_id = 0;
     sf::IPAddress svaddress;
     unsigned short svport;
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
-        RecvPacket >> actionid >> posx >> posy >> cl_id;
-        std::cout << "Server sent following Package: " << actionid << " (actionid), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
-        if (actionid == 1) { // stands for placing a block
+        RecvPacket >> request_id >> posx >> posy >> cl_id;
+        std::cout << "Server sent following Package: " << request_id << " (request_id), " << posx << " (X), " << posy << " (Y), " << cl_id << " (PlayerID)" << std::endl;
+        if (request_id == PACKET_BUILD) { // stands for placing a block
             PlaceBlock((int) posx, (int) posy);
         }
-        if (actionid == 2) { //stands for getting the mouse positions
+        if (request_id == PACKET_MOUSE) { //stands for getting the mouse positions
             m_mpos[cl_id]->Sprite.SetPosition((float) posx*m_ratio, (float) posy*m_ratio);
         }
-        if (actionid == 3) { // init stuff
+        if (request_id == PACKET_HANDSHAKE) { // init stuff
             m_cl_id = cl_id;
         }
-        //std::cout << actionid << " " << posx << " " << posy << std::endl;
+        //std::cout << request_id << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
     }
 

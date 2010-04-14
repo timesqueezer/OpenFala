@@ -2,47 +2,25 @@
 #include <string>
 #include <SFML/Network.hpp>
 
+enum PacketType {
+    LOL,
+    OMFG,
+    NIX
+};
+
 int main(void) {
-
-    enum PacketType {
-        Handshake,
-        Msg,
-        Default
-    };
-    
-    PacketType t_msg = Msg;
-    PacketType t_hs = Handshake;
-
     sf::SocketUDP Socket;
     sf::Packet Packet;
 
-    sf::IPAddress Address;
+    sf::IPAddress Address("localhost");
+    sf::Uint16 port = 12345;
 
-    unsigned short port = 12345;
+    PacketType foo = NIX;
+    sf::Uint16 foo2 = static_cast<sf::Uint16>(foo);
+    Packet << foo2; 
+    std::cout << "LOL: " << foo;
 
-    std::string data = "";
-    std::cout << "IPAddress to connect to: ";
-    std::cin >> Address;
+    Socket.Send(Packet, Address, port);
 
-    if (!Address.IsValid()) {
-        std::cout << "fail" << std::endl;
-        exit(0);
-    }
-    //Packet << t_hs << "Hallo";
-//    Socket.Send(Packet, Address, port);
-  //  Packet.Clear();
-
-    while (true) {
-//        Packet << t_hs << t_msg;
-   //     std::cout << "Data to send to the server: ";
-//        std::cin >> data;
-        data = "lol";
-
-        Packet << t_msg;
-
-        Socket.Send(Packet, Address, port);
-
-        Packet.Clear();
-    }
-
+    return EXIT_SUCCESS;
 }

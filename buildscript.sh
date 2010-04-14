@@ -4,4 +4,4 @@ if [ ! -d "./build" ]; then
    mkdir -p "./build" || exit 1
 fi 
 
-cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j3 && cp OpenFala ../OpenFala.bin && cd .. && ./OpenFala.bin
+cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j3 && cp OpenFala ../OpenFala.bin && cd .. 
