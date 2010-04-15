@@ -6,7 +6,7 @@ void World::AddEntity(IEntity* entity) {
     mEntities.insert(++m_entity_index, entity);
 }
 
-boost::ptr_map<sf::Uint16, IEntity>& World::GetEntities() {
+EntityMap& World::GetEntities() {
     return mEntities;
 }
 
@@ -18,7 +18,7 @@ void World::Update(){
     float frameTime = frameClock.GetElapsedTime();
     frameClock.Reset();
 
-
+    // Iterate through all Entities and Update them
     for ( EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
         i->second->Update(frameTime);
     }
@@ -27,9 +27,55 @@ void World::Update(){
 
 // Draws all Entities to RenderTarget
 void World::Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset){
-
+    // Iterate through all Entities and Draw their Sprites
     for ( EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
         sf::Sprite& s = i->second->GetSprite(blocksize, offset);
         target.Draw(s);
     }
+}
+
+
+
+// To Send a snapshot via Socket Connection
+sf::Packet &operator<<(sf::Packet &packet, World &w){
+
+    // Only the Server needs m_entity_index, as he gives new objects
+    // their names...
+
+    // frameClock is individually for every client
+
+    // Send number of entites
+    packet << (sf::Uint16)(w.mEntities.size());
+
+    // Iterate through all Entities and send their keys and them
+    for (EntityMap::iterator i = w.mEntities.begin(); i!=w.mEntities.end(); ++i ){
+        packet << (sf::Uint16)(i->first);
+        //packet << (*i->second);
+    }
+
+    packet << ("Send the World with entity Index " + w.m_entity_index);
+    return packet ;
+}
+
+// To extract a snapshot from Socket Connection
+sf::Packet &operator>>(sf::Packet &packet, World &w)
+{
+    // as every entity would be overwritten from the stream, remove all
+    // existing entities
+    w.mEntities.clear();
+
+    // Get Number of Entities
+    sf::Uint16 nbEntities;
+    packet >> nbEntities;
+
+    for (sf::Uint16 i = 0; i<nbEntities; ++i){
+        sf::Uint16 key;
+        packet >> key;
+
+        //IEntity* entity;
+        //packet >> (*entity);
+
+    }
+
+    return packet;
 }

@@ -2,6 +2,7 @@
 #define _WORLD_HPP_INCLUDED_
 
 #include <boost/ptr_container/ptr_container.hpp>
+#include <SFML/Network.hpp>
 
 #include "../entity/IEntity.hpp"
 
@@ -28,6 +29,10 @@ public:
     // Draws all Entities to RenderTarget
     void Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset);
 
+    // To send snapshot via sf::Socket / friends are needed to give the
+    // operator functions access to private Members of the World object
+    friend sf::Packet &operator<<(sf::Packet &packet, World &w);
+    friend sf::Packet &operator>>(sf::Packet &packet, World &w);
 private:
     EntityMap mEntities;
     sf::Clock frameClock;
