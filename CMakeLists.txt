@@ -22,6 +22,7 @@ AUX_SOURCE_DIRECTORY(src/resources OpenFala_resources_SRCS)
 AUX_SOURCE_DIRECTORY(src/server OpenFala_server_SRCS)
 AUX_SOURCE_DIRECTORY(src/states OpenFala_states_SRCS)
 AUX_SOURCE_DIRECTORY(src/utility OpenFala_utility_SRCS)
+AUX_SOURCE_DIRECTORY(src/world OpenFala_world_SRCS)
 
 ADD_DEFINITIONS(-Wall)
 
@@ -40,5 +41,6 @@ ADD_EXECUTABLE(OpenFala
     ${OpenFala_server_SRCS} 
     ${OpenFala_states_SRCS} 
     ${OpenFala_utility_SRCS} 
+    ${OpenFala_world_SRCS} 
 )
 TARGET_LINK_LIBRARIES(OpenFala ${SFML_LIBRARIES} ${Boost_LIBRARIES} ${SFML_LIBRARY} ${ImageMagick_LIBRARIES})

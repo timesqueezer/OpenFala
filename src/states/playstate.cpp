@@ -53,7 +53,7 @@ void PlayState::Init(GameEngine* game){
 	m_ratio = mGameEngine->m_height / 15;
 
     // Load images
-	ResourceManager& ResMgr = mGameEngine->GetResMgr();
+	ResourceManager& ResMgr = ResourceManager::get_mutable_instance();
 
 	ResMgr.AddImage("data/images/", "block-grass.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "block-dirt.svg", m_ratio, m_ratio);
@@ -216,10 +216,9 @@ void PlayState::Update(){
         RecvPacket.Clear();
     }
 
-    // Update Entities
-    BOOST_FOREACH(IEntity& entity, mGameEngine->GetEntMgr().GetEntities()){
-        entity.Update(mGameEngine->app.GetFrameTime());
-    }
+    // Update World
+    mGameEngine->GetWorld().Update();
+
 
     // Move clouds
     BOOST_FOREACH(sf::Drawable& cloud , mClouds){
@@ -252,9 +251,8 @@ void PlayState::Draw(){
 		}
 	}
 
-    BOOST_FOREACH(IEntity& entity, mGameEngine->GetEntMgr().GetEntities()){
-        mGameEngine->app.Draw(entity.GetSprite(m_ratio));
-    }
+    // Draw the whole World
+	mGameEngine->GetWorld().Draw(mGameEngine->app, m_ratio, sf::Vector2f(0,0));
 
     for(sf::Uint8 x = 0; x < 4; ++x) {
         mGameEngine->app.Draw(m_mpos[x]->Sprite);
@@ -315,13 +313,11 @@ void PlayState::PlaceBlock(int x, int y) {
         std::cout << "Cannot place the block right there!";
     } else {
         if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
-            ResourceManager& ResMgr = mGameEngine->GetResMgr();
-
             Building* b = new Building();
-            b->SetImage(ResMgr.GetImage("building"));
+            b->SetImageKey("building");
             b->SetPosition(sf::Vector2f(x,y));
             b->SetDimension(sf::Vector2f(m_ratio, m_ratio));
-            mGameEngine->GetEntMgr().AddEntity(b);
+            mGameEngine->GetWorld().AddEntity(b);
 
             //m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
         } else {

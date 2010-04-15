@@ -14,9 +14,9 @@ void IntroState::Init(GameEngine* game){
     mGameEngine->app.SetFramerateLimit(60);
 
     // Load title screen image
-    mGameEngine->GetResMgr().AddImage("data/images","title3.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
-    //std::cout << mGameEngine->GetResMgr().GetImage("title") << std::endl;
-    m_title_image.SetImage(*mGameEngine->GetResMgr().GetImage("title3"));
+    ResourceManager::get_mutable_instance().AddImage("data/images","title3.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
+
+    m_title_image.SetImage(*ResourceManager::get_mutable_instance().GetImage("title3"));
     m_title_image.SetPosition(0,0);
 
     // Create the Welcome Message

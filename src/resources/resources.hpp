@@ -3,16 +3,14 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-
 #include <ImageMagick/Magick++.h>
-
+#include <boost/serialization/singleton.hpp>
 #include <boost/lexical_cast.hpp>
-
 #include <map>
 
 #include "../filesystem/filesystem.hpp"
 
-class ResourceManager {
+class ResourceManager : public boost::serialization::singleton<ResourceManager> {
 public:
     ResourceManager();
     ~ResourceManager();

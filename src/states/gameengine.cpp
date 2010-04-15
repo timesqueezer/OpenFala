@@ -8,7 +8,6 @@
 #include "gamestate.hpp"
 
 GameEngine::GameEngine(const po::variables_map& vm){
-    mResMgr = ResourceManager::ResourceManager();
     mProgramOptions = vm;
 };
 
@@ -116,12 +115,8 @@ void GameEngine::Draw()
     }
 }
 
-ResourceManager& GameEngine::GetResMgr(){
-    return mResMgr;
-}
-
-EntityManager& GameEngine::GetEntMgr(){
-    return mEntMgr;
+World& GameEngine::GetWorld(){
+    return mWorld;
 }
 
 void GameEngine::StartMusic(std::string filename){

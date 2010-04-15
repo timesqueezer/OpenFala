@@ -19,27 +19,27 @@ void MainMenuState::Init(GameEngine* game){
     sf::Uint16 left = mGameEngine->app.GetWidth() / 2 - button_width/2;
 
     // Load and Init Background Image
-    mGameEngine->GetResMgr().AddImage("data/images","title2.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
-    mBackgroundImage.SetImage(*mGameEngine->GetResMgr().GetImage("title2"));
+    ResourceManager::get_mutable_instance().AddImage("data/images","title2.svg", mGameEngine->app.GetWidth(), mGameEngine->app.GetHeight());
+    mBackgroundImage.SetImage(*ResourceManager::get_mutable_instance().GetImage("title2"));
 
-    mGameEngine->GetResMgr().AddImage("data/images","menu_button_normal.svg", button_width, button_height);
-    mGameEngine->GetResMgr().AddImage("data/images","menu_button_hover.svg", button_width, button_height);
+    ResourceManager::get_mutable_instance().AddImage("data/images","menu_button_normal.svg", button_width, button_height);
+    ResourceManager::get_mutable_instance().AddImage("data/images","menu_button_hover.svg", button_width, button_height);
 
     // Game Start Button
-    gameStartButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Start Game" ,left, 0);
-    gameStartButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    gameStartButton = new cp::cpImageButton(&mGameEngine->app, &gui, ResourceManager::get_mutable_instance().GetImage("menu_button_normal") , "Start Game" ,left, 0);
+    gameStartButton->SetHoverImage(ResourceManager::get_mutable_instance().GetImage("menu_button_hover") );
     gameStartButton->SetTextColor(sf::Color(255,195,21));
     gameStartButton->SetTextHoverColor(sf::Color(255,255,255));
 
     // Options Button
-    optionsButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Options" ,left, 100);
-    optionsButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    optionsButton = new cp::cpImageButton(&mGameEngine->app, &gui, ResourceManager::get_mutable_instance().GetImage("menu_button_normal") , "Options" ,left, 100);
+    optionsButton->SetHoverImage(ResourceManager::get_mutable_instance().GetImage("menu_button_hover") );
     optionsButton->SetTextColor(sf::Color(255,195,21));
     optionsButton->SetTextHoverColor(sf::Color(255,255,255));
 
     // Exit Button
-    exitButton = new cp::cpImageButton(&mGameEngine->app, &gui, mGameEngine->GetResMgr().GetImage("menu_button_normal") , "Exit" ,left, 200);
-    exitButton->SetHoverImage(mGameEngine->GetResMgr().GetImage("menu_button_hover") );
+    exitButton = new cp::cpImageButton(&mGameEngine->app, &gui, ResourceManager::get_mutable_instance().GetImage("menu_button_normal") , "Exit" ,left, 200);
+    exitButton->SetHoverImage(ResourceManager::get_mutable_instance().GetImage("menu_button_hover") );
     exitButton->SetTextColor(sf::Color(255,195,21));
     exitButton->SetTextHoverColor(sf::Color(255,255,255));
 

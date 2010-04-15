@@ -6,13 +6,9 @@ sf::Uint16 IEntity::GetAnimationIndex(){
     return mAnimationIndex;
 }
 
-sf::Sprite& IEntity::GetSprite(float blockSize){
-    mSprite.SetPosition(mPosX*blockSize, mPosY*blockSize);
+sf::Sprite& IEntity::GetSprite(float blockSize, sf::Vector2f offset){
+    mSprite.SetPosition(mPosX * blockSize + offset.x, mPosY * blockSize + offset.y);
     return mSprite;
-}
-
-void IEntity::SetImage(sf::Image* img){
-    mSprite.SetImage(*img);
 }
 
 void IEntity::SetAnimationIndex(sf::Uint16 index){
@@ -72,6 +68,12 @@ void IEntity::SetAnimationFPS(sf::Uint16 FPS){
     mAnimationFPS = FPS;
 }
 
+std::string IEntity::GetImageKey(){
+    return mImageKey;
+}
+void IEntity::SetImageKey(std::string key){
+    mImageKey = key;
+}
 
 void IEntity::UpdateAnimation() {
     // Get Length of Animation in Frames

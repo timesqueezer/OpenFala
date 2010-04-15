@@ -9,12 +9,17 @@ Building::Building(){
 }
 
 void Building::Update(float dt){
-    // Update Life Time and Animation
+    // Update Life Time
     mLifeTime += dt;
+
+    // Set Image Pointer before Animation, as setting the Image changes the Subrect
+    mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
+
+    // Update Animation
     UpdateAnimation();
 
-    // Destroy Building after 5 seconds (for testing purposes)
-    if (mLifeTime > 5 and mAnimationIndex!=1){
+    // Destroy Building after 10 seconds (for testing purposes)
+    if (mLifeTime > 10 and mAnimationIndex!=1){
         mAnimationIndex = 1;
     }
 }
