@@ -37,7 +37,7 @@ void World::Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset)
 
 
 // To Send a snapshot via Socket Connection
-sf::Packet &operator<<(sf::Packet &packet, World &w){
+sf::Packet &operator<<(sf::Packet& packet, const World& world){
 
     // Only the Server needs m_entity_index, as he gives new objects
     // their names...
@@ -45,24 +45,23 @@ sf::Packet &operator<<(sf::Packet &packet, World &w){
     // frameClock is individually for every client
 
     // Send number of entites
-    packet << (sf::Uint16)(w.mEntities.size());
+    packet << (sf::Uint16)(world.mEntities.size());
 
     // Iterate through all Entities and send their keys and them
-    for (EntityMap::iterator i = w.mEntities.begin(); i!=w.mEntities.end(); ++i ){
+    for (EntityMap::const_iterator i = world.mEntities.begin(); i!=world.mEntities.end(); ++i ){
         packet << (sf::Uint16)(i->first);
         //packet << (*i->second);
     }
 
-    packet << ("Send the World with entity Index " + w.m_entity_index);
     return packet ;
 }
 
 // To extract a snapshot from Socket Connection
-sf::Packet &operator>>(sf::Packet &packet, World &w)
+sf::Packet &operator>>(sf::Packet &packet, World &world)
 {
     // as every entity would be overwritten from the stream, remove all
     // existing entities
-    w.mEntities.clear();
+    world.mEntities.clear();
 
     // Get Number of Entities
     sf::Uint16 nbEntities;
@@ -75,6 +74,7 @@ sf::Packet &operator>>(sf::Packet &packet, World &w)
         //IEntity* entity;
         //packet >> (*entity);
 
+        // TODO: add it
     }
 
     return packet;

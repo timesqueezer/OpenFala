@@ -31,8 +31,8 @@ public:
 
     // To send snapshot via sf::Socket / friends are needed to give the
     // operator functions access to private Members of the World object
-    friend sf::Packet &operator<<(sf::Packet &packet, World &w);
-    friend sf::Packet &operator>>(sf::Packet &packet, World &w);
+    friend sf::Packet &operator<<(sf::Packet& packet, const World& world);
+    friend sf::Packet &operator>>(sf::Packet& packet, World& world);
 private:
     EntityMap mEntities;
     sf::Clock frameClock;
