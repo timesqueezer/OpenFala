@@ -141,14 +141,6 @@ void PlayState::Init(GameEngine* game){
     m_cl_id = 0;
 	mode = MODE_BUILD_TOWER; // set to build mode
 
-    PlaceBlock(9, 9);
-    PlaceBlock(10, 9);
-    PlaceBlock(9, 8);
-    PlaceBlock(10, 8);
-    PlaceBlock(9, 7);
-    PlaceRocketLauncher(10, 7);
-    PlaceCannonTurret(10, 7);
-
     // Server handshake
     SendPacket << PACKET_HANDSHAKE << m_name;
     Socket.Send(SendPacket, m_bindaddress, m_port);
@@ -214,6 +206,7 @@ void PlayState::Update(){
 
     if (Socket.Receive(RecvPacket, svaddress, svport) == sf::Socket::Done) {
         RecvPacket >> request_id;
+        std::cout << "Got packet of type " << request_id << std::endl;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
             PlacePowerGenerator(posx, posy);
@@ -240,7 +233,7 @@ void PlayState::Update(){
     }
 
     // Update World
-    mGameEngine->GetWorld().Update();
+    mGameEngine->GetWorld().Update(m_ratio);
 
 
     // Move clouds
@@ -339,7 +332,7 @@ void PlayState::PlaceBlock(int x, int y) {
             Building* b = new Building();
             b->SetImageKey("building");
             b->SetPosition(sf::Vector2f(x,y));
-            b->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+            b->SetDimension(sf::Vector2f(1,1));
             mGameEngine->GetWorld().AddEntity(b);
 
             //m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
@@ -357,7 +350,7 @@ void PlayState::PlaceCannonTurret(int x, int y) {
         CannonTurret* c = new CannonTurret();
         c->SetImageKey("turret1");
         c->SetPosition(sf::Vector2f(x, y));
-        c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+        c->SetDimension(sf::Vector2f(1,1));
         mGameEngine->GetWorld().AddEntity(c);
     }
 }
@@ -369,7 +362,7 @@ void PlayState::PlaceRocketLauncher(int x, int y) {
         RocketLauncher* c = new RocketLauncher();
         c->SetImageKey("turret2");
         c->SetPosition(sf::Vector2f(x, y));
-        c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+        c->SetDimension(sf::Vector2f(1,1));
         mGameEngine->GetWorld().AddEntity(c);
     }
 }
@@ -381,7 +374,7 @@ void PlayState::PlacePowerGenerator(sf::Uint16 x, sf::Uint16 y) {
         PowerGenerator* c = new PowerGenerator();
         c->SetImageKey("generator");
         c->SetPosition(sf::Vector2f(x, y));
-        c->SetDimension(sf::Vector2f(m_ratio/2, m_ratio/2));
+        c->SetDimension(sf::Vector2f(0.5, 0.5));
         mGameEngine->GetWorld().AddEntity(c);
     }
 }

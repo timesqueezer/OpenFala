@@ -13,7 +13,7 @@ EntityMap& World::GetEntities() {
 
 
 // Calls all Entity Update methods, calculates physics
-void World::Update(){
+void World::Update(float blocksize){
 
     // reset frame Clock before frame Calculations, but remember time
     float frameTime = frameClock.GetElapsedTime();
@@ -21,7 +21,7 @@ void World::Update(){
 
     // Iterate through all Entities and Update them
     for ( EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
-        i->second->Update(frameTime);
+        i->second->Update(blocksize, frameTime);
     }
 
 }

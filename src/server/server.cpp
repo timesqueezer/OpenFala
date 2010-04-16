@@ -10,14 +10,10 @@
 
 #include "server.hpp"
 
-
-
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
 ServerApp::ServerApp(const sf::Uint16 port, const sf::Uint16 max_players) {
     m_port = port;
-    // TODO Blockmanager
-    //m_blocks.resize(extents[20][10]); // Size of the playablearea which is everytime the same
     m_ClMan = ClientManager();
     m_ClMan.SetMaxPlayers(max_players);
 }
@@ -50,15 +46,13 @@ void ServerApp::HandleRequest() {
         Packet >> command_id;
 
         if (command_id == PACKET_MOUSE) { // type "mouse", client sends mouse/block information
+
             sf::Uint16 sqx, sqy;
-
             Packet >> sqx >> sqy;
-
-            //std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
-
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
-        } else if (command_id == PACKET_BUILD) { // "build" type for building blocks
+        } else if (command_id == PACKET_BUILD) { // "build" type for building something
+
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
 
@@ -69,28 +63,13 @@ void ServerApp::HandleRequest() {
                 Building* b = new Building();
                 b->SetImageKey("building");
                 b->SetPosition(sf::Vector2f(sqx, sqy));
-                b->SetDimension(sf::Vector2f(40,40));
+                b->SetDimension(sf::Vector2f(1,1));
                 mWorld.AddEntity(b);
             }
 
-
-
-            /*SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
-            cSocket.Send(SendPacket, Address, port);
-            SendPacket.Clear();
-            std::cout << "BUILD " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
-
-            BOOST_FOREACH(sf::Uint16 id, m_ClMan.GetIDs()) {
-                if (id != m_ClMan.GetID(Address)) {
-                    SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
-                    Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
-                    SendPacket.Clear();
-                }
-            }*/
-
         } else if (command_id == PACKET_HANDSHAKE) { // "Handshake" getting client's name
-            if (!m_ClMan.IsKnown(Address)) {
 
+            if (!m_ClMan.IsKnown(Address)) {
                 std::string cl_name;
                 Packet >> cl_name;
                 m_ClMan.Add(Address, port, cl_name);
@@ -101,10 +80,12 @@ void ServerApp::HandleRequest() {
             }
 
         } else if (command_id == PACKET_GOODBYE) {
+
             sf::Uint16 cl_id;
             Packet >> cl_id;
             m_ClMan.Remove(cl_id);
             std::cout << "Removed client[" << cl_id << "][" << Address << "]" << std::endl;
+
         } else {
             std::cout << "Bad command_id" << std::endl;
         }
@@ -113,21 +94,10 @@ void ServerApp::HandleRequest() {
 }
 
 void ServerApp::Update() {
-    mWorld.Update();
+    mWorld.Update(0.0); // no need for blocksize for server
 }
 
 void ServerApp::Synchronize() {
-    /*BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
-        SendPacket << PACKET_MOUSE << m_ClMan.GetActiveClients();
-        //std::cout << "PacketType: " << PACKET_MOUSE << ", activeClients: " << m_ClMan.GetActiveClients() << "|";
-        BOOST_FOREACH(sf::Uint16 iddata, m_ClMan.GetIDs()) {
-            std::vector<sf::Uint16> tmpvec = m_ClMan.GetBlockUnderCursor(iddata);
-            SendPacket << iddata << tmpvec[0] << tmpvec[1];
-            //std::cout << "ID: " << iddata << " X: " << tmpvec[0] << "Y: " << tmpvec[1] << std::endl;
-        }
-        Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));
-        SendPacket.Clear();
-    }*/
     BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
         SendPacket << PACKET_SNAPSHOT << mWorld;
         Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));

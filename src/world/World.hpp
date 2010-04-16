@@ -24,7 +24,7 @@ public:
     EntityMap& GetEntities();
 
     // Calls all Entity Update methods, calculates physics
-    void Update();
+    void Update(float blocksize);
 
     // Draws all Entities to RenderTarget
     void Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset);

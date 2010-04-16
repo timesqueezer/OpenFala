@@ -6,7 +6,7 @@
 class RocketLauncher : public IEntity {
 public:
     RocketLauncher();
-    void Update(float dt);
+    void Update(float blocksize, float dt);
 
 private:
     static const sf::Uint16 mCost = 1000;

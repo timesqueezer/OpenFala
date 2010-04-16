@@ -9,7 +9,7 @@ Building::Building() {
     mPosY = 0;
 }
 
-void Building::Update(float dt) {
+void Building::Update(float blocksize, float dt) {
     // Update Life Time
     mLifeTime += dt;
 
@@ -17,7 +17,7 @@ void Building::Update(float dt) {
     mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
 
     // Update Animation
-    UpdateAnimation();
+    UpdateAnimation(blocksize);
 
     // Destroy Building after 10 seconds (for testing purposes)
     if (mLifeTime > 10 and mAnimationIndex!=1) {

@@ -6,8 +6,8 @@
 class PowerGenerator : public IEntity{
 public:
     PowerGenerator();
-    void Update(float dt);
-    
+    void Update(float blocksize, float dt);
+
     sf::Uint16 GetPower();
 
     void SetPosition(sf::Vector2f pos);

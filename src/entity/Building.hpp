@@ -6,7 +6,7 @@
 class Building : public IEntity{
 public:
     Building();
-    void Update(float dt);
+    void Update(float blocksize, float dt);
 
     void SetHealth(sf::Uint16 health);
     sf::Uint16 GetHealth();

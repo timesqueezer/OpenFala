@@ -17,7 +17,7 @@ const sf::Uint16 ENTITY_TYPE_CANNONTURRET = 1;
 class IEntity : boost::noncopyable {
 public:
     virtual ~IEntity() {}
-    virtual void Update(float dt) = 0;
+    virtual void Update(float blocksize, float dt) = 0;
     sf::Uint16 GetType() const;
 
     sf::Sprite& GetSprite(float blockSize, sf::Vector2f offset=sf::Vector2f(0,0));
@@ -70,7 +70,7 @@ protected:
     float mMass;
     sf::Uint16 mPlayerID;
 
-    virtual void UpdateAnimation();
+    virtual void UpdateAnimation(float blocksize);
 };
 
 #endif

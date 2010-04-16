@@ -79,9 +79,9 @@ void IEntity::SetImageKey(const std::string& key){
     mImageKey = key;
 }
 
-void IEntity::UpdateAnimation() {
+void IEntity::UpdateAnimation(float blocksize) {
     // Get Length of Animation in Frames
-    sf::Uint16 framesPerLoop = mSprite.GetImage()->GetWidth() / mDimX;
+    sf::Uint16 framesPerLoop = mSprite.GetImage()->GetWidth() / (mDimX*blocksize);
 
     // Get number of frames since start
     sf::Uint16 frameNb = (mLifeTime * mAnimationFPS);
@@ -93,13 +93,13 @@ void IEntity::UpdateAnimation() {
         frameNb = 0;
 
     // x-Coordinate = frame Number * frame Width
-    sf::Uint16 imageX =  frameNb * mDimX;
+    sf::Uint16 imageX =  frameNb * mDimX * blocksize ;
 
     // y-Coordinate = row Number * frame Height
-    sf::Uint16 imageY = mAnimationIndex * mDimY;
+    sf::Uint16 imageY = mAnimationIndex * mDimY * blocksize;
 
     // Set Subrect
-    mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX, imageY+mDimY) );
+    mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX*blocksize, imageY+mDimY*blocksize) );
 }
 
 void IEntity::SerializeIntoPacket(sf::Packet& packet) const {

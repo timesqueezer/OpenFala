@@ -8,15 +8,10 @@ RocketLauncher::RocketLauncher() {
     direction = false;
 }
 
-void RocketLauncher::Update(float dt) {
-    
-    
+void RocketLauncher::Update(float blocksize, float dt) {
+
     mLifeTime += dt;
-
-    
-
     mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
-
-    UpdateAnimation();
+    UpdateAnimation(blocksize);
 
 }

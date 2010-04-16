@@ -6,7 +6,7 @@
 class CannonTurret : public IEntity {
 public:
     CannonTurret();
-    void Update(float dt);
+    void Update(float blocksize, float dt);
     void SetRotation(float angle);
     void Rotate(float angle);
     float GetRotation();
@@ -14,7 +14,7 @@ public:
 private:
     static const sf::Uint16 mCost = 1000;
     float mRotation;
-    
+
 };
 
 #endif

@@ -8,7 +8,7 @@ PowerGenerator::PowerGenerator() {
     mPosY = 0;
 }
 
-void PowerGenerator::Update(float dt) {
+void PowerGenerator::Update(float blocksize, float dt) {
     // Update Life Time
     mLifeTime += dt;
 
@@ -16,7 +16,7 @@ void PowerGenerator::Update(float dt) {
     mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
 
     // Update Animation
-    UpdateAnimation();
+    UpdateAnimation(blocksize);
 }
 
 sf::Uint16 PowerGenerator::GetPower() {

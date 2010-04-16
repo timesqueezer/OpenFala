@@ -8,24 +8,24 @@ CannonTurret::CannonTurret() {
     mRotation = 0;
 }
 
-void CannonTurret::Update(float dt) {
-    
-    
+void CannonTurret::Update(float blocksize, float dt) {
+
+
     mLifeTime += dt;
 
-    
+
 
     mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
-    
+
     Rotate(20*dt);
 
-    UpdateAnimation();
+    UpdateAnimation(blocksize);
 
-    
-    mSprite.SetCenter(mDimX/2, mDimY/2);
+
+    mSprite.SetCenter(mDimX * blocksize / 2, mDimY * blocksize / 2);
     mSprite.SetRotation(mRotation);
 
-    
+
 }
 
 void CannonTurret::SetRotation(float angle) {

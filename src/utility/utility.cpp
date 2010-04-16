@@ -38,8 +38,8 @@ namespace Utility {
 		    ("mode,m", po::value<std::string>()->default_value("normal"),
 		        "choose mode <modes: 'client', 'server', 'both', 'normal'>")
 		    ("address,a", po::value<std::string>()->default_value("127.0.0.1"),
-		    	"get to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
-		    ("name,n", po::value<std::string>()->default_value("loldude"),
+		    	"address to connect to (ignored for server) <format: xxx.xxx.xxx.xxx>")
+		    ("name,n", po::value<std::string>()->default_value("no-name"),
 		    	"player name (ignored for server)")
 		    ("port,p", po::value<sf::Uint16>()->default_value(41311),
 		    	"port to bind to/connect to")
