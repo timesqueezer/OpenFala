@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../network/network.hpp"
+#include "../entity/Building.hpp"
 
 #include "server.hpp"
 
@@ -31,6 +32,17 @@ void ServerApp::Init() {
     std::cout << "OpenFala server started on port: " << m_port << std::endl;
     std::cout << "Max players: " << m_ClMan.GetMaxPlayers() << std::endl;
 
+    Building* b = new Building();
+    b->SetImageKey("building");
+    b->SetPosition(sf::Vector2f(5,5));
+    b->SetDimension(sf::Vector2f(40,40));
+    mWorld.AddEntity(b);
+
+    b = new Building();
+    b->SetImageKey("building");
+    b->SetPosition(sf::Vector2f(5,6));
+    b->SetDimension(sf::Vector2f(40,40));
+    mWorld.AddEntity(b);
 }
 
 void ServerApp::HandleRequest() {
@@ -53,7 +65,7 @@ void ServerApp::HandleRequest() {
             sf::Uint16 sqx, sqy;
 
             Packet >> sqx >> sqy;
-            
+
             //std::cout << "Name " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
 
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
@@ -98,16 +110,24 @@ void ServerApp::HandleRequest() {
     }
 }
 
-
 void ServerApp::Update() {
-    BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
+    mWorld.Update();
+}
+
+void ServerApp::Synchronize() {
+    /*BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
         SendPacket << PACKET_MOUSE << m_ClMan.GetActiveClients();
         //std::cout << "PacketType: " << PACKET_MOUSE << ", activeClients: " << m_ClMan.GetActiveClients() << "|";
         BOOST_FOREACH(sf::Uint16 iddata, m_ClMan.GetIDs()) {
             std::vector<sf::Uint16> tmpvec = m_ClMan.GetBlockUnderCursor(iddata);
-            SendPacket << iddata << tmpvec[0] << tmpvec[1]; 
-            //std::cout << "ID: " << iddata << " X: " << tmpvec[0] << "Y: " << tmpvec[1] << std::endl; 
+            SendPacket << iddata << tmpvec[0] << tmpvec[1];
+            //std::cout << "ID: " << iddata << " X: " << tmpvec[0] << "Y: " << tmpvec[1] << std::endl;
         }
+        Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));
+        SendPacket.Clear();
+    }*/
+    BOOST_FOREACH(sf::Uint16 idtosend, m_ClMan.GetIDs()) {
+        SendPacket << PACKET_SNAPSHOT << mWorld;
         Listener.Send(SendPacket, m_ClMan.GetIP(idtosend), m_ClMan.GetPort(idtosend));
         SendPacket.Clear();
     }

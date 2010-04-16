@@ -9,6 +9,7 @@
 #include <string>
 
 #include "clientmanager.hpp"
+#include "../world/World.hpp"
 
 typedef boost::multi_array<std::string, 2> stringarray2d;
 typedef boost::multi_array<sf::Uint16, 2> uint16array2d;
@@ -26,14 +27,18 @@ public:
     // This method takes care of client registering and data gathering.
 	void HandleRequest();
 
-	// Data gathered by HandleRequest() is evaluated here and sent back to
-	// clients.
+	// Updates all Entities, calculates physics
 	void Update();
+
+	// Sends snapshots to clients
+	void Synchronize();
 
 	// Safely shuts down the server.
 	void Die();
 
 private:
+    World mWorld;
+
     sf::Uint16 m_port;
     uint16array2d m_blocks;
     sf::SelectorUDP Selector;

@@ -29,14 +29,15 @@ void startServer(void *UserData) {
     ServerApp Server(port, max_players);
 	Server.Init();
     sf::Clock Clock;
-    const float tickrate = 30.f;
+    const float tickrate = 2.f;
     const float timebudget = 1/tickrate;
     while (true) {
         while (Clock.GetElapsedTime() < timebudget) {
             Server.HandleRequest();
+            Server.Update();
         }
         Clock.Reset();
-		Server.Update();
+		Server.Synchronize();
 	}
 	Server.Die();
 }

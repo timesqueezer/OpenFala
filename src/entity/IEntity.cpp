@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+sf::Uint16 IEntity::GetType() const {
+    return mType;
+}
+
 sf::Uint16 IEntity::GetAnimationIndex(){
     return mAnimationIndex;
 }
@@ -96,4 +100,39 @@ void IEntity::UpdateAnimation() {
 
     // Set Subrect
     mSprite.SetSubRect( sf::Rect<int>(imageX, imageY, imageX+mDimX, imageY+mDimY) );
+}
+
+void IEntity::SerializeIntoPacket(sf::Packet& packet) const {
+    std::cout << "IEntity::SerializeIntoPacket" << std::endl;
+    packet << mImageKey;
+    packet << mAnimationIndex;
+    packet << mAnimationFPS;
+    packet << mLifeTime;
+    packet << mPosX;
+    packet << mPosY;
+    packet << mDimX;
+    packet << mDimY;
+    packet << mMass;
+    packet << mPlayerID;
+}
+
+void IEntity::SerializeFromPacket(sf::Packet& packet) {
+    packet >> mImageKey;
+    packet >> mAnimationIndex;
+    packet >> mAnimationFPS;
+    packet >> mLifeTime;
+    packet >> mPosX;
+    packet >> mPosY;
+    packet >> mDimX;
+    packet >> mDimY;
+    packet >> mMass;
+    packet >> mPlayerID;
+}
+
+sf::Packet &operator<<(sf::Packet& packet, IEntity& entity) {
+    std::cout << "IEntity operator<<" << std::endl;
+    return packet;
+}
+sf::Packet &operator>>(sf::Packet& packet, IEntity& entity) {
+    return packet;
 }

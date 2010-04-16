@@ -1,12 +1,7 @@
 #include <iostream>
 #include <string>
 #include <SFML/Network.hpp>
-
-enum PacketType {
-    LOL,
-    OMFG,
-    NIX
-};
+#include "lol.cpp"
 
 int main() {
     sf::SocketUDP Listener;
@@ -21,9 +16,9 @@ int main() {
 
     Listener.Receive(Packet, Address, port);
 
-    sf::Uint16 bar = 41;
-    Packet >> bar;
-    std::cout << "bar: " << bar;
+    Derived d("falsch",0);
+    Packet >> d;
+    d.printInfo();
 
     Listener.Close();
 

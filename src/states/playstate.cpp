@@ -215,6 +215,9 @@ void PlayState::Update(){
             RecvPacket >> cl_id;
             m_cl_id = cl_id;
         }
+        if (request_id == PACKET_SNAPSHOT) { // Got a snapshot
+            RecvPacket >> mGameEngine->GetWorld();
+        }
         //std::cout << request_id << " " << posx << " " << posy << std::endl;
         RecvPacket.Clear();
     }

@@ -2,6 +2,7 @@
 #include <iostream>
 
 Building::Building(){
+    mType = ENTITY_TYPE_BUILDING;
     mAnimationFPS = 1;
     mAnimationIndex = 0;
     mPosX = 0;
@@ -30,4 +31,19 @@ void Building::SetHealth(sf::Uint16 health){
 
 sf::Uint16 Building::GetHealth(){
     return mHealth;
+}
+
+
+
+sf::Packet &operator<<(sf::Packet& packet, const Building& building) {
+    std::cout << "Building operator<<" << std::endl;
+    building.SerializeIntoPacket(packet);
+    packet << building.mHealth;
+    return packet;
+}
+
+sf::Packet &operator>>(sf::Packet& packet, Building& building) {
+    building.SerializeFromPacket(packet);
+    packet >> building.mHealth;
+    return packet;
 }

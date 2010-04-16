@@ -1,6 +1,7 @@
-#include "World.hpp"
 #include <boost/foreach.hpp>
 #include <iostream>
+#include "World.hpp"
+#include "../entity/Building.hpp"
 
 void World::AddEntity(IEntity* entity) {
     mEntities.insert(++m_entity_index, entity);
@@ -37,23 +38,53 @@ void World::Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset)
 
 
 // To Send a snapshot via Socket Connection
-sf::Packet &operator<<(sf::Packet& packet, const World& world){
+sf::Packet &operator<<(sf::Packet& packet, World& world){
 
     // Only the Server needs m_entity_index, as he gives new objects
     // their names...
 
     // frameClock is individually for every client
 
+    /* Packet structure:
+
+        - Number of Entities
+        - Key of Entity 1
+        - Type of Entity 1
+        - Entity 1
+        - Key of Entity 2
+        - Type of Entity 2
+        - Entity 2
+        ...
+
+    */
+
     // Send number of entites
     packet << (sf::Uint16)(world.mEntities.size());
 
-    // Iterate through all Entities and send their keys and them
-    for (EntityMap::const_iterator i = world.mEntities.begin(); i!=world.mEntities.end(); ++i ){
-        packet << (sf::Uint16)(i->first);
-        //packet << (*i->second);
+    // Iterate through all Entities and send their keys, types and them
+    for (EntityMap::iterator i = world.mEntities.begin(); i!=world.mEntities.end(); ++i){
+        // Send Entity key
+        packet << (sf::Uint16)i->first;
+
+        // Send Entity Type
+        sf::Uint16 entity_type = i->second->GetType();
+        packet << entity_type;
+
+        // stream entity
+        //Building* entity;
+        if (entity_type == ENTITY_TYPE_BUILDING){
+            Building* entity =  dynamic_cast<Building*>(i->second);
+            packet << *entity;
+        }
+        else
+            std::cerr << "ERROR: Invalid Entity type." << std::endl;
+/*
+        entity = (Building*)i->second;
+
+        packet << *entity;*/
     }
 
-    return packet ;
+    return packet;
 }
 
 // To extract a snapshot from Socket Connection
@@ -71,10 +102,30 @@ sf::Packet &operator>>(sf::Packet &packet, World &world)
         sf::Uint16 key;
         packet >> key;
 
-        //IEntity* entity;
-        //packet >> (*entity);
+        // Get Entity Type
+        sf::Uint16 entity_type;
+        packet >> entity_type;
 
-        // TODO: add it
+        /*IEntity* entity;
+        if (entity_type == ENTITY_TYPE_BUILDING)
+            entity = new Building();
+        else
+            std::cerr << "ERROR: Invalid Entity type." << std::endl;
+
+        // get entity
+        packet >> (*entity);
+*/
+
+        if (entity_type == ENTITY_TYPE_BUILDING){
+            Building* entity = new Building(); // =  dynamic_cast<Building*>(i->second);
+            packet >> *entity;
+            world.mEntities.insert(key, entity);
+            //std::cout << "lol gugg mal: 0 = " << entity.GetType() << std::endl;
+            //entity.Update(0.0);
+        }
+        else
+            std::cerr << "ERROR: Invalid Entity type." << std::endl;
+
     }
 
     return packet;

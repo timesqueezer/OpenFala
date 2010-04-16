@@ -1,12 +1,7 @@
 #include <iostream>
 #include <string>
 #include <SFML/Network.hpp>
-
-enum PacketType {
-    LOL,
-    OMFG,
-    NIX
-};
+#include "lol.cpp"
 
 int main(void) {
     sf::SocketUDP Socket;
@@ -15,10 +10,9 @@ int main(void) {
     sf::IPAddress Address("localhost");
     sf::Uint16 port = 12345;
 
-    PacketType foo = NIX;
-    sf::Uint16 foo2 = static_cast<sf::Uint16>(foo);
-    Packet << foo2; 
-    std::cout << "LOL: " << foo;
+    Derived d("myname",22);
+
+    Packet << d; 
 
     Socket.Send(Packet, Address, port);
 
