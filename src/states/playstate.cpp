@@ -184,6 +184,14 @@ void PlayState::HandleEvents(){
             // if Escape is pressed, the Main Menu is shown
            	mGameEngine->ChangeState( MainMenuState::Instance() );
         }
+        if ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::B)) {
+            // enter build mode
+            mode = MODE_BUILD;
+        }
+        if ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::D)) {
+            // enter build mode
+            mode = MODE_DEMOLISH;
+        }
         if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode == MODE_BUILD and MouseInPlayableArea()) {
                 SendPacket << PACKET_BUILD << (sf::Uint16) ((GetMouseBlock(true).x - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock(true).y;
@@ -205,13 +213,10 @@ void PlayState::HandleEvents(){
 
 		// BuildMode Button Click
         if(mGuiBuildModeButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
-            std::cout << "Build Mode !!!" << std::endl;
             mode = MODE_BUILD;
-
         }
-        // BuildMode Button Click
+        // DemolishMode Button Click
         if(mGuiDemolishModeButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
-            std::cout << "Demolish Mode !!!" << std::endl;
             mode = MODE_DEMOLISH;
         }
 
