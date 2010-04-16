@@ -46,6 +46,7 @@ public:
 	// places a block to the specified area
     void PlaceBlock(int x, int y);
     void PlaceCannonTurret(int x, int y);
+    void PlaceRocketLauncher(int x, int y);
 
     // Check if mouse is in legal area for building.
     bool MouseInPlayableArea();

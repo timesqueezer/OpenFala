@@ -15,6 +15,7 @@
 #include "../network/network.hpp"
 #include "../entity/Building.hpp"
 #include "../entity/CannonTurret.hpp"
+#include "../entity/RocketLauncher.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
@@ -70,6 +71,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "highlight-red.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "building.svg", m_ratio*2, m_ratio*2);
 	ResMgr.AddImage("data/images/", "turret1.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "turret2.svg", m_ratio, m_ratio);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -136,6 +138,14 @@ void PlayState::Init(GameEngine* game){
 
     m_cl_id = 0;
 	mode = MODE_BUILD_TOWER; // set to build mode
+
+    PlaceBlock(9, 9);
+    PlaceBlock(10, 9);
+    PlaceBlock(9, 8);
+    PlaceBlock(10, 8);
+    PlaceBlock(9, 7);
+    PlaceRocketLauncher(10, 7);
+    PlaceCannonTurret(10, 7);
 
     // Server handshake
     SendPacket << PACKET_HANDSHAKE << m_name;
@@ -204,7 +214,7 @@ void PlayState::Update(){
         RecvPacket >> request_id;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
-            PlaceCannonTurret((int) posx, (int) posy);
+            PlaceRocketLauncher((int) posx, (int) posy);
         }
         if (request_id == PACKET_MOUSE) { //stands for getting the mouse positions
             sf::Uint16 num_clients;
@@ -320,7 +330,7 @@ void PlayState::PlaceBlock(int x, int y) {
     if (!InPlayableArea(x,y)) {
         std::cout << "Cannot place the block right there!";
     } else {
-        if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
+        //if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             Building* b = new Building();
             b->SetImageKey("building");
             b->SetPosition(sf::Vector2f(x,y));
@@ -328,9 +338,9 @@ void PlayState::PlaceBlock(int x, int y) {
             mGameEngine->GetWorld().AddEntity(b);
 
             //m_blocks[x][y] = new Block(x*m_ratio, y*m_ratio, ResMgr.GetImage("building"), BLOCKTYPE_TOWER);
-        } else {
-            std::cout << "Can't place blocks in the air." << std::endl;
-        }
+        //} else {
+        //    std::cout << "Can't place blocks in the air." << std::endl;
+        //}
     }
     return;
 }
@@ -341,6 +351,18 @@ void PlayState::PlaceCannonTurret(int x, int y) {
     } else {
         CannonTurret* c = new CannonTurret();
         c->SetImageKey("turret1");
+        c->SetPosition(sf::Vector2f(x, y));
+        c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+        mGameEngine->GetWorld().AddEntity(c);
+    }
+}
+
+void PlayState::PlaceRocketLauncher(int x, int y) {
+    if (!InPlayableArea(x, y)) {
+        std::cout << "Cannot place the block right there!";
+    } else {
+        RocketLauncher* c = new RocketLauncher();
+        c->SetImageKey("turret2");
         c->SetPosition(sf::Vector2f(x, y));
         c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
         mGameEngine->GetWorld().AddEntity(c);

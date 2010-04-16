@@ -17,7 +17,7 @@ void CannonTurret::Update(float dt) {
 
     mSprite.SetImage(* ResourceManager::get_mutable_instance().GetImage(mImageKey));
     
-    Rotate(10*dt);
+    Rotate(20*dt);
 
     UpdateAnimation();
 
