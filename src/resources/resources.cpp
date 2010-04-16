@@ -6,22 +6,26 @@ ResourceManager::ResourceManager() {};
 ResourceManager::~ResourceManager() {};
 
 bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& imgname,
-    const sf::Uint16& width, const sf::Uint16& height, std::string key) {
+    const sf::Uint16 width, const sf::Uint16 height, const std::string& key) {
 
     // create Original File Path
     std::string originalFile = (path / imgname).string();
 
+
     // if the optional param key is not given, use the basename as key
+    std::string image_key = "";
     if(key == "") {
-        key = boost::filesystem::basename(originalFile);
+        image_key = boost::filesystem::basename(originalFile);
+    } else {
+        image_key = key;
     }
 
     // Create Cache Paths
     Filesystem::path cacheDir = (path / "cached").string();
-    std::string cacheFile = (cacheDir / key).string()+".png";
+    std::string cacheFile = (cacheDir / image_key ).string()+".png";
 
     // if an image with that key already exists in the dictionary, return
-    if(m_images.count(key) != 0) {
+    if(m_images.count(image_key) != 0) {
         return true;
     }
 
@@ -46,7 +50,7 @@ bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& 
         sfimage.SetSmooth(false);
 
         // Save loaded Image in Dictionary
-        m_images.insert(std::pair<std::string, sf::Image>(key, sfimage));
+        m_images.insert(std::pair<std::string, sf::Image>(image_key , sfimage));
     }
     catch (std::exception &error_) {
         std::cout << "ERROR: " << error_.what() << std::endl;
@@ -56,6 +60,5 @@ bool ResourceManager::AddImage(const Filesystem::path& path, const std::string& 
 }
 
 sf::Image* ResourceManager::GetImage(const std::string& img) {
-    sf::Image *a = &ResourceManager::m_images[img];
-    return a;
+    return &m_images[img];
 };

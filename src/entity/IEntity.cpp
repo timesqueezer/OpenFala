@@ -19,7 +19,7 @@ float IEntity::GetLifeTime(){
     return mLifeTime;
 }
 
-sf::Vector2f IEntity::GetPosition(){
+sf::Vector2f IEntity::GetPosition() const {
     return sf::Vector2f(mPosX, mPosY);
 }
 
@@ -28,24 +28,24 @@ void IEntity::SetPosition(sf::Vector2f position) {
     mPosY = position.y;
 }
 
-void IEntity::SetX(float x){
+void IEntity::SetX(const float x){
     mPosX = x;
 }
 
-void IEntity::SetY(float y){
+void IEntity::SetY(const float y){
     mPosY = y;
 }
 
-sf::Vector2f IEntity::GetDimension(){
+sf::Vector2f IEntity::GetDimension() const {
     return sf::Vector2f(mDimX, mDimY);
 }
 
-void IEntity::SetDimension(sf::Vector2f dimension) {
+void IEntity::SetDimension(const sf::Vector2f dimension) {
     mDimX = dimension.x;
     mDimY = dimension.y;
 }
 
-float IEntity::GetMass(){
+float IEntity::GetMass() const {
     return mMass;
 }
 
@@ -53,25 +53,25 @@ void IEntity::SetMass(float mass){
     mMass = mass;
 }
 
-sf::Uint16 IEntity::GetPlayerID(){
+sf::Uint16 IEntity::GetPlayerID() const {
     return mPlayerID;
 }
 
-void IEntity::SetPlayerID(sf::Uint16 id){
+void IEntity::SetPlayerID(const sf::Uint16 id){
     mPlayerID = id;
 }
 
-sf::Uint16 IEntity::GetAnimationFPS(){
+sf::Uint16 IEntity::GetAnimationFPS() const {
     return mAnimationFPS;
 }
 void IEntity::SetAnimationFPS(sf::Uint16 FPS){
     mAnimationFPS = FPS;
 }
 
-std::string IEntity::GetImageKey(){
+std::string IEntity::GetImageKey()const {
     return mImageKey;
 }
-void IEntity::SetImageKey(std::string key){
+void IEntity::SetImageKey(const std::string& key){
     mImageKey = key;
 }
 
