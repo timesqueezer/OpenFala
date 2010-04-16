@@ -14,11 +14,15 @@
 #include "../utility/utility.hpp"
 #include "../network/network.hpp"
 #include "../entity/Building.hpp"
+#include "../entity/CannonTurret.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
 #include "playstate.hpp"
 #include "mainmenustate.hpp"
+
+const sf::Uint16 MODE_BUILD_TOWER = 1;
+const sf::Uint16 MODE_BUILD_TURRET = 2;
 
 
 PlayState PlayState::m_PlayState;
@@ -65,6 +69,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "highlight-green.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "highlight-red.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "building.svg", m_ratio*2, m_ratio*2);
+	ResMgr.AddImage("data/images/", "turret1.svg", m_ratio, m_ratio);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -130,7 +135,7 @@ void PlayState::Init(GameEngine* game){
     }
 
     m_cl_id = 0;
-	mode = 1; // set to build mode
+	mode = MODE_BUILD_TOWER; // set to build mode
 
     // Server handshake
     SendPacket << PACKET_HANDSHAKE << m_name;
@@ -199,7 +204,7 @@ void PlayState::Update(){
         RecvPacket >> request_id;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
-            PlaceBlock((int) posx, (int) posy);
+            PlaceCannonTurret((int) posx, (int) posy);
         }
         if (request_id == PACKET_MOUSE) { //stands for getting the mouse positions
             sf::Uint16 num_clients;
@@ -328,4 +333,16 @@ void PlayState::PlaceBlock(int x, int y) {
         }
     }
     return;
+}
+
+void PlayState::PlaceCannonTurret(int x, int y) {
+    if (!InPlayableArea(x, y)) {
+        std::cout << "Cannot place the block right there!";
+    } else {
+        CannonTurret* c = new CannonTurret();
+        c->SetImageKey("turret1");
+        c->SetPosition(sf::Vector2f(x, y));
+        c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+        mGameEngine->GetWorld().AddEntity(c);
+    }
 }
