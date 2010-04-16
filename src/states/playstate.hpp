@@ -47,6 +47,7 @@ public:
     void PlaceBlock(int x, int y);
     void PlaceCannonTurret(int x, int y);
     void PlaceRocketLauncher(int x, int y);
+    void PlacePowerGenerator(sf::Uint16 x, sf::Uint16 y);
 
     // Check if mouse is in legal area for building.
     bool MouseInPlayableArea();

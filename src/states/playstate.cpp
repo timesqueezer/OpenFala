@@ -16,6 +16,7 @@
 #include "../entity/Building.hpp"
 #include "../entity/CannonTurret.hpp"
 #include "../entity/RocketLauncher.hpp"
+#include "../entity/PowerGenerator.hpp"
 
 #include "gameengine.hpp"
 #include "gamestate.hpp"
@@ -72,6 +73,7 @@ void PlayState::Init(GameEngine* game){
 	ResMgr.AddImage("data/images/", "building.svg", m_ratio*2, m_ratio*2);
 	ResMgr.AddImage("data/images/", "turret1.svg", m_ratio, m_ratio);
 	ResMgr.AddImage("data/images/", "turret2.svg", m_ratio, m_ratio);
+	ResMgr.AddImage("data/images/", "generator.svg", m_ratio, m_ratio/2);
 
 	ResMgr.AddImage("data/images/", "cloud01.svg", 3*m_ratio, 3*m_ratio);
 	ResMgr.AddImage("data/images/", "cloud02.svg", 3*m_ratio, 3*m_ratio);
@@ -214,7 +216,7 @@ void PlayState::Update(){
         RecvPacket >> request_id;
         if (request_id == PACKET_BUILD) { // stands for placing a block
             RecvPacket >> posx >> posy >> cl_id;
-            PlaceRocketLauncher((int) posx, (int) posy);
+            PlacePowerGenerator(posx, posy);
         }
         if (request_id == PACKET_MOUSE) { //stands for getting the mouse positions
             sf::Uint16 num_clients;
@@ -365,6 +367,18 @@ void PlayState::PlaceRocketLauncher(int x, int y) {
         c->SetImageKey("turret2");
         c->SetPosition(sf::Vector2f(x, y));
         c->SetDimension(sf::Vector2f(m_ratio, m_ratio));
+        mGameEngine->GetWorld().AddEntity(c);
+    }
+}
+
+void PlayState::PlacePowerGenerator(sf::Uint16 x, sf::Uint16 y) {
+    if (!InPlayableArea(x, y)) {
+        std::cout << "Cannot place the block right there!";
+    } else {
+        PowerGenerator* c = new PowerGenerator();
+        c->SetImageKey("generator");
+        c->SetPosition(sf::Vector2f(x, y));
+        c->SetDimension(sf::Vector2f(m_ratio/2, m_ratio/2));
         mGameEngine->GetWorld().AddEntity(c);
     }
 }
