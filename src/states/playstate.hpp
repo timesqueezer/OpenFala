@@ -12,9 +12,9 @@
 #include <boost/ptr_container/ptr_container.hpp>
 
 #include <ImageMagick/Magick++.h>
-
 #include <string>
 
+#include "../gui/cpGUI.hpp"
 #include "../filesystem/filesystem.hpp"
 #include "../resources/resources.hpp"
 #include "../block/block.hpp"
@@ -55,7 +55,7 @@ public:
     // check if the coordinates are in a legal area
     bool InPlayableArea(int, int);
     // Get the block beneath mouse cursor.
-    sf::Uint16 GetMouseBlock(char, char);
+    sf::Vector2<sf::Uint16> GetMouseBlock(bool OriginIsPlayableArea);
 
 
 protected:
@@ -64,8 +64,19 @@ protected:
 private:
 	static PlayState m_PlayState;
 
+    // Graphics
+    sf::Shape mGuiActionBar;
+    cp::cpGuiContainer mGui;
+    cp::cpImageButton *mGuiBuildModeButton;
+    cp::cpImageButton *mGuiDemolishModeButton;
 
+	sf::String mInfoLabel;
+	sf::Shape mInfoBar;
 
+	sf::Shape mSkyRect;
+	boost::ptr_vector<sf::Sprite> mClouds;
+
+	// Connection details
 	sf::Uint16 m_port;
 	sf::Uint16 m_clientport;
 	std::string m_name;
@@ -77,22 +88,17 @@ private:
     sf::Uint16 m_cl_id;
 	sf::String mousepos;
 
+    // Blocks
 	float m_ratio;
 	blockarray2d::extent_gen extents;
 	blockarray2d m_blocks;
-     blockarray1d m_mpos;
+    blockarray1d m_mpos;
 
-	int m_blocknbx;
-	int m_blocknby;
+	sf::Uint16 m_blocknbx;
+	sf::Uint16 m_blocknby;
 
-	int mode; // 0 - normal mode ; 1 - build mode ; 2 - demolition mode
+	int mode;
 
-	sf::String fps;
-	sf::Shape inforect;
-
-	sf::Shape mSkyRect;
-
-	boost::ptr_vector<sf::Sprite> mClouds;
 };
 
 #endif

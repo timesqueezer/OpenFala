@@ -34,8 +34,6 @@ private:
 	cp::cpImageButton *exitButton;
 
 	sf::Sprite mBackgroundImage;
-
-	sf::Music m_MenuMusic;
 };
 
 #endif

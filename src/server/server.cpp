@@ -77,6 +77,11 @@ void ServerApp::HandleRequest() {
                 SendPacket << PACKET_HANDSHAKE << (sf::Uint16) m_ClMan.GetID(Address);
                 Listener.Send(SendPacket, Address, port);
                 SendPacket.Clear();
+
+                // SEND THE FIRST SNAPSHOT
+                SendPacket << PACKET_SNAPSHOT << mWorld;
+                Listener.Send(SendPacket, Address, port);
+                SendPacket.Clear();
             }
 
         } else if (command_id == PACKET_GOODBYE) {
