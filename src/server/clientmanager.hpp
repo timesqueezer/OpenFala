@@ -17,45 +17,45 @@ struct Client {
 
 class ClientManager {
     public:
-        ClientManager(sf::Uint16 max_players=4);
+        ClientManager(const sf::Uint16 max_players=4);
 
         ~ClientManager();
 
-        void Add(sf::IPAddress address, sf::Uint16 port, std::string name);
+        void Add(const sf::IPAddress address, const sf::Uint16 port, const std::string name);
 
-        void Remove(sf::Uint16 id);
+        void Remove(const sf::Uint16 id);
 
-        bool IsKnown(sf::IPAddress address);
+        bool IsKnown(const sf::IPAddress address);
 
         bool IsSlotAvailable();
 
         // Returns vector of currently active (connected) client IDs
         std::vector<sf::Uint16> GetIDs();
 
-        sf::Uint16 GetID(sf::IPAddress address);
+        sf::Uint16 GetID(const sf::IPAddress address);
 
         // Get IP of client ID
-        sf::IPAddress GetIP(sf::Uint16 id);
+        sf::IPAddress GetIP(const sf::Uint16 id);
 
-        sf::Uint16 GetPort(sf::Uint16 id);
+        sf::Uint16 GetPort(const sf::Uint16 id);
     
         // Get name of client ID
-        std::string GetName(sf::Uint16 id);
+        std::string GetName(const sf::Uint16 id);
 
         // Get Block under cursor for client ID
-        std::vector<sf::Uint16> GetBlockUnderCursor(sf::Uint16 id);
+        std::vector<sf::Uint16> GetBlockUnderCursor(const sf::Uint16 id);
         
         sf::Uint16 GetMaxPlayers();
 
         sf::Uint16 GetActiveClients();
 
         // Set name of client ID
-        void SetName(sf::Uint16 id, std::string name);
+        void SetName(const sf::Uint16 id, const std::string name);
 
         // Set Block under cursor for client ID
-        void SetBlockUnderCursor(sf::Uint16 id, sf::Uint16 posx, sf::Uint16 posy);
+        void SetBlockUnderCursor(const sf::Uint16 id, const sf::Uint16 posx, const sf::Uint16 posy);
 
-        void SetMaxPlayers(sf::Uint16 max_players);
+        void SetMaxPlayers(const sf::Uint16 max_players);
 
     private:
         sf::Uint16 m_max_players;

@@ -11,5 +11,6 @@ const sf::Uint16 PACKET_NONE = 0;
 const sf::Uint16 PACKET_MOUSE = 1;
 const sf::Uint16 PACKET_BUILD = 2;
 const sf::Uint16 PACKET_HANDSHAKE = 3;
+const sf::Uint16 PACKET_GOODBYE = 4;
 
 #endif

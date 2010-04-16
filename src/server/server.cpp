@@ -9,7 +9,6 @@
 
 #include "server.hpp"
 
-// TODO Adding UID support for clients
 
 
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
@@ -87,6 +86,11 @@ void ServerApp::HandleRequest() {
                 SendPacket.Clear();
             }
 
+        } else if (command_id == PACKET_GOODBYE) {
+            sf::Uint16 cl_id;
+            Packet >> cl_id;
+            m_ClMan.Remove(cl_id);
+            std::cout << "Removed client[" << cl_id << "][" << Address << "]" << std::endl;
         } else {
             std::cout << "Bad command_id" << std::endl;
         }

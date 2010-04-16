@@ -140,6 +140,9 @@ void PlayState::Init(GameEngine* game){
 
 void PlayState::Cleanup(){
     std::cout << "- Cleanup PlayState" << std::endl;
+    SendPacket << PACKET_GOODBYE << m_cl_id;
+    Socket.Send(SendPacket, m_bindaddress, m_port);
+    SendPacket.Clear();
     Socket.Close();
 }
 

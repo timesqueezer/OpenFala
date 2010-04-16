@@ -12,7 +12,7 @@ ClientManager::ClientManager(sf::Uint16 max_players) {
 
 ClientManager::~ClientManager() {}
 
-void ClientManager::Add(sf::IPAddress address, sf::Uint16 port, std::string name) {
+void ClientManager::Add(const sf::IPAddress address, const sf::Uint16 port, const std::string name) {
     
     std::map<sf::Uint16, Client>::iterator it;
     it = m_clients.end();
@@ -26,11 +26,11 @@ void ClientManager::Add(sf::IPAddress address, sf::Uint16 port, std::string name
     m_clients.insert(std::pair<sf::Uint16, Client>(it->first, client));
 }
 
-void ClientManager::Remove(sf::Uint16 id) {
+void ClientManager::Remove(const sf::Uint16 id) {
     m_clients.erase(id);
 }
 
-bool ClientManager::IsKnown(sf::IPAddress address) {
+bool ClientManager::IsKnown(const sf::IPAddress address) {
     bool isknown = false;
     std::map<sf::Uint16, Client>::iterator it;
     for(it=m_clients.begin(); it != m_clients.end(); ++it) {
@@ -61,7 +61,7 @@ std::vector<sf::Uint16> ClientManager::GetIDs() {
     return ids;
 }
 
-sf::Uint16 ClientManager::GetID(sf::IPAddress address) {
+sf::Uint16 ClientManager::GetID(const sf::IPAddress address) {
     std::map<sf::Uint16, Client>::iterator it;
     sf::Uint16 tmp = 0;
     for ( it = m_clients.begin() ; it != m_clients.end(); it++ ) {
@@ -74,19 +74,19 @@ sf::Uint16 ClientManager::GetID(sf::IPAddress address) {
 
 }
 
-sf::IPAddress ClientManager::GetIP(sf::Uint16 id) {
+sf::IPAddress ClientManager::GetIP(const sf::Uint16 id) {
    return m_clients[id].address;
 }
 
-sf::Uint16 ClientManager::GetPort(sf::Uint16 id) {
+sf::Uint16 ClientManager::GetPort(const sf::Uint16 id) {
     return m_clients[id].port;
 }
 
-std::string ClientManager::GetName(sf::Uint16 id) {
+std::string ClientManager::GetName(const sf::Uint16 id) {
     return m_clients[id].name;
 }
 
-std::vector<sf::Uint16> ClientManager::GetBlockUnderCursor(sf::Uint16 id) {
+std::vector<sf::Uint16> ClientManager::GetBlockUnderCursor(const sf::Uint16 id) {
     std::vector<sf::Uint16> blocks;
     blocks.push_back(m_clients[id].posx);
     blocks.push_back(m_clients[id].posy);
@@ -101,15 +101,15 @@ sf::Uint16 ClientManager::GetActiveClients() {
     return m_clients.size();
 }
 
-void ClientManager::SetName(sf::Uint16 id, std::string name) {
+void ClientManager::SetName(const sf::Uint16 id, const std::string name) {
     m_clients[id].name = name;
 }
 
-void ClientManager::SetBlockUnderCursor(sf::Uint16 id, sf::Uint16 posx, sf::Uint16 posy) {
+void ClientManager::SetBlockUnderCursor(const sf::Uint16 id, const sf::Uint16 posx, const sf::Uint16 posy) {
     m_clients[id].posx = posx; 
     m_clients[id].posy = posy; 
 }
 
-void ClientManager::SetMaxPlayers(sf::Uint16 max_players) {
+void ClientManager::SetMaxPlayers(const sf::Uint16 max_players) {
     m_max_players = max_players;
 }
