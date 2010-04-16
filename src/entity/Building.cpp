@@ -36,7 +36,6 @@ sf::Uint16 Building::GetHealth() {
 
 
 sf::Packet &operator<<(sf::Packet& packet, const Building& building) {
-    std::cout << "Building operator<<" << std::endl;
     building.SerializeIntoPacket(packet);
     packet << building.mHealth;
     return packet;

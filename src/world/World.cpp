@@ -36,6 +36,14 @@ void World::Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset)
 }
 
 
+bool World::BlockExistsAt(float x, float y) const {
+    for ( EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
+        if (i->second->GetPosition().x == x and i->second->GetPosition().y == y and i->second->GetImageKey()=="building")
+            return true;
+    }
+    return false;
+}
+
 
 // To Send a snapshot via Socket Connection
 sf::Packet &operator<<(sf::Packet& packet, World& world){

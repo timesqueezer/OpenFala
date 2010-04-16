@@ -31,18 +31,6 @@ void ServerApp::Init() {
     Selector.Add(Listener);
     std::cout << "OpenFala server started on port: " << m_port << std::endl;
     std::cout << "Max players: " << m_ClMan.GetMaxPlayers() << std::endl;
-
-    Building* b = new Building();
-    b->SetImageKey("building");
-    b->SetPosition(sf::Vector2f(5,5));
-    b->SetDimension(sf::Vector2f(40,40));
-    mWorld.AddEntity(b);
-
-    b = new Building();
-    b->SetImageKey("building");
-    b->SetPosition(sf::Vector2f(5,6));
-    b->SetDimension(sf::Vector2f(40,40));
-    mWorld.AddEntity(b);
 }
 
 void ServerApp::HandleRequest() {
@@ -71,10 +59,23 @@ void ServerApp::HandleRequest() {
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
         } else if (command_id == PACKET_BUILD) { // "build" type for building blocks
-
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-            SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
+
+            // if the block is not in the earth AND there is no block at that position AND
+            // (the position is on the ground OR there is a block underneath)
+            if (sqy < 10 and !mWorld.BlockExistsAt(sqx,sqy) and (sqy==9 or mWorld.BlockExistsAt(sqx,sqy+1))) {
+                // Create entity
+                Building* b = new Building();
+                b->SetImageKey("building");
+                b->SetPosition(sf::Vector2f(sqx, sqy));
+                b->SetDimension(sf::Vector2f(40,40));
+                mWorld.AddEntity(b);
+            }
+
+
+
+            /*SendPacket << PACKET_BUILD << sqx << sqy << (sf::Uint16) m_ClMan.GetID(Address);
             cSocket.Send(SendPacket, Address, port);
             SendPacket.Clear();
             std::cout << "BUILD " << m_ClMan.GetName(m_ClMan.GetID(Address)) << "[" << m_ClMan.GetID(Address) << "] : " << sqx << " " << sqy << std::endl;
@@ -85,7 +86,8 @@ void ServerApp::HandleRequest() {
                     Listener.Send(SendPacket, m_ClMan.GetIP(id), port);
                     SendPacket.Clear();
                 }
-            }
+            }*/
+
         } else if (command_id == PACKET_HANDSHAKE) { // "Handshake" getting client's name
             if (!m_ClMan.IsKnown(Address)) {
 

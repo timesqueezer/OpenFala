@@ -103,7 +103,6 @@ void IEntity::UpdateAnimation() {
 }
 
 void IEntity::SerializeIntoPacket(sf::Packet& packet) const {
-    std::cout << "IEntity::SerializeIntoPacket" << std::endl;
     packet << mImageKey;
     packet << mAnimationIndex;
     packet << mAnimationFPS;
@@ -130,7 +129,6 @@ void IEntity::SerializeFromPacket(sf::Packet& packet) {
 }
 
 sf::Packet &operator<<(sf::Packet& packet, IEntity& entity) {
-    std::cout << "IEntity operator<<" << std::endl;
     return packet;
 }
 sf::Packet &operator>>(sf::Packet& packet, IEntity& entity) {
