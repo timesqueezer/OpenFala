@@ -44,9 +44,6 @@ public:
     sf::Uint16 GetAnimationFPS() const;
     void SetAnimationFPS(sf::Uint16 FPS);
 
-    std::string GetImageKey() const;
-    void SetImageKey(const std::string& key);
-
     void SerializeIntoPacket(sf::Packet& packet) const;
     void SerializeFromPacket(sf::Packet& packet);
 
@@ -56,12 +53,11 @@ public:
 protected:
     sf::Uint16 mType;
 
-    std::string mImageKey;
-
     static const sf::Uint16 mCost = 0;
     sf::Sprite mSprite;
     sf::Uint16 mAnimationIndex;
     sf::Uint16 mAnimationFPS;
+    std::string mImageKey;
     float mLifeTime;
     float mPosX;
     float mPosY;

@@ -1,6 +1,7 @@
 #include "RocketLauncher.hpp"
 
 RocketLauncher::RocketLauncher() {
+    mImageKey = "turret2";
     mAnimationFPS = 1;
     mAnimationIndex = 0;
     mPosX = 0;

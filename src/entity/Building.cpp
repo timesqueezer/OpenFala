@@ -2,6 +2,7 @@
 #include <iostream>
 
 Building::Building() {
+    mImageKey = "building";
     mType = ENTITY_TYPE_BUILDING;
     mAnimationFPS = 1;
     mAnimationIndex = 0;

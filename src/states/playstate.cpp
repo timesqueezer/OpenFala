@@ -358,7 +358,6 @@ void PlayState::PlaceBlock(int x, int y) {
     } else {
         //if (m_blocks[x][y+1]!=0 && m_blocks[x][y+1]->m_type != BLOCKTYPE_EMPTY) {
             Building* b = new Building();
-            b->SetImageKey("building");
             b->SetPosition(sf::Vector2f(x,y));
             b->SetDimension(sf::Vector2f(1,1));
             mGameEngine->GetWorld().AddEntity(b);
@@ -376,7 +375,6 @@ void PlayState::PlaceCannonTurret(int x, int y) {
         std::cout << "Cannot place the block right there!";
     } else {
         CannonTurret* c = new CannonTurret();
-        c->SetImageKey("turret1");
         c->SetPosition(sf::Vector2f(x, y));
         c->SetDimension(sf::Vector2f(1,1));
         mGameEngine->GetWorld().AddEntity(c);
@@ -388,7 +386,6 @@ void PlayState::PlaceRocketLauncher(int x, int y) {
         std::cout << "Cannot place the block right there!";
     } else {
         RocketLauncher* c = new RocketLauncher();
-        c->SetImageKey("turret2");
         c->SetPosition(sf::Vector2f(x, y));
         c->SetDimension(sf::Vector2f(1,1));
         mGameEngine->GetWorld().AddEntity(c);
@@ -400,7 +397,6 @@ void PlayState::PlacePowerGenerator(sf::Uint16 x, sf::Uint16 y) {
         std::cout << "Cannot place the block right there!";
     } else {
         PowerGenerator* c = new PowerGenerator();
-        c->SetImageKey("generator");
         c->SetPosition(sf::Vector2f(x, y));
         c->SetDimension(sf::Vector2f(0.5, 0.5));
         mGameEngine->GetWorld().AddEntity(c);

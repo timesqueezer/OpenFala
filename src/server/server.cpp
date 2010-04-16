@@ -61,7 +61,6 @@ void ServerApp::HandleRequest() {
             if (sqy < 10 and !mWorld.BlockExistsAt(sqx,sqy) and (sqy==9 or mWorld.BlockExistsAt(sqx,sqy+1))) {
                 // Create entity
                 Building* b = new Building();
-                b->SetImageKey("building");
                 b->SetPosition(sf::Vector2f(sqx, sqy));
                 b->SetDimension(sf::Vector2f(1,1));
                 mWorld.AddEntity(b);

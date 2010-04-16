@@ -38,7 +38,7 @@ void World::Draw(sf::RenderTarget& target, float blocksize, sf::Vector2f offset)
 
 bool World::BlockExistsAt(float x, float y) const {
     for ( EntityMap::const_iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
-        if (i->second->GetPosition().x == x and i->second->GetPosition().y == y and i->second->GetImageKey()=="building")
+        if (i->second->GetPosition().x == x and i->second->GetPosition().y == y and i->second->GetType()==ENTITY_TYPE_BUILDING)
             return true;
     }
     return false;

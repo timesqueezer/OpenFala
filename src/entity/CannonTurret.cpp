@@ -1,6 +1,7 @@
 #include "CannonTurret.hpp"
 
 CannonTurret::CannonTurret() {
+    mImageKey = "turret1";
     mAnimationFPS = 1;
     mAnimationIndex = 0;
     mPosX = 0;

@@ -15,7 +15,6 @@ public:
 private:
     static const sf::Uint16 mCost = 1000;
     static const sf::Uint16 mPower = 200;
-
 };
 
 #endif

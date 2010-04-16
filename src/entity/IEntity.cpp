@@ -72,13 +72,6 @@ void IEntity::SetAnimationFPS(sf::Uint16 FPS){
     mAnimationFPS = FPS;
 }
 
-std::string IEntity::GetImageKey()const {
-    return mImageKey;
-}
-void IEntity::SetImageKey(const std::string& key){
-    mImageKey = key;
-}
-
 void IEntity::UpdateAnimation(float blocksize) {
     // Get Length of Animation in Frames
     sf::Uint16 framesPerLoop = mSprite.GetImage()->GetWidth() / (mDimX*blocksize);
@@ -103,7 +96,6 @@ void IEntity::UpdateAnimation(float blocksize) {
 }
 
 void IEntity::SerializeIntoPacket(sf::Packet& packet) const {
-    packet << mImageKey;
     packet << mAnimationIndex;
     packet << mAnimationFPS;
     packet << mLifeTime;
@@ -116,7 +108,6 @@ void IEntity::SerializeIntoPacket(sf::Packet& packet) const {
 }
 
 void IEntity::SerializeFromPacket(sf::Packet& packet) {
-    packet >> mImageKey;
     packet >> mAnimationIndex;
     packet >> mAnimationFPS;
     packet >> mLifeTime;

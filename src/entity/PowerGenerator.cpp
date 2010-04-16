@@ -2,6 +2,7 @@
 #include <iostream>
 
 PowerGenerator::PowerGenerator() {
+    mImageKey = "generator";
     mAnimationFPS = 3;
     mAnimationIndex = 0;
     mPosX = 0;
