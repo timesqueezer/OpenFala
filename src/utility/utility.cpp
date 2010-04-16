@@ -45,7 +45,7 @@ namespace Utility {
 		    	"port to bind to/connect to")
 		    ("size,s", po::value<std::string>()->default_value("800x600"),
 		    	"sets the window size <e.g.: 800x600>")
-		    ("maxplayers,p", po::value<sf::Uint16>()->default_value(4),
+		    ("maxplayers,x", po::value<sf::Uint16>()->default_value(4),
 		    	"maximum number of players (ignored for client)")
 		    //("verbose,v", po::value<sf::Uint16>()->implicit_value(1), "be verbose")
 		    //("quiet,q", po::value<sf::Uint16>()->implicit_value(1), "be quiet")

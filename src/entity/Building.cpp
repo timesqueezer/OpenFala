@@ -1,7 +1,7 @@
 #include "Building.hpp"
 #include <iostream>
 
-Building::Building(){
+Building::Building() {
     mType = ENTITY_TYPE_BUILDING;
     mAnimationFPS = 1;
     mAnimationIndex = 0;
@@ -9,7 +9,7 @@ Building::Building(){
     mPosY = 0;
 }
 
-void Building::Update(float dt){
+void Building::Update(float dt) {
     // Update Life Time
     mLifeTime += dt;
 
@@ -20,16 +20,16 @@ void Building::Update(float dt){
     UpdateAnimation();
 
     // Destroy Building after 10 seconds (for testing purposes)
-    if (mLifeTime > 10 and mAnimationIndex!=1){
+    if (mLifeTime > 10 and mAnimationIndex!=1) {
         mAnimationIndex = 1;
     }
 }
 
-void Building::SetHealth(sf::Uint16 health){
+void Building::SetHealth(sf::Uint16 health) {
     mHealth = health;
 }
 
-sf::Uint16 Building::GetHealth(){
+sf::Uint16 Building::GetHealth() {
     return mHealth;
 }
 
