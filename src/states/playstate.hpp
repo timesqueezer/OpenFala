@@ -67,6 +67,7 @@ private:
     // Graphics
     sf::Shape mGuiActionBar;
     cp::cpGuiContainer mGui;
+    sf::Shape mGuiModeIndicator;
     cp::cpImageButton *mGuiBuildModeButton;
     cp::cpImageButton *mGuiDemolishModeButton;
 

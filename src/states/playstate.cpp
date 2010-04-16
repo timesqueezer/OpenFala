@@ -23,8 +23,8 @@
 #include "playstate.hpp"
 #include "mainmenustate.hpp"
 
-const sf::Uint16 MODE_BUILD_TOWER = 1;
-const sf::Uint16 MODE_BUILD_TURRET = 2;
+const sf::Uint16 MODE_BUILD = 1;
+const sf::Uint16 MODE_DEMOLISH = 2;
 
 
 PlayState PlayState::m_PlayState;
@@ -46,7 +46,7 @@ void PlayState::Init(GameEngine* game){
     m_ratio = mGameEngine->m_height / 15;
     m_blocknbx = mGameEngine->app.GetWidth() / m_ratio;
 	m_blocknby = mGameEngine->app.GetHeight() / m_ratio;
-	mode = MODE_BUILD_TOWER; // set to build mode
+	mode = MODE_BUILD; // set to build mode
 
 
     //  Setup Socket Connection
@@ -87,17 +87,25 @@ void PlayState::Init(GameEngine* game){
 	mInfoLabel.SetSize(13);
 
 	// Initialize Action Bar
+	sf::Uint16 action_buttons_y = mGameEngine->app.GetHeight() - m_ratio*1.25;
 	mGuiActionBar = Utility::GradientRectangle(0,
         mGameEngine->app.GetHeight()-1.5*m_ratio,
         mGameEngine->app.GetWidth(),
         mGameEngine->app.GetHeight(),
         sf::Color(50,50,50),
         sf::Color(0,0,0));
-
-	sf::Uint16 action_buttons_y = mGameEngine->app.GetHeight() - m_ratio*1.25;
+    mGuiModeIndicator = Utility::GradientRectangle(m_ratio*0.25,
+        action_buttons_y,
+        m_ratio*1.25,
+        action_buttons_y+m_ratio,
+        sf::Color(255,255,255,30),
+        sf::Color(255,255,255,10),
+        1.0,
+        sf::Color(255,255,255,100),
+        sf::Color(255,255,255,100));
 	// BuildModeButton
     mGuiBuildModeButton = new cp::cpImageButton(&mGameEngine->app, &mGui, ResourceManager::get_mutable_instance().GetImage("buildmode") , "" ,m_ratio*0.25,action_buttons_y);
-    mGuiBuildModeButton->SetHoverImage(ResourceManager::get_mutable_instance().GetImage("buildmode") );
+    mGuiDemolishModeButton = new cp::cpImageButton(&mGameEngine->app, &mGui, ResourceManager::get_mutable_instance().GetImage("demolishmode") , "" ,m_ratio*1.5,action_buttons_y);
 
 
     // Initialisation of the Mouse Hightlight Blocks
@@ -177,7 +185,7 @@ void PlayState::HandleEvents(){
            	mGameEngine->ChangeState( MainMenuState::Instance() );
         }
         if (Event.Type == sf::Event::MouseButtonPressed) {
-            if (mode == MODE_BUILD_TOWER and MouseInPlayableArea()) {
+            if (mode == MODE_BUILD and MouseInPlayableArea()) {
                 SendPacket << PACKET_BUILD << (sf::Uint16) ((GetMouseBlock(true).x - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock(true).y;
                 Socket.Send(SendPacket, m_bindaddress, m_port);
                 SendPacket.Clear();
@@ -194,13 +202,23 @@ void PlayState::HandleEvents(){
 		    	m_mpos[m_cl_id]->Sprite.SetPosition((GetMouseBlock(true).x+GetNonPlayableAreaSize())*m_ratio, GetMouseBlock(true).y*m_ratio);
 		    }
 		}
+
+		// BuildMode Button Click
+        if(mGuiBuildModeButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
+            std::cout << "Build Mode !!!" << std::endl;
+            mode = MODE_BUILD;
+
+        }
+        // BuildMode Button Click
+        if(mGuiDemolishModeButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
+            std::cout << "Demolish Mode !!!" << std::endl;
+            mode = MODE_DEMOLISH;
+        }
+
         mGui.ProcessKeys(&Event);
 	}
-	// BuildMode Button Click
-    if(mGuiBuildModeButton->CheckState(mInput) == cp::CP_ST_MOUSE_LBUTTON_RELEASED) {
-        std::cout << "Build Mode !!!" << std::endl;
-        mode = MODE_BUILD_TOWER;
-    }
+
+    mGuiModeIndicator.SetX( ((mode-1)*1.25)*m_ratio );
 }
 
 void PlayState::Update(){
@@ -271,7 +289,7 @@ void PlayState::Draw(){
 
 	for(sf::Uint8 x = 0;x<m_blocknbx;++x) {
 		for(sf::Uint8 y = 0;y<m_blocknby;++y) {
-			if(m_blocks[x][y]!=0 && mode == 1) {
+			if(m_blocks[x][y]!=0) {
                 mGameEngine->app.Draw(m_blocks[x][y]->Sprite);
 			}
 		}
@@ -293,7 +311,10 @@ void PlayState::Draw(){
 	mGameEngine->app.Draw(mInfoLabel);
 
 	mGameEngine->app.Draw(mGuiActionBar);
+	mGameEngine->app.Draw(mGuiModeIndicator);
 	mGuiBuildModeButton->Draw();
+	mGuiDemolishModeButton->Draw();
+
 
 }
 
