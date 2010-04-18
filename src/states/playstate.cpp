@@ -186,7 +186,7 @@ void PlayState::HandleEvents(){
         }
         if (Event.Type == sf::Event::MouseButtonPressed) {
             if (mode == MODE_BUILD and MouseInPlayableArea()) {
-                SendPacket << PACKET_BUILD << (sf::Uint16) ((GetMouseBlock(true).x - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock(true).y;
+                SendPacket << PACKET_BUILD << mode << (sf::Uint16) ((GetMouseBlock(true).x - (mGameEngine->m_width / m_ratio - 20)/2)) << GetMouseBlock(true).y;
                 Socket.Send(SendPacket, m_bindaddress, m_port);
                 SendPacket.Clear();
             }

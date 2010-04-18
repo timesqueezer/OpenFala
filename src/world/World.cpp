@@ -7,6 +7,10 @@ void World::AddEntity(IEntity* entity) {
     mEntities.insert(++m_entity_index, entity);
 }
 
+void World::DelEntity(sf::Uint16 sqx, sf::Uint16 sqy) {
+    //TODO implement this
+}
+
 EntityMap& World::GetEntities() {
     return mEntities;
 }
@@ -23,7 +27,6 @@ void World::Update(float blocksize){
     for ( EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
         i->second->Update(blocksize, frameTime);
     }
-
 }
 
 // Draws all Entities to RenderTarget
