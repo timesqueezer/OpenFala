@@ -20,6 +20,8 @@ public:
     // Adds an entity to the internal entity list mEntities
     void AddEntity(IEntity* entity);
 
+    void DelEntity(sf::Uint16 sqx, sf::Uint16 sqy);
+
     // Return internal entity list mEntities
     EntityMap& GetEntities();
 

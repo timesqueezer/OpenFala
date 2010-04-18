@@ -10,6 +10,10 @@
 
 #include "server.hpp"
 
+const sf::Uint16 MODE_BUILD = 1;
+const sf::Uint16 MODE_DEMOLISH = 2;
+
+
 // New Packet: PacketType(0, 1, 2), arg0(x, x, name), arg1(y, y, none)
 
 ServerApp::ServerApp(const sf::Uint16 port, const sf::Uint16 max_players) {
@@ -52,18 +56,25 @@ void ServerApp::HandleRequest() {
             m_ClMan.SetBlockUnderCursor(m_ClMan.GetID(Address), sqx, sqy);
 
         } else if (command_id == PACKET_BUILD) { // "build" type for building something
-
+            sf::Uint16 mode = 0;
+            Packet >> mode; // is it a building or a turret or whatever 
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
-
-            // if the block is not in the earth AND there is no block at that position AND
-            // (the position is on the ground OR there is a block underneath)
-            if (sqy < 10 and !mWorld.BlockExistsAt(sqx,sqy) and (sqy==9 or mWorld.BlockExistsAt(sqx,sqy+1))) {
-                // Create entity
-                Building* b = new Building();
-                b->SetPosition(sf::Vector2f(sqx, sqy));
-                b->SetDimension(sf::Vector2f(1,1));
-                mWorld.AddEntity(b);
+            if (mode == MODE_BUILD) {
+                // if the block is not in the earth AND there is no block at that position AND
+                // (the position is on the ground OR there is a block underneath)
+                if (sqy < 10 and !mWorld.BlockExistsAt(sqx,sqy) and (sqy==9 or mWorld.BlockExistsAt(sqx,sqy+1))) {
+                    // Create entity
+                    Building* b = new Building();
+                    b->SetPosition(sf::Vector2f(sqx, sqy));
+                    b->SetDimension(sf::Vector2f(1,1));
+                    mWorld.AddEntity(b);
+                }
+            } else if (mode == MODE_DEMOLISH) {
+                std::cout << "lol" << std::endl;
+                if (sqy < 10 and mWorld.BlockExistsAt(sqx,sqy)) {
+                    mWorld.DelEntity(sqx, sqy);
+                }
             }
 
         } else if (command_id == PACKET_HANDSHAKE) { // "Handshake" getting client's name

@@ -98,7 +98,7 @@ private:
 	sf::Uint16 m_blocknbx;
 	sf::Uint16 m_blocknby;
 
-	int mode;
+    sf::Uint16 mode;
 
 };
 
