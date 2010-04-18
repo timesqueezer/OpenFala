@@ -7,8 +7,13 @@ void World::AddEntity(IEntity* entity) {
     mEntities.insert(++m_entity_index, entity);
 }
 
-void World::DelEntity(sf::Uint16 sqx, sf::Uint16 sqy) {
-    //TODO implement this
+void World::DeleteEntity(sf::Uint16 sqx, sf::Uint16 sqy, sf::Uint16 type) {
+    for ( EntityMap::iterator i = mEntities.begin(); i!=mEntities.end(); ++i ){
+        if (i->second->GetPosition().x == sqx and i->second->GetPosition().y == sqy and i->second->GetType()==type){
+            mEntities.erase(i);
+            return;
+        }
+    }
 }
 
 EntityMap& World::GetEntities() {

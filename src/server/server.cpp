@@ -57,7 +57,7 @@ void ServerApp::HandleRequest() {
 
         } else if (command_id == PACKET_BUILD) { // "build" type for building something
             sf::Uint16 mode = 0;
-            Packet >> mode; // is it a building or a turret or whatever 
+            Packet >> mode; // get mode (BUILD/DEMOLISH)
             sf::Uint16 sqx, sqy;
             Packet >> sqx >> sqy;
             if (mode == MODE_BUILD) {
@@ -71,9 +71,9 @@ void ServerApp::HandleRequest() {
                     mWorld.AddEntity(b);
                 }
             } else if (mode == MODE_DEMOLISH) {
-                std::cout << "lol" << std::endl;
-                if (sqy < 10 and mWorld.BlockExistsAt(sqx,sqy)) {
-                    mWorld.DelEntity(sqx, sqy);
+                // if the block exists and there is no block above
+                if (mWorld.BlockExistsAt(sqx,sqy) and !mWorld.BlockExistsAt(sqx,sqy-1)) {
+                    mWorld.DeleteEntity(sqx, sqy, ENTITY_TYPE_BUILDING);
                 }
             }
 
