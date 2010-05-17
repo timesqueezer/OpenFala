@@ -20,7 +20,7 @@ void GameEngine::Init(std::string title, sf::Uint16 width, sf::Uint16 height, bo
     if (fullscreen)
         app.Create(sf::VideoMode(m_width, m_height, 32), title, sf::Style::Fullscreen);
     else
-        app.Create(sf::VideoMode(m_width, m_height, 32), title, sf::Style::Close, sf::WindowSettings::WindowSettings(24, 8, 2));
+        app.Create(sf::VideoMode(m_width, m_height, 32), title, sf::Style::Close, sf::WindowSettings(24, 8, 2));
 
     app.SetFramerateLimit(0);
     
